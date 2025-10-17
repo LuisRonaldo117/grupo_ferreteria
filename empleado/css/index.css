@@ -1,0 +1,434 @@
+/* Estilo base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  padding-top: 140px; /* Ajusta según el alto del header */
+  background-color: #f9fafb;
+  color: #333;
+
+  
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+a:hover {
+  color: #0056b3;
+}
+
+/* === HEADER PROFESIONAL === */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #1e293b;
+  color: white;
+  padding: 1.2rem 2rem;
+  border-radius: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.empleado-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icono-usuario i {
+  font-size: 2rem;
+  color: #ffffff; /* blanco */
+  background-color: #1e293b; /* fondo oscuro opcional si quieres hacerlo más circular aún */
+  border-radius: 50%;
+  padding: 4px;
+}
+
+
+.datos-usuario div {
+  font-size: 1rem;
+  color: #f1f5f9;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+}
+
+.nav-menu,
+.nav-menu-right {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-menu li a,
+.nav-menu-right li a {
+  color: #cbd5e1;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-menu li a:hover,
+.nav-menu-right li a:hover {
+  background-color: #334155;
+  color: #fff;
+}
+.badge-carrito {
+  background-color: red;
+  color: white;
+  font-size: 0.95rem;     /* Aumenta el tamaño del número */
+  font-weight: bold;      /* Más grueso */
+  border-radius: 50%;
+  padding: 4px 8px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.4); /* Sombra sutil */
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.btn-carrito {
+  position: relative;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  padding: 8px 14px;
+}
+
+.btn-carrito:hover .badge-carrito {
+  transform: scale(1.2);
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+
+.logout {
+  background-color: transparent;
+  border: 1px solid #f87171;
+  color: #f87171;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.logout:hover {
+  background-color: #f87171;
+  color: #fff;
+}
+
+
+/* Formulario filtros */
+#filtros-form {
+  background-color: #f1f5f9; /* gris claro azulado (no blanco) */
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(30, 41, 59, 0.15); /* sombra más elegante */
+  margin: 0 auto 2rem auto;
+  max-width: 900px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #cbd5e1; /* borde sutil */
+}
+
+/* Estilo para etiquetas */
+#filtros-form label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+/* Estilo para selects e inputs */
+#filtros-form select,
+#filtros-form input[type="text"],
+#filtros-form input[type="number"] {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #94a3b8;
+  background-color: #ffffff;
+  color: #1e293b;
+  transition: border-color 0.3s ease;
+}
+
+#filtros-form select:focus,
+#filtros-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+/* Botón de búsqueda o aplicar filtro */
+#filtros-form button {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#filtros-form button:hover {
+  background-color: #2563eb;
+}
+
+
+/* Productos */
+#productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.producto {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra todo el contenido */
+  text-align: center; /* Centra texto */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.producto:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.producto img {
+  max-width: 100%;
+  height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.producto:hover img {
+  transform: scale(1.05);
+}
+
+.info-producto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.nombre-producto {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.descripcion-producto {
+  font-size: 0.92rem;
+  color: #6b7280;
+  min-height: 48px;
+}
+
+/* Precio y stock ya centrados y mejorados antes */
+.precio-stock {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.precio-producto {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #10b981;
+}
+
+.stock-disponible {
+  background-color: #f59e0b;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+
+/* Formulario agregar */
+.form-agregar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  flex-wrap: wrap; /* Adaptable para pantallas pequeñas */
+}
+
+.form-agregar label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.form-agregar input[type="number"] {
+  width: 70px;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #111827;
+  background-color: #f9fafb;
+  text-align: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-agregar input[type="number"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Botón "Añadir" más moderno y atractivo */
+.form-agregar .btn-agregar {
+  background-color: #10b981;
+  border: none;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.form-agregar .btn-agregar:hover {
+  background-color: #059669;
+  transform: scale(1.03);
+}
+
+/* Icono opcional si usas uno tipo 🛒 con pseudo-elemento o HTML */
+.form-agregar .btn-agregar::before {
+  content: "🛒";
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Notificación de éxito moderna y profesional */
+/* Contenedor fijo en esquina inferior derecha */
+#contenedor-notificaciones {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column-reverse; /* Para que las nuevas salgan ABAJO */
+  gap: 1rem;
+  z-index: 9999;
+}
+
+/* Estilo de cada notificación */
+.notificacion-exito {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #22c55e; /* Verde moderno */
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  font-weight: 500;
+  min-width: 300px;
+  max-width: 420px;
+  animation: slideFadeIn 0.4s ease-out forwards;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  position: relative;
+}
+
+/* Animación suave de entrada */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notificacion-exito.ocultar {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* Icono decorativo */
+.notificacion-exito::before {
+  content: "✅";
+  font-size: 1.2rem;
+  margin-right: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px;
+  border-radius: 50%;
+}
+
+/* Botón cerrar */
+.notificacion-exito .cerrar {
+  margin-left: 1.2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ffffff;
+  transition: color 0.3s ease;
+}
+
+.notificacion-exito .cerrar:hover {
+  color: #d1fae5;
+}

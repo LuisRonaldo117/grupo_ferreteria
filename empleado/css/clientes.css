@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #0b0f14; /* Fondo oscuro general */
+    color: #00ff88;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 1rem 2.5rem 2.5rem 2.5rem; /* menos padding arriba */
+    background: linear-gradient(135deg, #111a1f, #1c2a2e);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 255, 128, 0.1);
+    position: relative;
+}
+
+h1 {
+    text-align: center;
+    color: #00ff88; /* Verde fosforescente */
+    font-weight: 800;
+    font-size: 2.2rem;
+    margin-top: 0rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 8px rgba(0, 255, 128, 0.5);
+}
+
+.btn-volver {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1.2rem;
+    background: linear-gradient(135deg, #00cc66, #00ff88);
+    color: #000;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 255, 128, 0.4);
+}
+
+.btn-volver:hover {
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    box-shadow: 0 6px 18px rgba(0, 255, 128, 0.6);
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+.dataTables_wrapper {
+    margin-top: 1.2rem;
+}
+
+/* Buscador */
+#tablaClientes_filter {
+    margin-bottom: 1.2rem;
+    text-align: right;
+}
+
+#tablaClientes_filter label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #eee;
+}
+
+#tablaClientes_filter input {
+    margin-left: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #00ff88;
+    background-color: #111;
+    color: #00ff88;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+#tablaClientes_filter input:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 255, 128, 0.5);
+    border-color: #00ff88;
+}
+
+/* Tabla */
+table.dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    background-color: #1a1a1a;
+}
+
+table.dataTable thead {
+    background: linear-gradient(135deg, #00cc66, #00ff88);
+    color: white;
+}
+
+table.dataTable th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #000000;
+    border-bottom: 2px solid #00ff88;
+}
+
+table.dataTable td {
+    padding: 0.7rem 1rem;
+    color: #ddd;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #333;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: #26332e;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    table.dataTable th,
+    table.dataTable td {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+}

@@ -1,0 +1,90 @@
+
+            .factura-contenedor {
+                max-width: 900px;
+                margin: 30px auto;
+                padding: 30px;
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                font-family: "Segoe UI", Tahoma, sans-serif;
+                color: #333;
+            }
+
+            .factura-titulo {
+                text-align: center;
+                color: #0a2463;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 5px;
+            }
+
+            .factura-fecha {
+                text-align: right;
+                color: #555;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+
+            .factura-tabla {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 30px;
+            }
+
+            .factura-tabla thead {
+                background-color: #0a2463;
+                color: white;
+            }
+
+            .factura-tabla th,
+            .factura-tabla td {
+                padding: 12px 10px;
+                border: 1px solid #ddd;
+                text-align: left;
+                font-size: 14px;
+            }
+
+            .factura-tabla tbody tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+
+            .total-label {
+                text-align: right;
+                font-weight: bold;
+                background: #f0f0f0;
+            }
+
+            .total-valor {
+                font-weight: bold;
+                color: #d32f2f;
+                background: #ffecec;
+            }
+
+            .boton-container {
+                text-align: center;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .boton-rojo {
+                background-color: #d32f2f;
+                color: white;
+                padding: 10px 25px;
+                border: none;
+                border-radius: 8px;
+                font-size: 15px;
+                cursor: pointer;
+                transition: 0.3s ease;
+            }
+
+            .boton-rojo:hover {
+                background-color: #b71c1c;
+            }
+
+            @media print {
+                #btnVolverAtrasForm, #btnImprimir, #btnDescargarPDF {
+                    display: none !important;
+                }
+            }
