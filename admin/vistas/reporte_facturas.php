@@ -185,19 +185,18 @@ $(document).ready(function() {
         }
     });
 
-    // Filtro personalizado para el mes
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var filtroMes = $('#filtroMes').val();
-            var fila = tabla.row(dataIndex).node();
-            var mesFila = $(fila).data('mes');
+// Filtro personalizado para el mes
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    var filtroMes = $('#filtroMes').val();          // valor del select
+    var fila = tabla.row(dataIndex).node();
+    var mesFila = $(fila).data('mes').toString().padStart(2, '0'); // forzamos formato "01"
 
-            if(filtroMes === "" || filtroMes === mesFila) {
-                return true;
-            }
-            return false;
-        }
-    );
+    if(filtroMes === "" || filtroMes === mesFila) {
+        return true;
+    }
+    return false;
+});
+
 
     // Redibujar tabla al cambiar filtro
     $('#filtroMes').on('change', function() {

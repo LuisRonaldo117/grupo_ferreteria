@@ -45,85 +45,89 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Registro de Persona</title>
     <link rel="stylesheet" href="../estilos/persona_cliente.css" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
     <div class="wrapper">
-        <form action="registrar_persona.php" method="post">
+        <div class="form-card">
+            <form action="registrar_persona.php" method="post">
 
-            <h1>Iniciar Registro</h1>
+                <h1>Iniciar Registro</h1>
 
-            <?php if ($error_msg): ?>
-                <div style="background-color:#f44336; color:white; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center;">
-                    <?= $error_msg ?>
+                <?php if ($error_msg): ?>
+                    <div class="error-msg">
+                        <?= $error_msg ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="input-box">
+                    <input type="text" placeholder="Nombres" name="nombre" required>
+                    <i class='bx bxs-user'></i>
                 </div>
-            <?php endif; ?>
 
-            <div class="input-box">
-                <input type="text" placeholder="Nombres" name="nombre" required>
-                <i class='bx bxs-user'></i>
-            </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Apellidos" name="apellido" required>
+                    <i class='bx bx-user'></i>
+                </div>
 
-            <div class="input-box">
-                <input type="text" placeholder="Apellidos" name="apellido" required>
-                <i class='bx bxstext-user'></i>
-            </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Cédula" name="ci" required>
+                    <i class='bx bxs-id-card'></i>
+                </div>
 
-            <div class="input-box">
-                <input type="text" placeholder="Cédula" name="ci" required>
-                <i class='bx bxs-id-card'></i>
-            </div>
+                <div class="input-box">
+                    <label for="fecha_nacimiento" style="color:white;">Fecha de Nacimiento:</label>
+                    <input type="date" name="fecha_nacimiento" required>
+                </div>
 
-            <div class="input-box">
-                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                <input type="date" name="fecha_nacimiento" required>
-            </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Dirección" name="direccion">
+                    <i class='bx bxs-map'></i>
+                </div>
 
-            <div class="input-box">
-                <input type="text" placeholder="Dirección" name="direccion">
-                <i class='bx bxs-map'></i>
-            </div>
+                <div class="input-box">
+                    <input type="text" placeholder="Teléfono" name="telefono">
+                    <i class='bx bxs-phone-call'></i>
+                </div>
 
-            <div class="input-box">
-                <input type="text" placeholder="Teléfono" name="telefono">
-                <i class='bx bxs-phone-call'></i>
-            </div>
+                <div class="input-box">
+                    <input type="email" placeholder="Correo" name="correo">
+                    <i class='bx bxs-envelope'></i>
+                </div>
 
-            <div class="input-box">
-                <input type="email" placeholder="Correo" name="correo">
-                <i class='bx bxs-envelope'></i>
-            </div>
+                <div class="input-box">
+                    <label for="genero" style="color:white;">Género:</label>
+                    <select name="genero" id="genero" required>
+                        <option value="" disabled selected>Selecciona Género</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                </div>
 
-            <div class="input-box">
-                <label for="genero">Género:</label>
-                <select name="genero" id="genero" required>
-                    <option value="" disabled selected>Selecciona Género</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                </select>
-            </div>
-
-            <div class="input-box">
-                <label for="id_departamento">Departamento:</label>
-                <select name="id_departamento" id="id_departamento" required>
-                    <option value="" disabled selected>Selecciona departamento</option>
-                    <?php
-                    $sql = "SELECT id_departamento, nom_departamento FROM departamento ORDER BY id_departamento";
-                    $result = mysqli_query($conexion, $sql);
-                    if ($result) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<option value="' . $row['id_departamento'] . '">' . htmlspecialchars($row['nom_departamento']) . '</option>';
+                <div class="input-box">
+                    <label for="id_departamento" style="color:white;">Departamento:</label>
+                    <select name="id_departamento" id="id_departamento" required>
+                        <option value="" disabled selected>Selecciona departamento</option>
+                        <?php
+                        $sql = "SELECT id_departamento, nom_departamento FROM departamento ORDER BY id_departamento";
+                        $result = mysqli_query($conexion, $sql);
+                        if ($result) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo '<option value="' . $row['id_departamento'] . '">' . htmlspecialchars($row['nom_departamento']) . '</option>';
+                            }
                         }
-                    }
-                    ?>
-                </select>
-            </div>
+                        ?>
+                    </select>
+                </div>
 
-            <div class="botones">
-                <input class="btn" type="submit" value="Siguiente" style="background-color: green; color: white;">
-                <input class="btn" type="button" value="Volver Atrás" onclick="window.location.href='../index.php';">
- </div>
-        </form>
+                <div class="buttons">
+                    <input class="btn btn-submit" type="submit" value="Siguiente">
+                    <input class="btn btn-login" type="button" value="Volver Atrás" onclick="window.location.href='../index.php';">
+                </div>
+
+            </form>
+        </div>
     </div>
 </body>
 

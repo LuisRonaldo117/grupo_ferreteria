@@ -147,32 +147,32 @@ $(document).ready(function() {
         }
     });
 
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var proveedorFiltro = $('#filtroProveedor').val().toLowerCase();
-            var mesFiltro = $('#filtroMes').val();
-            var anioFiltro = $('#filtroAnio').val();
-            var estadoFiltro = $('#filtroEstado').val().toLowerCase();
+    // Filtro personalizado
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        var proveedorFiltro = $('#filtroProveedor').val().toLowerCase();
+        var mesFiltro = $('#filtroMes').val();
+        var estadoFiltro = $('#filtroEstado').val().toLowerCase();
 
-            var fila = tabla.row(dataIndex).node();
-            var proveedor = $(fila).data('proveedor').toLowerCase();
-            var mes = $(fila).data('mes');
-            var anio = $(fila).data('anio');
-            var estado = $(fila).data('estado').toLowerCase();
+        var fila = tabla.row(dataIndex).node();
+        var proveedor = $(fila).data('proveedor').toLowerCase();
+        var mes = parseInt($(fila).data('mes'));          // convertir a número
+        var estado = $(fila).data('estado').toLowerCase();
 
-            if (proveedorFiltro && proveedorFiltro !== proveedor) return false;
-            if (mesFiltro && mesFiltro !== mes) return false;
-            if (anioFiltro && anioFiltro !== anio) return false;
-            if (estadoFiltro && estadoFiltro !== estado) return false;
+        var mesFiltroInt = mesFiltro ? parseInt(mesFiltro) : null;
 
-            return true;
-        }
-    );
+        if (proveedorFiltro && proveedorFiltro !== proveedor) return false;
+        if (mesFiltroInt && mesFiltroInt !== mes) return false;
+        if (estadoFiltro && estadoFiltro !== estado) return false;
 
-    $('#filtroProveedor, #filtroMes, #filtroAnio, #filtroEstado').on('change', function() {
+        return true;
+    });
+
+    // Redibujar tabla al cambiar filtros
+    $('#filtroProveedor, #filtroMes, #filtroEstado').on('change', function() {
         tabla.draw();
     });
 });
+
 </script>
 
 <style>

@@ -156,24 +156,20 @@ $(document).ready(function() {
         }
     });
 
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var estadoFiltro = $('#filtroEstado').val();
-            var mesFiltro = $('#filtroMes').val();
+    // Filtro por estado y mes
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        var estadoFiltro = $('#filtroEstado').val();
+        var mesFiltro = $('#filtroMes').val();
 
-            var fila = tabla.row(dataIndex).node();
-            var estado = $(fila).data('estado');
-            var mes = $(fila).data('mes');
+        var fila = tabla.row(dataIndex).node();
+        var estado = $(fila).data('estado');
+        var mes = $(fila).data('mes').toString().padStart(2, '0'); // aseguramos formato "01"
 
-            if (estadoFiltro && estadoFiltro !== estado) {
-                return false;
-            }
-            if (mesFiltro && mesFiltro !== mes) {
-                return false;
-            }
-            return true;
-        }
-    );
+        if (estadoFiltro && estadoFiltro !== estado) return false;
+        if (mesFiltro && mesFiltro !== mes) return false;
+
+        return true;
+    });
 
     $('#filtroEstado, #filtroMes').on('change', function() {
         tabla.draw();

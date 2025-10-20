@@ -160,23 +160,29 @@ $(document).ready(function() {
 
     // Filtro personalizado por tipo de venta y mes
     $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var tipoVentaFiltro = $('#filtroTipoVenta').val();
-            var mesFiltro = $('#filtroMes').val();
+    function(settings, data, dataIndex) {
+        var tipoVentaFiltro = $('#filtroTipoVenta').val();
+        var mesFiltro = $('#filtroMes').val();
 
-            var fila = tabla.row(dataIndex).node();
-            var tipoVenta = $(fila).data('tipo');
-            var mesVenta = $(fila).data('mes');
+        var fila = tabla.row(dataIndex).node();
+        var tipoVenta = $(fila).data('tipo');
+        var mesVenta = parseInt($(fila).data('mes'));       // convertir a número entero
+        var mesFiltroInt = mesFiltro ? parseInt(mesFiltro) : null; // convertir filtro a entero si existe
 
-            if (tipoVentaFiltro && tipoVentaFiltro !== tipoVenta) {
-                return false;
-            }
-            if (mesFiltro && mesFiltro !== mesVenta) {
-                return false;
-            }
-            return true;
+        // Filtrar por tipo de venta
+        if (tipoVentaFiltro && tipoVentaFiltro !== tipoVenta) {
+            return false;
         }
-    );
+
+        // Filtrar por mes
+        if (mesFiltroInt && mesFiltroInt !== mesVenta) {
+            return false;
+        }
+
+        return true;
+    }
+);
+
 
     // Redibujar tabla al cambiar filtros
     $('#filtroTipoVenta, #filtroMes').on('change', function() {
