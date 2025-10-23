@@ -11,28 +11,8 @@ $fechaEmision = date("d/m/Y H:i:s");
 $datosFactura = $_SESSION['factura_generada'];
 $productos = $datosFactura['productos'];
 $total = $datosFactura['total'];
-$idCliente = $datosFactura['id_cliente'] ?? null;
-$nombreCliente = $direccionCliente = $telefonoCliente = $nitCliente = "";
 
-include '../conexion.php';
-if ($idCliente) {
-    $stmt = $conexion->prepare("SELECT CONCAT(p.nombres, ' ', p.apellidos) AS nombre, p.direccion, p.telefono, c.nit
-                                FROM cliente c
-                                JOIN persona p ON c.id_persona = p.id_persona
-                                WHERE c.id_cliente = ?");
-    $stmt->bind_param("i", $idCliente);
-    $stmt->execute();
-    $stmt->bind_result($nombre, $direccion, $telefono, $nit);
-    if ($stmt->fetch()) {
-        $nombreCliente = $nombre;
-        $direccionCliente = $direccion;
-        $telefonoCliente = $telefono;
-        $nitCliente = $nit;
-    }
-    $stmt->close();
-}
-
-// Datos de la empresa
+// Datos de la empresa (opcional, para encabezado)
 $nombreEmpresa = "Grupo Ferretería S.R.L.";
 $direccionEmpresa = "Av. América #245, Cochabamba - Bolivia";
 $telefonoEmpresa = "+591 4 4456789";
@@ -48,11 +28,9 @@ $nitEmpresa = "7894567012";
 </head>
 <body>
 
-  <h1>Factura</h1>
-
   <div class="factura-container">
 
-    <!-- Encabezado empresa -->
+    <!-- Encabezado -->
     <div class="factura-header">
       <div>
         <strong><?= $nombreEmpresa ?></strong><br>
@@ -63,14 +41,6 @@ $nitEmpresa = "7894567012";
         <strong>N° Factura:</strong> <?= str_pad($idFactura, 5, '0', STR_PAD_LEFT) ?><br>
         <strong>Fecha:</strong> <?= $fechaEmision ?>
       </div>
-    </div>
-
-    <!-- Datos del cliente -->
-    <div class="factura-header" style="background:#f5f5f5; color:#333; border-top:1px solid #ccc;">
-      <div><strong>Cliente:</strong> <?= $nombreCliente ?></div>
-      <div><strong>Dirección:</strong> <?= $direccionCliente ?></div>
-      <div><strong>Teléfono:</strong> <?= $telefonoCliente ?></div>
-      <div><strong>NIT:</strong> <?= $nitCliente ?></div>
     </div>
 
     <!-- Tabla de productos -->
@@ -100,11 +70,12 @@ $nitEmpresa = "7894567012";
         </tr>
       </tfoot>
     </table>
+
   </div>
 
   <div class="btn-container no-print">
     <a href="#" class="btn btn-print" onclick="window.print()">🖨️ Imprimir Factura</a>
-    <a href="../index.php" class="btn btn-back">← Volver al inicio</a>
+    <a href="../index.php" class="btn btn-back">Volver al inicio</a>
   </div>
 
 </body>
