@@ -152,7 +152,24 @@ $usuario = $_SESSION['admin_usuario'] ?? 'Invitado';
                     </ul>
                 </li>
 
+                <li class="nav-item ">
+                    <a href="#" class="nav-link ">
+                        <i class="nav-icon fas fa-paper-plane"></i>
+                        <p>
+                            Envio de Repotes
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a style="cursor: pointer;" class="nav-link" onclick="CELM_CargarContenido('vistas/envio_reportes/index.php','content-wrapper')">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Reporte mensual</p>
+                            </a>
+                        </li>
 
+                    </ul>
+                </li>
 
                 <li class="nav-item ">
                     <a href="#" class="nav-link ">

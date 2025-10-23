@@ -1,0 +1,165 @@
+/* === Fuentes y colores === */
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #fdf6f0; /* Fondo cálido */
+}
+
+/* === Encabezado azul corporativo ancho completo === */
+.header {
+    background-color: #004d99;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.header .fecha {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: #e0e0e0;
+}
+
+.header .envio {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 2px;
+    color: #d0d0d0;
+}
+
+/* Logo circular centrado */
+.header .logo {
+    display: block;
+    width: 80px;
+    height: 80px;
+    margin: 12px auto 8px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+}
+
+/* === Perfil del empleado === */
+/* === Perfil con logo al lado derecho === */
+.profile {
+    display: flex;
+    align-items: center; /* Alinea verticalmente al centro */
+    justify-content: space-between; /* Espacio entre info y logo */
+    padding: 20px 30px;
+    margin: 25px auto;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    width: 85%;
+    box-sizing: border-box;
+}
+
+.profile-info {
+    flex: 1; /* Ocupa todo el espacio disponible */
+}
+
+.profile-logo img {
+    max-width: 120px;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+
+/* === Títulos de sección === */
+.section-title {
+    margin: 30px auto 12px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #004d99;
+    text-align: center;
+    border-bottom: 2px solid #004d99;
+    padding-bottom: 5px;
+    width: 85%;
+}
+
+/* === Tablas === */
+table {
+    width: 85%;
+    border-collapse: collapse;
+    margin: 0 auto 25px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 12px;
+}
+
+table th {
+    background-color: #e8f0ff;
+    color: #004d99;
+    font-weight: 700;
+}
+
+.table-row-even {
+    background-color: #f9f9f9;
+}
+
+/* === Footer === */
+.footer {
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    margin-top: 35px;
+    border-top: 1px solid #ccc;
+    padding-top: 12px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer::before {
+    content: "• • •";
+    display: block;
+    color: #004d99;
+    margin-bottom: 6px;
+}
+
+/* === Adaptaciones para PDF / Móvil === */
+@media only screen and (max-width: 600px) {
+    .header {
+        padding: 15px 0;
+    }
+
+    .profile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 95%;
+    }
+
+    .profile-img {
+        margin: 0 0 10px 0;
+    }
+
+    .section-title, table, .footer {
+        width: 95%;
+    }
+
+    table th, table td {
+        font-size: 11px;
+        padding: 5px 6px;
+    }
+}

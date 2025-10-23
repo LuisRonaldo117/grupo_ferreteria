@@ -1,49 +1,35 @@
 <?php
-session_start();
-if (!isset($_GET['id_factura']) || !isset($_SESSION['factura_generada'])) {
-    header("Location: ../index.php");
-    exit();
-}
+// ============================
+// FACTURA DE PRUEBA (DEMO)
+// ============================
 
-$idFactura = intval($_GET['id_factura']);
-date_default_timezone_set('America/La_Paz');
-$fechaEmision = date("d/m/Y H:i:s");
-$datosFactura = $_SESSION['factura_generada'];
-$productos = $datosFactura['productos'];
-$total = $datosFactura['total'];
-$idCliente = $datosFactura['id_cliente'] ?? null;
-$nombreCliente = $direccionCliente = $telefonoCliente = $nitCliente = "";
-
-include '../conexion.php';
-if ($idCliente) {
-    $stmt = $conexion->prepare("SELECT CONCAT(p.nombres, ' ', p.apellidos) AS nombre, p.direccion, p.telefono, c.nit
-                                FROM cliente c
-                                JOIN persona p ON c.id_persona = p.id_persona
-                                WHERE c.id_cliente = ?");
-    $stmt->bind_param("i", $idCliente);
-    $stmt->execute();
-    $stmt->bind_result($nombre, $direccion, $telefono, $nit);
-    if ($stmt->fetch()) {
-        $nombreCliente = $nombre;
-        $direccionCliente = $direccion;
-        $telefonoCliente = $telefono;
-        $nitCliente = $nit;
-    }
-    $stmt->close();
-}
-
-// Datos de la empresa
+// Datos simulados para visualizar el diseño sin generar la factura real.
 $nombreEmpresa = "Grupo Ferretería S.R.L.";
 $direccionEmpresa = "Av. América #245, Cochabamba - Bolivia";
 $telefonoEmpresa = "+591 4 4456789";
 $nitEmpresa = "7894567012";
+
+$idFactura = 12345;
+$fechaEmision = date("d/m/Y H:i:s");
+
+$nombreCliente = "Juan Pérez López";
+$direccionCliente = "Calle Siempre Viva 742";
+$telefonoCliente = "+591 76543210";
+$nitCliente = "12345678";
+
+$productos = [
+    ["nombre" => "Taladro Bosch GSB 13 RE", "precio_unitario" => 650.00, "cantidad" => 1, "subtotal" => 650.00],
+    ["nombre" => "Martillo Stanley Antivibración", "precio_unitario" => 80.50, "cantidad" => 2, "subtotal" => 161.00],
+    ["nombre" => "Caja de Tornillos 100pz", "precio_unitario" => 35.00, "cantidad" => 1, "subtotal" => 35.00],
+];
+$total = 846.00;
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Factura Generada</title>
+  <title>Vista Previa Factura</title>
   <link rel="stylesheet" href="../css/facturaexitosa.css">
 </head>
 <body>
@@ -68,7 +54,6 @@ $nitEmpresa = "7894567012";
     <!-- Datos del cliente -->
     <div class="factura-header" style="background:#f5f5f5; color:#333; border-top:1px solid #ccc;">
       <div><strong>Cliente:</strong> <?= $nombreCliente ?></div>
-      <div><strong>Dirección:</strong> <?= $direccionCliente ?></div>
       <div><strong>Teléfono:</strong> <?= $telefonoCliente ?></div>
       <div><strong>NIT:</strong> <?= $nitCliente ?></div>
     </div>

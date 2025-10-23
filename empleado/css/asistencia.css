@@ -1,118 +1,215 @@
-/* asistencia.css */
-body {
+/* === ESTILO GLOBAL === */
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-  color: #f0f0f0;
+body {
+  background: linear-gradient(to right, #243B55, #141E30);
+  color: #fff;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
-.container {
-  background: #2a2a2a;
-  padding: 2rem 3rem;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+/* === CONTENEDOR PRINCIPAL === */
+.asistencia-wrapper {
   width: 100%;
-  max-width: 500px;
-}
-
-header h1 {
-  margin: 0 0 20px;
-  font-size: 1.8rem;
-  text-align: center;
-  color: #00c6ff;
-  text-shadow: 1px 1px 2px black;
-}
-
-.info p {
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  border-bottom: 1px solid #444;
-  padding-bottom: 5px;
-}
-.acciones form {
   display: flex;
-  flex-direction: row; /* Ahora están en línea */
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.asistencia-card {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 3rem 3rem;
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  width: 100%;
+  max-width: 750px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.asistencia-card:hover {
+  transform: translateY(-4px);
+}
+
+/* === TITULO === */
+.asistencia-card h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #00c6ff;
+  text-shadow: 1px 1px 3px black;
+}
+
+/* === INFO === */
+.info p {
+  font-size: 1.3rem;
+  margin: 0.8rem 0;
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 0.4rem;
+}
+
+/* === BOTONES === */
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2.5rem 0;
+  flex-wrap: wrap;
 }
 
 .acciones button {
   flex: 1;
-  padding: 0.8rem;
-  font-size: 1rem;
+  min-width: 230px;
+  padding: 1.2rem;
+  font-size: 1.3rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   cursor: pointer;
-  color: white;
-  font-weight: bold;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.25s ease;
 }
 
-/* Botón entrada: verde */
-.acciones button[name="tipo"][value="entrada"] {
-  background: linear-gradient(to right, #43cea2, #185a9d);
+.acciones button[value="entrada"] {
+  background: linear-gradient(135deg, #00b09b, #96c93d);
 }
 
-/* Botón salida: rojo */
-.acciones button[name="tipo"][value="salida"] {
-  background: linear-gradient(to right, #f85032, #e73827);
+.acciones button[value="salida"] {
+  background: linear-gradient(135deg, #f85032, #e73827);
 }
 
 .acciones button:hover:not(.bloqueado) {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  transform: scale(1.07);
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
 }
 
-.acciones .bloqueado {
-  background: #555;
-  color: #ccc;
+/* === ESTADO BLOQUEADO === */
+.bloqueado {
+  background: #555 !important;
   cursor: not-allowed;
+  opacity: 0.7;
+  position: relative;
+  color: #ccc !important;
 }
 
+.bloqueado::after {
+  content: "🔒";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+}
+
+/* === MENSAJE === */
 .mensaje {
-  margin-top: 1rem;
-  background-color: #333;
+  background: rgba(255, 255, 255, 0.1);
   border-left: 5px solid #00c6ff;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: #fff;
-  animation: aparecer 0.4s ease-out forwards;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  margin-top: 1.2rem;
+  animation: aparecer 0.4s ease forwards;
 }
 
+/* === FOOTER === */
 footer {
-  margin-top: 2rem;
-  text-align: center;
+  margin-top: 2.5rem;
 }
 
 .btn-volver {
-  text-decoration: none;
-  background: #2aabf5d7;
-  color: #eee;
-  padding: 0.6rem 1.2rem;
-  border-radius: 10px;
+  display: inline-block;
+  background: #00c6ff;
+  color: #000;
+  padding: 1rem 2rem;
+  border-radius: 12px;
   font-weight: bold;
-  transition: background 0.3s ease;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 1.2rem;
 }
 
 .btn-volver:hover {
-  background: #00c6ff;
-  color: #000;
+  background: #00f0ff;
 }
 
+/* === ANIMACIONES === */
 @keyframes aparecer {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+  body {
+    align-items: flex-start;
+    padding-top: 2rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .asistencia-card {
+    max-width: 95%;
+    padding: 2.5rem 1.8rem;
+  }
+
+  .asistencia-card h1 {
+    font-size: 2.1rem;
+  }
+
+  .info p {
+    font-size: 1.1rem;
+  }
+
+  .acciones {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .acciones button {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 1.3rem;
+  }
+
+  .mensaje {
+    font-size: 1.1rem;
+  }
+
+  .btn-volver {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 1.2rem;
+  }
+}
+
+/* === EXTRA PEQUEÑAS (menos de 400px) === */
+@media (max-width: 400px) {
+  .asistencia-card {
+    padding: 2rem 1rem;
+  }
+
+  .asistencia-card h1 {
+    font-size: 1.8rem;
+  }
+
+  .info p {
+    font-size: 1rem;
+  }
+
+  .acciones button {
+    padding: 1.1rem;
+    font-size: 1rem;
+  }
+
+  .btn-volver {
+    font-size: 1rem;
   }
 }

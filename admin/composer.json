@@ -1,0 +1,13 @@
+{
+    "name": "luis/grupo_ferreteria",
+    "require": {
+        "phpmailer/phpmailer": "^7.0",
+        "dompdf/dompdf": "^3.1"
+    },
+    "authors": [
+        {
+            "name": "Luis Ronaldo Mamani Mayta",
+            "email": "luisronaldomamanimayta01@gmail.com"
+        }
+    ]
+}
