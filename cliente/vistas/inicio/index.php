@@ -1,444 +1,319 @@
 <!-- Carrusel -->
-<div class="carrusel-container">
-    <div class="carrusel" id="carrusel">
-        <?php foreach($imagenesCarrusel as $index => $imagen): ?>
-            <div class="slide <?php echo $index === 0 ? 'active' : ''; ?>">
-                <img src="<?php echo $imagen['imagen']; ?>" alt="<?php echo $imagen['titulo']; ?>">
-                <div class="slide-content">
-                    <h2><?php echo $imagen['titulo']; ?></h2>
-                    <p><?php echo $imagen['descripcion']; ?></p>
-                    <a href="index.php?c=catalogo" class="btn-primary">Ver Catálogo</a>
+<div class="carousel-container">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <?php foreach($imagenesCarrusel as $index => $imagen): ?>
+                <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="<?php echo $index; ?>" 
+                    class="<?php echo $index === 0 ? 'active' : ''; ?>"></button>
+            <?php endforeach; ?>
+        </div>
+        <div class="carousel-inner rounded-3">
+            <?php foreach($imagenesCarrusel as $index => $imagen): ?>
+                <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>" 
+                     style="background-image: url('<?php echo $imagen['imagen']; ?>')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5><?php echo $imagen['titulo']; ?></h5>
+                        <p><?php echo $imagen['descripcion']; ?></p>
+                        <a href="index.php?c=catalogo" class="btn btn-primary mt-2">Ver Catálogo</a>
+                    </div>
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    
-    <!-- Controles del carrusel -->
-    <button class="carrusel-control prev" onclick="cambiarSlide(-1)">&#10094;</button>
-    <button class="carrusel-control next" onclick="cambiarSlide(1)">&#10095;</button>
-    
-    <!-- Indicadores -->
-    <div class="carrusel-indicadores">
-        <?php foreach($imagenesCarrusel as $index => $imagen): ?>
-            <span class="indicador <?php echo $index === 0 ? 'active' : ''; ?>" onclick="irASlide(<?php echo $index; ?>)"></span>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
     </div>
 </div>
 
-<!-- Botones de categorias -->
-<div class="categorias-section">
-    <h2>Nuestros Catálogos</h2>
-    <p>Explora nuestras categorías principales</p>
+<!-- Sección de Categorías -->
+<div class="categories-section">
+    <h3 class="section-title">Nuestros Catálogos</h3>
+    <p class="section-subtitle">Explora nuestras categorías principales</p>
     
-    <div class="categorias-grid">
+    <div class="row">
         <?php foreach($categoriasCatalogo as $categoria): ?>
-            <a href="<?php echo $categoria['url']; ?>" class="categoria-card">
-                <div class="categoria-icono"><?php echo $categoria['icono']; ?></div>
-                <h3><?php echo $categoria['nombre']; ?></h3>
-                <p><?php echo $categoria['descripcion']; ?></p>
+        <div class="col-6 col-md-4 col-lg-3 mb-4">
+            <a href="<?php echo $categoria['url']; ?>" class="text-decoration-none">
+                <div class="category-card">
+                    <i class="fas fa-tools"></i>
+                    <h6><?php echo $categoria['nombre']; ?></h6>
+                    <small class="text-muted"><?php echo $categoria['descripcion']; ?></small>
+                </div>
             </a>
+        </div>
         <?php endforeach; ?>
     </div>
 </div>
 
-<!-- Seccion de informacion adicional -->
+<!-- Sección de Información -->
 <div class="info-section">
-    <div class="info-card">
-        <h3>🚚 Envío Gratis</h3>
-        <p>En compras mayores a $100</p>
-    </div>
-    <div class="info-card">
-        <h3>✅ Calidad Garantizada</h3>
-        <p>Productos de primera calidad</p>
-    </div>
-    <div class="info-card">
-        <h3>📞 Soporte 24/7</h3>
-        <p>Asesoramiento profesional</p>
-    </div>
-    <div class="info-card">
-        <h3>💳 Múltiples Pagos</h3>
-        <p>Tarjeta, efectivo y QR</p>
+    <div class="row">
+        <div class="col-md-3 col-6 mb-3">
+            <div class="info-card text-center">
+                <i class="fas fa-shipping-fast fa-2x mb-2"></i>
+                <h6>Envío Gratis</h6>
+                <small>En compras mayores a $100</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="info-card text-center">
+                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                <h6>Calidad Garantizada</h6>
+                <small>Productos de primera calidad</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="info-card text-center">
+                <i class="fas fa-headset fa-2x mb-2"></i>
+                <h6>Soporte 24/7</h6>
+                <small>Asesoramiento profesional</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+            <div class="info-card text-center">
+                <i class="fas fa-credit-card fa-2x mb-2"></i>
+                <h6>Múltiples Pagos</h6>
+                <small>Tarjeta, efectivo y QR</small>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-    /* Estilos del carrusel */
-    .carrusel-container {
-        position: relative;
-        max-width: 1200px;
-        margin: 0 auto 40px;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #d32f2f;
+        --accent-color: #007bff;
+        --light-bg: #f8f9fa;
     }
-
-    .carrusel {
-        position: relative;
-        height: 500px;
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--light-bg);
     }
-
-    .slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
+    
+    /* Carrusel */
+    .carousel-container {
+        margin-top: 20px;
+        margin-bottom: 30px;
     }
-
-    .slide.active {
-        opacity: 1;
+    
+    .carousel-item {
+        height: 300px;
+        background-size: cover;
+        background-position: center;
     }
-
-    .slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .slide-content {
-        position: absolute;
-        bottom: 50px;
-        left: 50px;
-        background: rgba(44, 62, 80, 0.9);
-        color: white;
-        padding: 25px;
-        border-radius: 8px;
-        max-width: 400px;
-    }
-
-    .slide-content h2 {
-        margin-bottom: 10px;
-        font-size: 28px;
-        color: white;
-    }
-
-    .slide-content p {
-        margin-bottom: 15px;
-        font-size: 16px;
-        color: #ecf0f1;
-    }
-
-    .btn-primary {
-        background: #1abc9c;
-        color: white;
-        padding: 12px 25px;
-        text-decoration: none;
+    
+    .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 15px;
         border-radius: 5px;
-        display: inline-block;
-        transition: background 0.3s;
-        font-weight: bold;
-    }
-
-    .btn-primary:hover {
-        background: #16a085;
-        transform: translateY(-2px);
-    }
-
-    .carrusel-control {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.5);
-        color: white;
-        border: none;
-        padding: 15px 20px;
-        cursor: pointer;
-        font-size: 18px;
-        transition: background 0.3s;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .carrusel-control:hover {
-        background: rgba(0,0,0,0.8);
-    }
-
-    .prev {
-        left: 20px;
-    }
-
-    .next {
-        right: 20px;
-    }
-
-    .carrusel-indicadores {
-        position: absolute;
         bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 10px;
+        right: 20px;
+        left: 20px;
+        width: auto;
     }
-
-    .indicador {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.5);
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .indicador.active {
-        background: white;
-    }
-
-    /* Estilos de las categorías */
-    .categorias-section {
-        text-align: center;
-        padding: 60px 20px;
-        background: white;
-        margin: 40px 0;
-        border-radius: 15px;
-        box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    }
-
-    .categorias-section h2 {
-        color: #2c3e50;
-        margin-bottom: 15px;
-        font-size: 36px;
-        font-weight: bold;
-    }
-
-    .categorias-section p {
-        color: #7f8c8d;
-        margin-bottom: 40px;
-        font-size: 18px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .categorias-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    .categoria-card {
-        background: white;
-        padding: 30px 25px;
-        border-radius: 15px;
-        text-decoration: none;
-        color: #2c3e50;
-        transition: all 0.3s ease;
-        border: 2px solid #ecf0f1;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .categoria-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        border-color: #1abc9c;
-        background: #f8f9fa;
-    }
-
-    .categoria-icono {
-        font-size: 64px;
-        margin-bottom: 20px;
-        transition: transform 0.3s ease;
-    }
-
-    .categoria-card:hover .categoria-icono {
-        transform: scale(1.1);
-    }
-
-    .categoria-card h3 {
-        margin-bottom: 15px;
-        font-size: 22px;
+    
+    .carousel-caption h5 {
         font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    /* Categorías */
+    .categories-section {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+    
+    .section-title {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 10px;
+        position: relative;
+        padding-bottom: 10px;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: var(--accent-color);
+    }
+    
+    .section-subtitle {
+        color: #6c757d;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+    }
+    
+    .category-card {
         text-align: center;
+        padding: 20px 15px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        margin-bottom: 15px;
+        background: white;
+        border: 1px solid #e9ecef;
+        height: 100%;
     }
-
-    .categoria-card p {
-        color: #7f8c8d;
-        font-size: 15px;
-        margin: 0;
-        text-align: center;
-        line-height: 1.5;
-    }
-
-    /* Sección de información */
-    .info-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-        margin: 50px 0;
-        padding: 40px;
-        background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-        border-radius: 15px;
-        color: white;
-    }
-
-    .info-card {
-        text-align: center;
-        padding: 25px 20px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 10px;
-        transition: transform 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-
-    .info-card:hover {
+    
+    .category-card:hover {
         transform: translateY(-5px);
-        background: rgba(255,255,255,0.15);
+        box-shadow: 0 5px 15px rgba(0,0,0,.1);
+        border-color: var(--accent-color);
     }
-
-    .info-card h3 {
-        margin-bottom: 12px;
-        font-size: 20px;
+    
+    .category-card i {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: var(--accent-color);
+    }
+    
+    .category-card h6 {
         font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
     }
-
-    .info-card p {
-        color: #bdc3c7;
-        margin: 0;
-        font-size: 15px;
+    
+    .category-card small {
+        font-size: 0.8rem;
+        line-height: 1.4;
     }
-
+    
+    /* Sección de Información */
+    .info-section {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+    
+    .info-card {
+        padding: 20px 15px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        background: white;
+        border: 1px solid #e9ecef;
+        height: 100%;
+    }
+    
+    .info-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 3px 10px rgba(0,0,0,.1);
+        border-color: var(--accent-color);
+    }
+    
+    .info-card i {
+        color: var(--accent-color);
+        margin-bottom: 10px;
+    }
+    
+    .info-card h6 {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+    }
+    
+    .info-card small {
+        font-size: 0.8rem;
+        color: #6c757d;
+        line-height: 1.4;
+    }
+    
+    /* Botones */
+    .btn-primary {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        border-radius: 20px;
+        padding: 8px 20px;
+        font-weight: 500;
+    }
+    
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        transform: translateY(-1px);
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
-        .carrusel {
-            height: 400px;
+        .carousel-item {
+            height: 250px;
         }
         
-        .slide-content {
-            left: 20px;
-            bottom: 20px;
-            padding: 20px;
-            max-width: 300px;
-        }
-        
-        .slide-content h2 {
-            font-size: 22px;
-        }
-        
-        .carrusel-control {
-            width: 40px;
-            height: 40px;
-            padding: 10px 15px;
-        }
-        
-        .categorias-section {
-            padding: 40px 15px;
-        }
-        
-        .categorias-section h2 {
-            font-size: 28px;
-        }
-        
-        .categorias-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
+        .categories-section,
         .info-section {
-            grid-template-columns: 1fr;
-            padding: 30px 20px;
-            gap: 20px;
+            padding: 20px 15px;
+        }
+        
+        .category-card,
+        .info-card {
+            padding: 15px 10px;
+        }
+        
+        .category-card i,
+        .info-card i {
+            font-size: 1.5rem;
         }
     }
-
-    @media (max-width: 480px) {
-        .carrusel {
-            height: 300px;
+    
+    @media (max-width: 576px) {
+        .carousel-item {
+            height: 200px;
         }
         
-        .slide-content {
-            left: 15px;
-            bottom: 15px;
-            padding: 15px;
-            max-width: 250px;
+        .carousel-caption {
+            padding: 10px;
+            bottom: 10px;
+            right: 10px;
+            left: 10px;
         }
         
-        .slide-content h2 {
-            font-size: 18px;
+        .carousel-caption h5 {
+            font-size: 1rem;
         }
         
-        .slide-content p {
-            font-size: 14px;
+        .carousel-caption p {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
         }
         
-        .categorias-grid {
-            grid-template-columns: 1fr;
+        .btn-primary {
+            padding: 5px 15px;
+            font-size: 0.8rem;
         }
     }
 </style>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-    let slideIndex = 0;
-    const slides = document.querySelectorAll('.slide');
-    const indicadores = document.querySelectorAll('.indicador');
-
-    function mostrarSlide(n) {
-        // Ocultar todos los slides
-        slides.forEach(slide => slide.classList.remove('active'));
-        indicadores.forEach(ind => ind.classList.remove('active'));
-        
-        // Calcular el nuevo índice
-        slideIndex = n;
-        if (slideIndex >= slides.length) slideIndex = 0;
-        if (slideIndex < 0) slideIndex = slides.length - 1;
-        
-        // Mostrar el slide actual
-        slides[slideIndex].classList.add('active');
-        indicadores[slideIndex].classList.add('active');
-    }
-
-    function cambiarSlide(n) {
-        mostrarSlide(slideIndex + n);
-    }
-
-    function irASlide(n) {
-        mostrarSlide(n);
-    }
-
-    // Cambio automatico cada 5 segundos
-    let carruselInterval;
-
-    function iniciarCarruselAutomatico() {
-        carruselInterval = setInterval(() => {
-            cambiarSlide(1);
-        }, 5000);
-    }
-
-    function pausarCarruselAutomatico() {
-        clearInterval(carruselInterval);
-    }
-
-    // Pausar el carrusel cuando el mouse esta sobre él
-    const carrusel = document.getElementById('carrusel');
-    if (carrusel) {
-        carrusel.addEventListener('mouseenter', pausarCarruselAutomatico);
-        carrusel.addEventListener('mouseleave', iniciarCarruselAutomatico);
-    }
-
-    // Iniciar el carrusel automatico
+    // Inicializar carrusel de Bootstrap
     document.addEventListener('DOMContentLoaded', function() {
-        iniciarCarruselAutomatico();
-        
-        // Asegurarse de que el primer slide este activo
-        mostrarSlide(0);
-    });
-
-    // Manejar el evento de visibilidad de la pagina
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            pausarCarruselAutomatico();
-        } else {
-            iniciarCarruselAutomatico();
+        var myCarousel = document.querySelector('#mainCarousel');
+        if (myCarousel) {
+            var carousel = new bootstrap.Carousel(myCarousel, {
+                interval: 5000,
+                wrap: true
+            });
         }
     });
 </script>

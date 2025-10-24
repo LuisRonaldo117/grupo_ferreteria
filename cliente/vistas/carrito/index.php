@@ -6,16 +6,56 @@
             <!-- Lista de Productos -->
             <div class="carrito-productos">
                 <div id="carritoContenido">
-                    <!-- El contenido del carrito se cargará dinámicamente -->
-                </div>
-                
-                <div class="carrito-acciones-principales">
-                    <a href="index.php?c=catalogo" class="btn-seguir-comprando">
-                        ← Seguir Comprando
-                    </a>
-                    <button class="btn-vaciar-carrito-principal" id="btnVaciarCarritoPrincipal">
-                        🗑️ Vaciar Carrito
-                    </button>
+                    <?php if (!empty($carrito)): ?>
+                        <?php foreach($carrito as $item): ?>
+                        <!-- En la sección del carrito -->
+                        <div class="carrito-item-detalle">
+                            <div class="item-imagen">
+                                <?php 
+                                // Verificar si hay imagen y construir la ruta correcta
+                                if (!empty($item['imagen'])) {
+                                    $rutaImagen = 'assets/images/' . $item['imagen'];
+                                    echo '<img src="' . $rutaImagen . '" alt="' . $item['nombre'] . '" onerror="this.style.display=\'none\'">';
+                                } else {
+                                    echo '📦';
+                                }
+                                ?>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-nombre"><?php echo $item['nombre']; ?></div>
+                                <div class="item-precio">Bs. <?php echo number_format($item['precio_unitario'], 2); ?></div>
+                            </div>
+                            <div class="item-controls">
+                                <div class="cantidad-control">
+                                    <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(<?php echo $item['id_carrito']; ?>, <?php echo $item['cantidad'] - 1; ?>)">-</button>
+                                    <span class="cantidad-numero"><?php echo $item['cantidad']; ?></span>
+                                    <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(<?php echo $item['id_carrito']; ?>, <?php echo $item['cantidad'] + 1; ?>)">+</button>
+                                </div>
+                                <button class="btn-eliminar-item" onclick="carritoManager.eliminarProducto(<?php echo $item['id_carrito']; ?>)">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                        
+                        <!-- Botones de acción -->
+                        <div class="carrito-acciones-principales">
+                            <a href="index.php?c=catalogo" class="btn-seguir-comprando">
+                                ← Seguir Comprando
+                            </a>
+                            <button class="btn-vaciar-carrito-principal" 
+                                    onclick="carritoManager.vaciarCarrito()">
+                                🗑️ Vaciar Carrito
+                            </button>
+                        </div>
+                    <?php else: ?>
+                        <div class="carrito-vacio-mensaje">
+                            <div class="icono">🛒</div>
+                            <h3>Tu carrito está vacío</h3>
+                            <p>Agrega productos desde nuestro catálogo</p>
+                            <a href="index.php?c=catalogo" class="btn-ir-catalogo">Ir al Catálogo</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -27,15 +67,15 @@
                     <div class="resumen-detalle">
                         <div class="resumen-item">
                             <span>Subtotal:</span>
-                            <span>Bs. <span id="resumenSubtotal">0.00</span></span>
+                            <span>Bs. <span id="resumenSubtotal"><?php echo number_format($totalCarrito ?? 0, 2); ?></span></span>
                         </div>
                         <div class="resumen-item">
                             <span>Envío:</span>
-                            <span>Bs. <span id="resumenEnvio">15.00</span></span>
+                            <span>Bs. <span id="resumenEnvio"><?php echo ($totalCarrito ?? 0) > 0 ? '15.00' : '0.00'; ?></span></span>
                         </div>
                         <div class="resumen-total">
                             <span>Total:</span>
-                            <span>Bs. <span id="resumenTotal">15.00</span></span>
+                            <span>Bs. <span id="resumenTotal"><?php echo number_format(($totalCarrito ?? 0) + (($totalCarrito ?? 0) > 0 ? 15 : 0), 2); ?></span></span>
                         </div>
                     </div>
                     
@@ -43,7 +83,7 @@
                         <p>🔒 Tu información de pago está protegida</p>
                     </div>
                     
-                    <button class="btn-proceder-pago" id="btnProcederPago">
+                    <button class="btn-proceder-pago" id="btnProcederPago" <?php echo empty($carrito) ? 'disabled' : ''; ?>>
                         Proceder al Pago
                     </button>
                 </div>
@@ -205,6 +245,35 @@
         justify-content: center;
         font-size: 32px;
         flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .item-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* Para el dropdown del carrito */
+    .carrito-item-imagen {
+        width: 50px;
+        height: 50px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .carrito-item-imagen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
     }
 
     .item-info {

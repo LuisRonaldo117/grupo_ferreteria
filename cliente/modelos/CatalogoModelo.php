@@ -65,7 +65,7 @@ class CatalogoModelo {
     
     private function obtenerRutaImagen($nombreImagen, $categoria) {
         if (!empty($nombreImagen)) {
-            // Si hay nombre de imagen en la BD, usar nuestra ruta local
+            // Si hay nombre de imagen en la bd, usar nuestra ruta local
             return 'assets/images/' . $nombreImagen;
         } else {
             // Si no hay imagen, usamos un icono segun la categoria

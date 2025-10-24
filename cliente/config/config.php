@@ -8,7 +8,7 @@ define('DB_PASS', '');
 
 // Configuracion de la aplicacion
 define('APP_NAME', 'FERRETERIA');
-define('APP_URL', 'http://localhost/grupo_ferreteria');
+define('APP_URL', 'http://localhost/grupo_ferreteria/cliente');
 
 // Conexion a la bd
 function conectarBD() {

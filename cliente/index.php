@@ -2,15 +2,18 @@
 
 require_once 'config/config.php';
 
-// Iniciar sesión (temporal para pruebas)
+// Iniciar sesión
 session_start();
-if (!isset($_SESSION['id_cliente'])) {
-    $_SESSION['id_cliente'] = 1; // ID temporal para pruebas
-}
 
-// Obtener el controlador y la acción desde la URL
+// Controlador y acción por defecto
 $controlador = isset($_GET['c']) ? $_GET['c'] : 'Inicio';
 $accion = isset($_GET['a']) ? $_GET['a'] : 'index';
+
+// Si el usuario no está logueado y no está en auth, redirigir al login
+if (!isset($_SESSION['id_cliente']) && $controlador !== 'Auth') {
+    header('Location: index.php?c=auth&a=login');
+    exit();
+}
 
 // Si hay un parámetro 'articulo', redirigir a la acción articulo del controlador Informate
 if (isset($_GET['articulo'])) {

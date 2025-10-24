@@ -1,3 +1,7 @@
+<?php
+// Vista Infórmate - Estructura original con estilos del diseño guía
+?>
+
 <!-- Portada -->
 <section class="portada-informate">
     <div class="portada-imagen">
@@ -14,15 +18,15 @@
     <div class="container">
         <div class="tabs-navegacion">
             <button class="tab-btn active" data-tab="articulos">
-                <span class="tab-icon">📚</span>
+                <i class="fas fa-newspaper"></i>
                 Artículos
             </button>
             <button class="tab-btn" data-tab="tutoriales">
-                <span class="tab-icon">🎥</span>
+                <i class="fas fa-video"></i>
                 Tutoriales
             </button>
             <button class="tab-btn" data-tab="consejos">
-                <span class="tab-icon">💡</span>
+                <i class="fas fa-lightbulb"></i>
                 Consejos
             </button>
         </div>
@@ -44,12 +48,14 @@
                             </div>
                             <div class="articulo-contenido">
                                 <div class="articulo-meta">
-                                    <span class="articulo-categoria"><?php echo $articulo['categoria']; ?></span>
+                                    <span class="badge-category"><?php echo $articulo['categoria']; ?></span>
                                     <span class="articulo-fecha"><?php echo $articulo['fecha']; ?></span>
                                 </div>
                                 <h3><?php echo $articulo['titulo']; ?></h3>
                                 <p><?php echo $articulo['descripcion']; ?></p>
-                                <a href="index.php?articulo=<?php echo $articulo['id']; ?>" class="btn-leer-mas">Leer Más</a>
+                                <a href="index.php?articulo=<?php echo $articulo['id']; ?>" class="btn-leer-mas">
+                                    <i class="fas fa-book-reader me-1"></i>Leer Más
+                                </a>
                             </div>
                         </article>
                     <?php endforeach; ?>
@@ -68,7 +74,7 @@
                             <div class="tutorial-video">
                                 <img src="<?php echo $tutorial['imagen']; ?>" alt="<?php echo $tutorial['titulo']; ?>">
                                 <div class="play-button" onclick="abrirVideo('<?php echo $tutorial['video_url']; ?>')">
-                                    <span>▶</span>
+                                    <i class="fas fa-play"></i>
                                 </div>
                                 <div class="duracion"><?php echo $tutorial['duracion']; ?></div>
                             </div>
@@ -76,7 +82,7 @@
                                 <h3><?php echo $tutorial['titulo']; ?></h3>
                                 <p><?php echo $tutorial['descripcion']; ?></p>
                                 <button class="btn-ver-video" onclick="abrirVideo('<?php echo $tutorial['video_url']; ?>')">
-                                    Ver Tutorial
+                                    <i class="fas fa-play me-1"></i>Ver Tutorial
                                 </button>
                             </div>
                         </div>
@@ -94,12 +100,17 @@
                     <?php foreach($consejos['items'] as $categoria): ?>
                         <div class="consejo-categoria">
                             <div class="categoria-header">
-                                <div class="categoria-icono"><?php echo $categoria['icono']; ?></div>
+                                <div class="categoria-icono">
+                                    <?php echo $categoria['icono']; ?>
+                                </div>
                                 <h3><?php echo $categoria['titulo']; ?></h3>
                             </div>
                             <ul class="lista-consejos">
                                 <?php foreach($categoria['consejos'] as $consejo): ?>
-                                    <li><?php echo $consejo; ?></li>
+                                    <li>
+                                        <i class="fas fa-check text-success me-2"></i>
+                                        <?php echo $consejo; ?>
+                                    </li>
                                 <?php endforeach; ?>
                             </ul>
                         </div>
@@ -111,19 +122,41 @@
 </section>
 
 <!-- Modal para videos -->
-<div id="videoModal" class="modal">
-    <div class="modal-contenido">
-        <span class="cerrar" onclick="cerrarVideo()">&times;</span>
-        <div id="videoContainer"></div>
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">Tutorial en Video</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="videoContainer" class="ratio ratio-16x9">
+                    <!-- El video se cargará aquí -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #d32f2f;
+        --accent-color: #007bff;
+        --light-bg: #f8f9fa;
+        --text-muted: #6c757d;
+        --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+        --shadow-md: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
     /* Portada */
     .portada-informate {
         position: relative;
         height: 400px;
         margin-bottom: 40px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
     }
 
     .portada-imagen {
@@ -151,14 +184,14 @@
     }
 
     .portada-contenido h1 {
-        font-size: 48px;
+        font-size: 3rem;
         margin-bottom: 15px;
         font-weight: bold;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
     .portada-contenido p {
-        font-size: 20px;
+        font-size: 1.25rem;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         max-width: 600px;
         margin: 0 auto;
@@ -181,7 +214,8 @@
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid #e9ecef;
     }
 
     .tab-btn {
@@ -195,25 +229,25 @@
         cursor: pointer;
         transition: all 0.3s ease;
         font-size: 16px;
-        font-weight: 600;
-        color: #7f8c8d;
+        font-weight: 500;
+        color: var(--text-muted);
         flex: 1;
         justify-content: center;
     }
 
     .tab-btn:hover {
-        color: #2c3e50;
-        background: rgba(26, 188, 156, 0.1);
+        color: var(--primary-color);
+        background: rgba(0, 123, 255, 0.1);
     }
 
     .tab-btn.active {
-        background: #1abc9c;
+        background: linear-gradient(90deg, var(--accent-color), #0056b3);
         color: white;
-        box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
     }
 
-    .tab-icon {
-        font-size: 20px;
+    .tab-btn i {
+        font-size: 18px;
     }
 
     /* Contenido de pestañas */
@@ -241,17 +275,32 @@
     }
 
     .panel-header h2 {
-        font-size: 36px;
-        color: #2c3e50;
+        font-size: 2.5rem;
+        color: var(--primary-color);
         margin-bottom: 15px;
-        font-weight: bold;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .panel-header h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: var(--accent-color);
+        border-radius: 2px;
     }
 
     .panel-header p {
-        font-size: 18px;
-        color: #7f8c8d;
+        font-size: 1.1rem;
+        color: var(--text-muted);
         max-width: 500px;
         margin: 0 auto;
+        line-height: 1.6;
     }
 
     /* Artículos */
@@ -263,21 +312,21 @@
 
     .articulo-card {
         background: white;
-        border-radius: 15px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-        border: 1px solid #f1f2f6;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
     }
 
     .articulo-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-md);
     }
 
     .articulo-imagen {
         position: relative;
-        height: 200px;
+        height: 220px;
         overflow: hidden;
     }
 
@@ -296,9 +345,9 @@
         position: absolute;
         top: 15px;
         right: 15px;
-        background: #1abc9c;
+        background: var(--secondary-color);
         color: white;
-        padding: 5px 15px;
+        padding: 6px 15px;
         border-radius: 20px;
         font-size: 12px;
         font-weight: bold;
@@ -311,46 +360,58 @@
     .articulo-meta {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 15px;
-        font-size: 14px;
     }
 
-    .articulo-categoria {
-        color: #1abc9c;
-        font-weight: bold;
+    .badge-category {
+        background: linear-gradient(90deg, var(--accent-color), #0056b3);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-transform: uppercase;
     }
 
     .articulo-fecha {
-        color: #7f8c8d;
+        color: var(--text-muted);
+        font-size: 0.85rem;
     }
 
     .articulo-contenido h3 {
-        font-size: 20px;
-        color: #2c3e50;
+        font-size: 1.4rem;
+        color: var(--primary-color);
         margin-bottom: 15px;
         line-height: 1.4;
+        font-weight: 600;
     }
 
     .articulo-contenido p {
-        color: #7f8c8d;
+        color: var(--text-muted);
         line-height: 1.6;
         margin-bottom: 20px;
+        font-size: 0.95rem;
     }
 
     .btn-leer-mas {
-        background: #3498db;
+        background: linear-gradient(90deg, var(--accent-color), #0056b3);
         color: white;
         padding: 10px 20px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         text-decoration: none;
-        display: inline-block;
-        transition: background 0.3s;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
         font-weight: 500;
+        font-size: 14px;
     }
 
     .btn-leer-mas:hover {
-        background: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        color: white;
     }
 
     /* Tutoriales */
@@ -362,21 +423,21 @@
 
     .tutorial-card {
         background: white;
-        border-radius: 15px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-        border: 1px solid #f1f2f6;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
     }
 
     .tutorial-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-md);
     }
 
     .tutorial-video {
         position: relative;
-        height: 200px;
+        height: 220px;
         overflow: hidden;
     }
 
@@ -384,6 +445,11 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .tutorial-card:hover .tutorial-video img {
+        transform: scale(1.05);
     }
 
     .play-button {
@@ -391,37 +457,39 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(26, 188, 156, 0.9);
-        width: 60px;
-        height: 60px;
+        background: rgba(211, 47, 47, 0.9);
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
     .play-button:hover {
-        background: rgba(26, 188, 156, 1);
+        background: rgba(211, 47, 47, 1);
         transform: translate(-50%, -50%) scale(1.1);
     }
 
-    .play-button span {
+    .play-button i {
         color: white;
-        font-size: 20px;
+        font-size: 24px;
         margin-left: 3px;
     }
 
     .duracion {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.7);
+        bottom: 15px;
+        right: 15px;
+        background: rgba(0,0,0,0.8);
         color: white;
-        padding: 5px 10px;
+        padding: 6px 12px;
         border-radius: 15px;
         font-size: 12px;
+        font-weight: 600;
     }
 
     .tutorial-contenido {
@@ -429,59 +497,67 @@
     }
 
     .tutorial-contenido h3 {
-        font-size: 20px;
-        color: #2c3e50;
+        font-size: 1.4rem;
+        color: var(--primary-color);
         margin-bottom: 15px;
         line-height: 1.4;
+        font-weight: 600;
     }
 
     .tutorial-contenido p {
-        color: #7f8c8d;
+        color: var(--text-muted);
         line-height: 1.6;
         margin-bottom: 20px;
+        font-size: 0.95rem;
     }
 
     .btn-ver-video {
-        background: #e74c3c;
+        background: linear-gradient(90deg, var(--secondary-color), #b71c1c);
         color: white;
-        padding: 10px 20px;
+        padding: 12px 25px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         width: 100%;
         font-weight: 500;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
 
     .btn-ver-video:hover {
-        background: #c0392b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
     }
 
     /* Consejos */
     .consejos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 30px;
     }
 
     .consejo-categoria {
         background: white;
         padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        border: 1px solid #f1f2f6;
-        transition: transform 0.3s ease;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
     }
 
     .consejo-categoria:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-md);
     }
 
     .categoria-header {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         padding-bottom: 15px;
         border-bottom: 2px solid #f8f9fa;
     }
@@ -489,11 +565,12 @@
     .categoria-icono {
         font-size: 40px;
         margin-right: 15px;
+        color: var(--accent-color);
     }
 
     .categoria-header h3 {
-        font-size: 20px;
-        color: #2c3e50;
+        font-size: 1.4rem;
+        color: var(--primary-color);
         margin: 0;
         font-weight: 600;
     }
@@ -507,95 +584,45 @@
     .lista-consejos li {
         padding: 12px 0;
         border-bottom: 1px solid #f8f9fa;
-        position: relative;
-        padding-left: 30px;
-        color: #7f8c8d;
+        color: var(--text-muted);
         line-height: 1.5;
-    }
-
-    .lista-consejos li:before {
-        content: '✓';
-        position: absolute;
-        left: 0;
-        color: #1abc9c;
-        font-weight: bold;
-        font-size: 16px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: flex-start;
     }
 
     .lista-consejos li:last-child {
         border-bottom: none;
     }
 
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.9);
-    }
-
-    .modal-contenido {
-        position: relative;
-        margin: 5% auto;
-        width: 80%;
-        max-width: 800px;
-    }
-
-    .cerrar {
-        position: absolute;
-        top: -40px;
-        right: 0;
-        color: white;
-        font-size: 35px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .cerrar:hover {
-        color: #1abc9c;
-    }
-
-    #videoContainer {
-        position: relative;
-        padding-bottom: 56.25%; /* 16:9 */
-        height: 0;
-    }
-
-    #videoContainer iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
+    .lista-consejos li i {
+        margin-top: 3px;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
         .portada-contenido h1 {
-            font-size: 36px;
+            font-size: 2.2rem;
         }
 
         .portada-contenido p {
-            font-size: 18px;
+            font-size: 1.1rem;
         }
 
         .tabs-navegacion {
             flex-direction: column;
             border-radius: 20px;
             gap: 5px;
+            max-width: 100%;
         }
 
         .tab-btn {
             border-radius: 15px;
+            padding: 12px 20px;
         }
 
         .panel-header h2 {
-            font-size: 28px;
+            font-size: 2rem;
         }
 
         .articulos-grid,
@@ -605,20 +632,29 @@
             gap: 25px;
         }
 
-        .modal-contenido {
-            width: 95%;
-            margin: 10% auto;
+        .portada-informate {
+            height: 300px;
+            margin-bottom: 30px;
         }
     }
 
     @media (max-width: 480px) {
         .portada-informate {
-            height: 300px;
+            height: 250px;
+        }
+
+        .portada-contenido h1 {
+            font-size: 1.8rem;
+        }
+
+        .portada-contenido p {
+            font-size: 1rem;
         }
 
         .articulo-meta {
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
+            align-items: flex-start;
         }
 
         .categoria-header {
@@ -629,6 +665,15 @@
 
         .categoria-icono {
             margin-right: 0;
+        }
+
+        .panel-header h2 {
+            font-size: 1.6rem;
+        }
+
+        .articulo-contenido,
+        .tutorial-contenido {
+            padding: 20px;
         }
     }
 </style>
@@ -656,7 +701,7 @@
 
     // Funciones para el modal de videos
     function abrirVideo(url) {
-        const modal = document.getElementById('videoModal');
+        const modal = new bootstrap.Modal(document.getElementById('videoModal'));
         const container = document.getElementById('videoContainer');
         
         // Extraer id del video de youtube
@@ -671,29 +716,12 @@
             </iframe>
         `;
         
-        modal.style.display = 'block';
+        modal.show();
     }
 
-    function cerrarVideo() {
-        const modal = document.getElementById('videoModal');
+    // Limpiar el video cuando se cierra el modal
+    document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
         const container = document.getElementById('videoContainer');
-        
-        modal.style.display = 'none';
         container.innerHTML = '';
-    }
-
-    // Cerrar modal al hacer click fuera
-    window.onclick = function(event) {
-        const modal = document.getElementById('videoModal');
-        if (event.target == modal) {
-            cerrarVideo();
-        }
-    }
-
-    // Cerrar con tecla
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            cerrarVideo();
-        }
     });
 </script>

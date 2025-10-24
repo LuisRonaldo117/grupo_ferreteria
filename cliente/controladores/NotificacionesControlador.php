@@ -1,59 +1,114 @@
 <?php
-require_once 'modelos/InicioModelo.php';
+require_once 'modelos/NotificacionModelo.php';
 
 class NotificacionesControlador {
     private $modelo;
     
     public function __construct() {
-        $this->modelo = new InicioModelo();
+        $this->modelo = new NotificacionModelo();
     }
     
     public function obtener() {
-        // En una aplicación real, aquí obtendrías el ID del cliente de la sesión
-        // Por ahora usaremos un ID fijo para pruebas
-        $idCliente = isset($_SESSION['id_cliente']) ? $_SESSION['id_cliente'] : 1;
+        session_start();
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'error' => 'No autenticado']);
+            return;
+        }
         
+        $idCliente = $_SESSION['id_cliente'];
         $notificaciones = $this->modelo->obtenerNotificaciones($idCliente);
+        
+        // Formatear las notificaciones para la vista
+        $notificacionesFormateadas = [];
+        foreach ($notificaciones as $notif) {
+            $notificacionesFormateadas[] = [
+                'id' => $notif['id_notificacion'],
+                'titulo' => $notif['titulo'],
+                'descripcion' => $notif['descripcion'],
+                'tiempo' => $this->formatearTiempo($notif['fecha_creacion']),
+                'leida' => (bool)$notif['leida'],
+                'tipo' => $notif['tipo'],
+                'fecha' => $notif['fecha_formateada'],
+                'hora' => $notif['hora']
+            ];
+        }
         
         header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
-            'notificaciones' => $notificaciones,
+            'notificaciones' => $notificacionesFormateadas,
             'totalNoLeidas' => $this->modelo->obtenerCantidadNoLeidas($idCliente)
         ]);
     }
     
     public function marcarLeida() {
-        $idNotificacion = isset($_POST['id_notificacion']) ? $_POST['id_notificacion'] : null;
+        session_start();
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'error' => 'No autenticado']);
+            return;
+        }
         
-        // En una aplicación real, aquí obtendrías el ID del cliente de la sesión
-        $idCliente = isset($_SESSION['id_cliente']) ? $_SESSION['id_cliente'] : 1;
+        $idNotificacion = isset($_POST['id_notificacion']) ? intval($_POST['id_notificacion']) : null;
+        $idCliente = $_SESSION['id_cliente'];
         
         if ($idNotificacion) {
             $resultado = $this->modelo->marcarComoLeida($idNotificacion, $idCliente);
             
-            header('Content-Type: application/json');
             echo json_encode([
                 'success' => $resultado,
                 'totalNoLeidas' => $this->modelo->obtenerCantidadNoLeidas($idCliente)
             ]);
         } else {
-            header('Content-Type: application/json');
             echo json_encode(['success' => false, 'error' => 'ID de notificación no válido']);
         }
     }
     
-    public function cantidadNoLeidas() {
-        // En una aplicación real, aquí obtendrías el ID del cliente de la sesión
-        $idCliente = isset($_SESSION['id_cliente']) ? $_SESSION['id_cliente'] : 1;
+    public function marcarTodasLeidas() {
+        session_start();
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'error' => 'No autenticado']);
+            return;
+        }
         
+        $idCliente = $_SESSION['id_cliente'];
+        $resultado = $this->modelo->marcarTodasComoLeidas($idCliente);
+        
+        echo json_encode([
+            'success' => $resultado,
+            'totalNoLeidas' => 0
+        ]);
+    }
+    
+    public function cantidadNoLeidas() {
+        session_start();
+        if (!isset($_SESSION['id_cliente'])) {
+            echo json_encode(['success' => false, 'totalNoLeidas' => 0]);
+            return;
+        }
+        
+        $idCliente = $_SESSION['id_cliente'];
         $total = $this->modelo->obtenerCantidadNoLeidas($idCliente);
         
-        header('Content-Type: application/json');
         echo json_encode([
             'success' => true,
             'totalNoLeidas' => $total
         ]);
+    }
+    
+    private function formatearTiempo($fecha) {
+        $ahora = new DateTime();
+        $fechaNotif = new DateTime($fecha);
+        $diferencia = $ahora->diff($fechaNotif);
+        
+        if ($diferencia->d > 0) {
+            return "Hace {$diferencia->d} día" . ($diferencia->d > 1 ? 's' : '');
+        } elseif ($diferencia->h > 0) {
+            return "Hace {$diferencia->h} hora" . ($diferencia->h > 1 ? 's' : '');
+        } elseif ($diferencia->i > 0) {
+            return "Hace {$diferencia->i} minuto" . ($diferencia->i > 1 ? 's' : '');
+        } else {
+            return 'Hace unos momentos';
+        }
     }
 }
 ?>

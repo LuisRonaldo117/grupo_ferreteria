@@ -5,6 +5,9 @@ class FacturaModelo {
     public function crearFactura($datos) {
         $conexion = conectarBD();
         
+        // Iniciar transaccion
+        $conexion->autocommit(false);
+        
         try {
             // Validacion de datos
             if (empty($datos['id_cliente'])) {
@@ -15,6 +18,9 @@ class FacturaModelo {
                 throw new Exception("Total inválido o no proporcionado");
             }
 
+            // Debug para ver que datos llegan
+            error_log("Datos recibidos en crearFactura: " . print_r($datos, true));
+
             // Obtener id del metodo de pago
             $metodoPago = $this->convertirMetodoPago($datos['metodo_pago'] ?? 'efectivo');
             $sqlMetodo = "SELECT id_metodo FROM metodo_pago WHERE nombre_metodo = ? LIMIT 1";
@@ -22,7 +28,8 @@ class FacturaModelo {
             $stmtMetodo->bind_param("s", $metodoPago);
             $stmtMetodo->execute();
             $resultMetodo = $stmtMetodo->get_result();
-            $idMetodo = $resultMetodo->fetch_assoc()['id_metodo'] ?? 2; // Default: Efectivo
+            $idMetodoRow = $resultMetodo->fetch_assoc();
+            $idMetodo = $idMetodoRow['id_metodo'] ?? 2; // Default: Efectivo
             $stmtMetodo->close();
 
             // Insertar factura principal
@@ -45,9 +52,32 @@ class FacturaModelo {
             }
 
             $id_factura = $conexion->insert_id;
+            error_log("Factura creada con ID: " . $id_factura);
             
             // Insertar detalles de factura
             foreach ($datos['productos'] as $producto) {
+                // Usar la estructura correcta del carrito de bd
+                $idProducto = $producto['id_producto'] ?? $producto['id'] ?? null;
+                $cantidad = $producto['cantidad'] ?? 0;
+                $precioUnitario = $producto['precio_unitario'] ?? $producto['precio'] ?? 0;
+                
+                if (!$idProducto || $cantidad <= 0) {
+                    throw new Exception("Datos de producto inválidos: " . print_r($producto, true));
+                }
+
+                // Verificar stock antes de procesar
+                $sqlStock = "SELECT stock FROM producto WHERE id_producto = ?";
+                $stmtStockCheck = $conexion->prepare($sqlStock);
+                $stmtStockCheck->bind_param("i", $idProducto);
+                $stmtStockCheck->execute();
+                $resultStock = $stmtStockCheck->get_result();
+                $stockActual = $resultStock->fetch_assoc()['stock'] ?? 0;
+                $stmtStockCheck->close();
+                
+                if ($stockActual < $cantidad) {
+                    throw new Exception("Stock insuficiente para producto ID: " . $idProducto . ". Stock actual: " . $stockActual . ", solicitado: " . $cantidad);
+                }
+
                 $sqlDetalle = "INSERT INTO detalle_factura 
                         (id_factura, id_producto, cantidad, precio_unitario)
                         VALUES 
@@ -56,9 +86,9 @@ class FacturaModelo {
                 $stmtDetalle = $conexion->prepare($sqlDetalle);
                 $stmtDetalle->bind_param("iiid",
                     $id_factura,
-                    $producto['id'],
-                    $producto['cantidad'],
-                    $producto['precio']
+                    $idProducto,
+                    $cantidad,
+                    $precioUnitario
                 );
                 
                 if (!$stmtDetalle->execute()) {
@@ -66,26 +96,43 @@ class FacturaModelo {
                 }
 
                 // Actualizar stock
-                $sqlStock = "UPDATE producto SET stock = stock - ? WHERE id_producto = ?";
-                $stmtStock = $conexion->prepare($sqlStock);
-                $stmtStock->bind_param("ii", $producto['cantidad'], $producto['id']);
-                $stmtStock->execute();
-                $stmtStock->close();
+                $sqlUpdateStock = "UPDATE producto SET stock = stock - ? WHERE id_producto = ?";
+                $stmtUpdateStock = $conexion->prepare($sqlUpdateStock);
+                $stmtUpdateStock->bind_param("ii", $cantidad, $idProducto);
+                if (!$stmtUpdateStock->execute()) {
+                    throw new Exception("Error al actualizar stock: " . $stmtUpdateStock->error);
+                }
+                $stmtUpdateStock->close();
                 
                 $stmtDetalle->close();
             }
             
-            // Registrar pedido
-            $this->registrarPedido($id_factura, $datos['id_cliente'], $conexion);
+            // Vaciar carrito del cliente después del pago exitoso
+            $sqlVaciarCarrito = "DELETE FROM carrito WHERE id_cliente = ?";
+            $stmtVaciarCarrito = $conexion->prepare($sqlVaciarCarrito);
+            $stmtVaciarCarrito->bind_param("i", $datos['id_cliente']);
+            if (!$stmtVaciarCarrito->execute()) {
+                throw new Exception("Error al vaciar carrito: " . $stmtVaciarCarrito->error);
+            }
+            $stmtVaciarCarrito->close();
             
+            // Registrar pedido
+            $idPedido = $this->registrarPedido($id_factura, $datos['id_cliente'], $conexion);
+            error_log("Pedido registrado con ID: " . $idPedido);
+            
+            // Confirmar transaccion
             $conexion->commit();
+            error_log("Transacción completada exitosamente para factura ID: " . $id_factura);
+            
             return $id_factura;
             
         } catch (Exception $e) {
+            // Revertir transaccion en caso de error
             $conexion->rollback();
-            error_log("Error en FacturaModelo: " . $e->getMessage());
+            error_log("Error en FacturaModelo - crearFactura: " . $e->getMessage());
             return false;
         } finally {
+            $conexion->autocommit(true);
             if (isset($stmt)) $stmt->close();
             $conexion->close();
         }
@@ -200,14 +247,17 @@ class FacturaModelo {
             $metodoPago = $resultMetodo->fetch_assoc()['nombre_metodo'] ?? 'efectivo';
             $stmtMetodo->close();
             
+            // Convertir metodo de pago para la tabla pedido
+            $tipoPagoPedido = $this->convertirMetodoPagoParaPedido($metodoPago);
+            
             // Insertar pedido principal
             $sqlPedido = "INSERT INTO pedido 
                     (id_cliente, id_sucursal, fecha_pedido, estado, total, tipo_pago)
                     VALUES 
-                    (?, 1, NOW(), 'pendiente', ?, ?)";
+                    (?, 1, NOW(), 'entregado', ?, ?)";
             
             $stmtPedido = $conexion->prepare($sqlPedido);
-            $stmtPedido->bind_param("ids", $id_cliente, $factura['total'], $metodoPago);
+            $stmtPedido->bind_param("ids", $id_cliente, $factura['total'], $tipoPagoPedido);
             $stmtPedido->execute();
             $id_pedido = $conexion->insert_id;
             $stmtPedido->close();
@@ -248,6 +298,15 @@ class FacturaModelo {
             error_log("Error al registrar pedido: " . $e->getMessage());
             return false;
         }
+    }
+
+    private function convertirMetodoPagoParaPedido($metodoPago) {
+        $conversiones = [
+            'Tarjeta' => 'tarjeta',
+            'Efectivo' => 'efectivo', 
+            'QR' => 'transferencia'
+        ];
+        return $conversiones[$metodoPago] ?? 'efectivo';
     }
 }
 ?>

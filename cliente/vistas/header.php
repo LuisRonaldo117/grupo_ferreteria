@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo APP_NAME; ?></title>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
     <style>
         * {
             margin: 0;
@@ -19,13 +23,14 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 100%);
             color: white;
             padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(26, 188, 156, 0.3);
         }
         
         .container {
@@ -43,57 +48,99 @@
             gap: 15px;
         }
         
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #1abc9c, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(26, 188, 156, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .logo-icon {
             font-size: 28px;
-            font-weight: bold;
             color: #1abc9c;
+            text-shadow: 0 0 8px rgba(26, 188, 156, 0.5);
         }
         
         .search-bar {
             flex-grow: 1;
             margin: 0 20px;
             max-width: 500px;
+            position: relative;
         }
         
         .search-bar input {
             width: 100%;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
+            padding: 12px 45px 12px 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
             font-size: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
         }
         
         .search-bar input:focus {
             outline: none;
-            box-shadow: 0 2px 15px rgba(26, 188, 156, 0.3);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 15px rgba(26, 188, 156, 0.4);
+            border-color: rgba(26, 188, 156, 0.5);
+        }
+        
+        .search-bar input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 18px;
         }
         
         .header-icons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             position: relative;
         }
         
         .icon {
             cursor: pointer;
-            font-size: 24px;
-            padding: 8px;
+            font-size: 22px;
+            padding: 10px;
             border-radius: 50%;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
         }
         
         .icon:hover {
             background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
         /* Contador de notificaciones */
         .notificacion-contador {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #e74c3c;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(45deg, #e74c3c, #ff6b6b);
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -103,6 +150,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
         }
 
@@ -117,13 +165,15 @@
             position: absolute;
             top: 100%;
             right: 0;
-            width: 350px;
+            width: 380px;
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 1001;
             display: none;
             margin-top: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
         .notificaciones-dropdown.active {
@@ -146,8 +196,9 @@
             padding: 20px;
             border-bottom: 1px solid #ecf0f1;
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
+            background: #f8f9fa;
         }
 
         .notificaciones-header h3 {
@@ -213,6 +264,7 @@
             padding: 15px 20px;
             border-top: 1px solid #ecf0f1;
             text-align: center;
+            background: #f8f9fa;
         }
 
         .btn-ver-todas {
@@ -241,10 +293,11 @@
         .nav-menu {
             display: flex;
             justify-content: center;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 5px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 8px;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
         }
         
         .nav-item {
@@ -253,13 +306,32 @@
             transition: all 0.3s;
             text-decoration: none;
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
         }
         
         .nav-item:hover {
-            background: #1abc9c;
+            background: rgba(26, 188, 156, 0.2);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #1abc9c, #3498db);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-item:hover::after {
+            width: 70%;
         }
         
         .content {
@@ -275,47 +347,12 @@
             margin-top: 50px;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-top {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .search-bar {
-                margin: 10px 0;
-                order: 3;
-                width: 100%;
-            }
-            
-            .nav-menu {
-                flex-wrap: wrap;
-            }
-            
-            .nav-item {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
-
-            .notificaciones-dropdown {
-                width: 300px;
-                right: -50px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .notificaciones-dropdown {
-                width: 280px;
-                right: -80px;
-            }
-        }
-
         /* Contador del carrito */
         .carrito-contador {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #e74c3c;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(45deg, #e74c3c, #ff6b6b);
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -325,6 +362,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             animation: pulse 2s infinite;
         }
 
@@ -335,11 +373,13 @@
             right: 0;
             width: 380px;
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             z-index: 1001;
             display: none;
             margin-top: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
         .carrito-dropdown.active {
@@ -350,6 +390,7 @@
         .carrito-header {
             padding: 20px;
             border-bottom: 1px solid #ecf0f1;
+            background: #f8f9fa;
         }
 
         .carrito-header h3 {
@@ -382,6 +423,18 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carrito-item-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         .carrito-item-info {
@@ -419,6 +472,7 @@
             align-items: center;
             justify-content: center;
             font-size: 12px;
+            transition: all 0.2s;
         }
 
         .carrito-item-cantidad button:hover {
@@ -434,6 +488,7 @@
             padding: 5px;
             border-radius: 4px;
             font-size: 14px;
+            transition: all 0.2s;
         }
 
         .carrito-item-eliminar:hover {
@@ -456,6 +511,7 @@
         .carrito-footer {
             padding: 20px;
             border-top: 1px solid #ecf0f1;
+            background: #f8f9fa;
         }
 
         .carrito-total {
@@ -463,6 +519,7 @@
             margin-bottom: 15px;
             font-size: 16px;
             color: #2c3e50;
+            font-weight: 600;
         }
 
         .carrito-acciones {
@@ -484,6 +541,8 @@
 
         .btn-ver-carrito:hover {
             background: #2980b9;
+            color: white;
+            text-decoration: none;
         }
 
         .btn-vaciar-carrito {
@@ -513,6 +572,8 @@
             z-index: 1001;
             margin-top: 5px;
             overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-top: none;
         }
 
         .sugerencia-item {
@@ -531,23 +592,56 @@
             border-bottom: none;
         }
 
-        /* Mejorar el input de búsqueda */
-        .search-bar {
-            position: relative;
+        /* Efectos de neón para elementos destacados */
+        .neon-effect {
+            text-shadow: 0 0 5px rgba(26, 188, 156, 0.7),
+                         0 0 10px rgba(26, 188, 156, 0.5),
+                         0 0 15px rgba(26, 188, 156, 0.3);
         }
 
-        .search-bar input {
-            padding-right: 40px !important;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-bar {
+                margin: 10px 0;
+                order: 3;
+                width: 100%;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+            }
+            
+            .nav-item {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            .notificaciones-dropdown {
+                width: 300px;
+                right: -50px;
+            }
+            
+            .carrito-dropdown {
+                width: 300px;
+                right: -50px;
+            }
         }
 
-        .search-bar::after {
-            content: '🔍';
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #7f8c8d;
-            pointer-events: none;
+        @media (max-width: 480px) {
+            .notificaciones-dropdown {
+                width: 280px;
+                right: -80px;
+            }
+            
+            .carrito-dropdown {
+                width: 280px;
+                right: -80px;
+            }
         }
     </style>
 </head>
@@ -558,7 +652,10 @@
     <header class="header">
         <div class="container">
             <div class="header-top">
-                <div class="logo">FERRETERIA</div>
+                <div class="logo-container">
+                    <i class="bi bi-tools logo-icon neon-effect"></i>
+                    <div class="logo">FERRETERÍA</div>
+                </div>
                 <div class="search-bar">
                     <form action="index.php" method="GET" id="formBusqueda">
                         <input type="hidden" name="c" value="catalogo">
@@ -568,11 +665,12 @@
                             id="inputBusqueda">
                         <button type="submit" style="display: none;">Buscar</button>
                     </form>
+                    <i class="bi bi-search search-icon"></i>
                 </div>
                 <div class="header-icons">
                     <!-- Icono de Notificaciones -->
                     <div class="icon" id="iconoNotificaciones" title="Notificaciones">
-                        🔔
+                        <i class="bi bi-bell"></i>
                         <div class="notificacion-contador" id="contadorNotificaciones">3</div>
                     </div>
                     
@@ -589,37 +687,20 @@
                         </div>
                     </div>
 
-                    <!-- Icono del Carrito -->
-                    <div class="icon" id="iconoCarrito" title="Carrito de Compras">
-                        🛒
+                    <!-- Icono del Carrito (sin dropdown) -->
+                    <a href="index.php?c=carrito" class="icon" title="Carrito de Compras">
+                        <i class="bi bi-cart3"></i>
                         <div class="carrito-contador" id="contadorCarrito">0</div>
-                    </div>
+                    </a>
 
-                    <!-- Dropdown del Carrito -->
-                    <div class="carrito-dropdown" id="dropdownCarrito">
-                        <div class="carrito-header">
-                            <h3>Carrito de Compras</h3>
-                        </div>
-                        <div class="carrito-lista" id="listaCarrito">
-                            <!-- Los productos del carrito se cargarán aquí -->
-                        </div>
-                        <div class="carrito-footer">
-                            <div class="carrito-total">
-                                <strong>Total: Bs. <span id="carritoTotal">0.00</span></strong>
-                            </div>
-                            <div class="carrito-acciones">
-                                <a href="index.php?c=carrito" class="btn-ver-carrito">Ver Carrito</a>
-                                <button class="btn-vaciar-carrito" id="btnVaciarCarrito">Vaciar</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="index.php?c=usuario" class="icon" title="Mi perfil">👤</a>
+                    <a href="index.php?c=usuario" class="icon" title="Mi perfil">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
                 </div>
             </div>
             <nav class="nav-menu">
                 <a href="index.php?c=inicio" class="nav-item">INICIO</a>
-                <a href="index.php?c=catalogo" class="nav-item">CATALOGO</a>
+                <a href="index.php?c=catalogo" class="nav-item">CATÁLOGO</a>
                 <a href="index.php?c=nosotros" class="nav-item">NOSOTROS</a>
                 <a href="index.php?c=informate" class="nav-item">INFÓRMATE</a>
                 <a href="index.php?c=contactos" class="nav-item">CONTACTO</a>
@@ -632,3 +713,7 @@
     <script src="js/notificaciones.js"></script>
     <script src="<?php echo APP_URL; ?>/js/carrito.js"></script>
     <script src="js/busqueda.js"></script>
+    <script>
+        // Pasar el ID del cliente al JavaScript
+        window.idCliente = <?php echo $_SESSION['id_cliente'] ?? 0; ?>;
+    </script>

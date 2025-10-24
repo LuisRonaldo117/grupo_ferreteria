@@ -1,134 +1,167 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const iconoNotificaciones = document.getElementById('iconoNotificaciones');
-    const dropdownNotificaciones = document.getElementById('dropdownNotificaciones');
-    const overlayNotificaciones = document.getElementById('overlayNotificaciones');
-    const listaNotificaciones = document.getElementById('listaNotificaciones');
-    const contadorNotificaciones = document.getElementById('contadorNotificaciones');
-
-    // Datos de ejemplo para notificaciones
-    const notificaciones = [
-        {
-            id: 1,
-            titulo: '¡Bienvenido a Ferretería!',
-            descripcion: 'Gracias por registrarte. Disfruta de envío gratis en tu primera compra.',
-            tiempo: 'Hace 2 horas',
-            leida: false,
-            tipo: 'bienvenida'
-        },
-        {
-            id: 2,
-            titulo: 'Oferta Especial',
-            descripcion: '20% de descuento en herramientas eléctricas esta semana.',
-            tiempo: 'Hace 1 día',
-            leida: false,
-            tipo: 'promocion'
-        },
-        {
-            id: 3,
-            titulo: 'Pedido #00123 enviado',
-            descripcion: 'Tu pedido ha sido enviado y llegará en 2-3 días hábiles.',
-            tiempo: 'Hace 3 días',
-            leida: true,
-            tipo: 'pedido'
+class NotificacionesManager {
+    constructor() {
+        this.contador = document.getElementById('contadorNotificaciones');
+        this.dropdown = document.getElementById('dropdownNotificaciones');
+        this.icono = document.getElementById('iconoNotificaciones');
+        this.lista = document.getElementById('listaNotificaciones');
+        this.overlay = document.getElementById('overlayNotificaciones');
+        this.idCliente = window.idCliente || 0;
+        
+        this.init();
+    }
+    
+    init() {
+        if (this.icono) {
+            this.icono.addEventListener('click', (e) => this.toggleDropdown(e));
+            this.overlay.addEventListener('click', () => this.cerrarDropdown());
+            this.cargarNotificaciones();
+            
+            // Actualizar cada 30 segundos
+            setInterval(() => this.actualizarContador(), 30000);
         }
-    ];
-
-    // Función para cargar notificaciones
-    function cargarNotificaciones() {
-        listaNotificaciones.innerHTML = '';
-
-        const notificacionesNoLeidas = notificaciones.filter(notif => !notif.leida);
-                
-        // Actualizar contador
-        contadorNotificaciones.textContent = notificacionesNoLeidas.length;
-                
-        if (notificacionesNoLeidas.length === 0) {
-            // Mostrar mensaje cuando no hay notificaciones
-            listaNotificaciones.innerHTML = `
+    }
+    
+    toggleDropdown(e) {
+        e.stopPropagation();
+        const estaAbierto = this.dropdown.classList.contains('active');
+        
+        if (estaAbierto) {
+            this.cerrarDropdown();
+        } else {
+            this.abrirDropdown();
+        }
+    }
+    
+    abrirDropdown() {
+        this.dropdown.classList.add('active');
+        this.overlay.style.display = 'block';
+        this.cargarNotificaciones();
+    }
+    
+    cerrarDropdown() {
+        this.dropdown.classList.remove('active');
+        this.overlay.style.display = 'none';
+    }
+    
+    async cargarNotificaciones() {
+        if (!this.idCliente) return;
+        
+        try {
+            const response = await fetch('index.php?c=notificaciones&a=obtener');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.mostrarNotificaciones(data.notificaciones);
+                this.actualizarContadorUI(data.totalNoLeidas);
+            }
+        } catch (error) {
+            console.error('Error cargando notificaciones:', error);
+        }
+    }
+    
+    mostrarNotificaciones(notificaciones) {
+        if (notificaciones.length === 0) {
+            this.lista.innerHTML = `
                 <div class="notificacion-vacia">
                     <div class="icono">🔔</div>
-                    <p>No tienes notificaciones nuevas</p>
+                    <p>No tienes notificaciones</p>
+                    <small>Te notificaremos cuando tus pedidos cambien de estado</small>
                 </div>
             `;
-        } else {
-            // Mostrar notificaciones no leídas
-            notificacionesNoLeidas.forEach(notificacion => {
-                const notificacionElement = document.createElement('div');
-                notificacionElement.className = 'notificacion-item';
-                notificacionElement.innerHTML = `
-                    <div class="notificacion-titulo">${notificacion.titulo}</div>
-                    <div class="notificacion-descripcion">${notificacion.descripcion}</div>
-                    <div class="notificacion-tiempo">${notificacion.tiempo}</div>
-                `;
-                        
-                notificacionElement.addEventListener('click', function() {
-                    marcarComoLeida(notificacion.id);
-                });
-                        
-                listaNotificaciones.appendChild(notificacionElement);
+            return;
+        }
+        
+        let html = '';
+        let fechaActual = '';
+        
+        notificaciones.forEach(notif => {
+            // Agrupar por fecha
+            if (notif.fecha !== fechaActual) {
+                fechaActual = notif.fecha;
+                html += `<div class="notificacion-grupo-fecha">${fechaActual}</div>`;
+            }
+            
+            html += `
+                <div class="notificacion-item ${notif.leida ? 'leida' : 'no-leida'}" 
+                     data-id="${notif.id}" data-tipo="${notif.tipo}">
+                    <div class="notificacion-header">
+                        <div class="notificacion-titulo">${notif.titulo}</div>
+                        ${!notif.leida ? '<div class="notificacion-punto"></div>' : ''}
+                    </div>
+                    <div class="notificacion-descripcion">${notif.descripcion}</div>
+                    <div class="notificacion-footer">
+                        <span class="notificacion-tiempo">${notif.tiempo}</span>
+                        <span class="notificacion-tipo">${notif.tipo}</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        this.lista.innerHTML = html;
+        
+        // Agregar event listeners a las notificaciones
+        this.lista.querySelectorAll('.notificacion-item').forEach(item => {
+            item.addEventListener('click', () => this.marcarComoLeida(item));
+        });
+    }
+    
+    async marcarComoLeida(elemento) {
+        const idNotificacion = elemento.dataset.id;
+        
+        try {
+            const formData = new FormData();
+            formData.append('id_notificacion', idNotificacion);
+            
+            const response = await fetch('index.php?c=notificaciones&a=marcarLeida', {
+                method: 'POST',
+                body: formData
             });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                elemento.classList.remove('no-leida');
+                elemento.classList.add('leida');
+                elemento.querySelector('.notificacion-punto')?.remove();
+                this.actualizarContadorUI(data.totalNoLeidas);
+            }
+        } catch (error) {
+            console.error('Error marcando notificación como leída:', error);
         }
     }
-
-    // Función para marcar notificación como leída
-    function marcarComoLeida(id) {
-        const notificacion = notificaciones.find(notif => notif.id === id);
-        if (notificacion && !notificacion.leida) {
-            notificacion.leida = true;
-            cargarNotificaciones();
-                    
-            // Cerrar dropdown después de un momento
-            setTimeout(() => {
-                cerrarNotificaciones();
-            }, 1000);
+    
+    async actualizarContador() {
+        if (!this.idCliente) return;
+        
+        try {
+            const response = await fetch('index.php?c=notificaciones&a=cantidadNoLeidas');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.actualizarContadorUI(data.totalNoLeidas);
+            }
+        } catch (error) {
+            console.error('Error actualizando contador:', error);
         }
     }
-
-    // Función para abrir notificaciones
-    function abrirNotificaciones() {
-        dropdownNotificaciones.classList.add('active');
-        overlayNotificaciones.style.display = 'block';
-        cargarNotificaciones();
+    
+    actualizarContadorUI(totalNoLeidas) {
+        if (this.contador) {
+            if (totalNoLeidas > 0) {
+                this.contador.textContent = totalNoLeidas > 99 ? '99+' : totalNoLeidas;
+                this.contador.style.display = 'flex';
+                
+                // Agregar animacion de parpadeo para nuevas notificaciones
+                this.contador.style.animation = 'pulse 2s infinite';
+            } else {
+                this.contador.style.display = 'none';
+                this.contador.style.animation = 'none';
+            }
+        }
     }
+}
 
-    // Función para cerrar notificaciones
-    function cerrarNotificaciones() {
-        dropdownNotificaciones.classList.remove('active');
-        overlayNotificaciones.style.display = 'none';
-    }
-
-    // Event listeners
-    iconoNotificaciones.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (dropdownNotificaciones.classList.contains('active')) {
-            cerrarNotificaciones();
-        } else {
-            abrirNotificaciones();
-        }
-    });
-
-    overlayNotificaciones.addEventListener('click', cerrarNotificaciones);
-
-    // Cerrar notificaciones al hacer click fuera
-    document.addEventListener('click', function(e) {
-        if (!dropdownNotificaciones.contains(e.target) && !iconoNotificaciones.contains(e.target)) {
-            cerrarNotificaciones();
-        }
-    });
-
-    // Cerrar con tecla ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            cerrarNotificaciones();
-        }
-    });
-
-    // Cargar notificaciones al iniciar
-    cargarNotificaciones();
-
-    // Simular nueva notificación (para demostración)
-    setTimeout(() => {
-        // Esta es solo una simulación - en una app real vendría del servidor
-        console.log('Nueva notificación simulada');
-    }, 10000);
+// Inicializar cuando el dom este listo
+document.addEventListener('DOMContentLoaded', () => {
+    new NotificacionesManager();
 });

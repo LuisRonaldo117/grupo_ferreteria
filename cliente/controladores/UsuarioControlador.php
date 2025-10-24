@@ -7,9 +7,18 @@ class UsuarioControlador {
     
     public function __construct() {
         $this->modelo = new UsuarioModelo();
-        // En una aplicación real, aquí verificaríamos la sesión del usuario
-        // Por ahora simulamos que el usuario con ID 1 está logueado
-        $this->idCliente = 1; // Esto vendría de la sesión
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if (!isset($_SESSION['id_cliente']) || $_SESSION['rol'] !== 'cliente') {
+            header('Location: index.php');
+            exit();
+        }
+        
+        // Usar el id real del cliente desde la sesión
+        $this->idCliente = $_SESSION['id_cliente'];
     }
     
     public function index() {
@@ -57,27 +66,88 @@ class UsuarioControlador {
     }
     
     public function actualizarPerfil() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (ob_get_length()) ob_clean();
+        
+        header('Content-Type: application/json');
+        
+        // Log para debugs
+        error_log("=== ACTUALIZAR PERFIL INICIADO ===");
+        error_log("Datos POST recibidos: " . print_r($_POST, true));
+        error_log("ID Cliente: " . $this->idCliente);
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            error_log("Error: Método no permitido");
+            echo json_encode(['success' => false, 'mensaje' => 'Método no permitido']);
+            exit();
+        }
+        
+        try {
+            // Validar que los campos requeridos esten presentes
+            $camposRequeridos = ['nombres', 'apellidos', 'correo'];
+            foreach ($camposRequeridos as $campo) {
+                if (!isset($_POST[$campo]) || empty(trim($_POST[$campo]))) {
+                    error_log("Error: Campo requerido faltante: " . $campo);
+                    echo json_encode(['success' => false, 'mensaje' => 'El campo ' . $campo . ' es requerido']);
+                    exit();
+                }
+            }
+            
             $datos = [
-                'nombres' => $_POST['nombres'],
-                'apellidos' => $_POST['apellidos'],
-                'correo' => $_POST['correo'],
-                'telefono' => $_POST['telefono'],
-                'direccion' => $_POST['direccion']
+                'nombres' => trim($_POST['nombres']),
+                'apellidos' => trim($_POST['apellidos']),
+                'correo' => trim($_POST['correo']),
+                'telefono' => isset($_POST['telefono']) ? trim($_POST['telefono']) : '',
+                'direccion' => isset($_POST['direccion']) ? trim($_POST['direccion']) : ''
             ];
+            
+            error_log("Datos procesados: " . print_r($datos, true));
+            
+            // Validar formato de email
+            if (!filter_var($datos['correo'], FILTER_VALIDATE_EMAIL)) {
+                error_log("Error: Email inválido: " . $datos['correo']);
+                echo json_encode(['success' => false, 'mensaje' => 'El formato del correo electrónico no es válido']);
+                exit();
+            }
             
             $resultado = $this->modelo->actualizarPerfil($this->idCliente, $datos);
             
             if ($resultado) {
-                echo json_encode(['success' => true, 'mensaje' => 'Perfil actualizado correctamente']);
+                // Actualizar tambien los datos en la sesión
+                $_SESSION['nombre_cliente'] = $datos['nombres'];
+                $_SESSION['apellido_cliente'] = $datos['apellidos'];
+                
+                error_log("Perfil actualizado exitosamente");
+                echo json_encode([
+                    'success' => true, 
+                    'mensaje' => 'Perfil actualizado correctamente'
+                ]);
             } else {
-                echo json_encode(['success' => false, 'mensaje' => 'Error al actualizar el perfil']);
+                error_log("Error: No se pudo actualizar el perfil en el modelo");
+                echo json_encode([
+                    'success' => false, 
+                    'mensaje' => 'Error al actualizar el perfil. Verifique los datos e intente nuevamente.'
+                ]);
             }
+        } catch (Exception $e) {
+            error_log("Error en actualizarPerfil: " . $e->getMessage());
+            echo json_encode([
+                'success' => false, 
+                'mensaje' => 'Error: ' . $e->getMessage()
+            ]);
         }
+        
+        error_log("=== ACTUALIZAR PERFIL FINALIZADO ===");
+        error_log("JSON enviado: " . json_last_error_msg());
+        exit();
     }
     
     public function cerrarSesion() {
-        header('Location: index.php?c=inicio');
+        echo "<script>
+            localStorage.removeItem('carrito_ferreteria');
+        </script>";
+        
+        session_destroy();
+        header('Location: http://localhost/grupo_ferreteria/');
         exit();
     }
 }

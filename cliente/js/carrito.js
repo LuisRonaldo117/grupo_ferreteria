@@ -1,79 +1,141 @@
-// Sistema de Carrito de Compras
 class CarritoManager {
     constructor() {
-        this.carrito = this.obtenerCarritoLocalStorage();
+        this.carrito = [];
         this.init();
     }
 
-    init() {
-        this.actualizarVista();
+    async init() {
+        await this.cargarCarritoDesdeBD();
         this.agregarEventListeners();
-        this.agregarDropdownListeners();
+        this.actualizarVista();
+        this.actualizarContadores();
     }
 
-    obtenerCarritoLocalStorage() {
-        const carrito = localStorage.getItem('carrito_ferreteria');
-        return carrito ? JSON.parse(carrito) : [];
+    async cargarCarritoDesdeBD() {
+        try {
+            const response = await fetch('index.php?c=carrito&a=obtenerCarrito');
+            
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            
+            const resultado = await response.json();
+            
+            if (resultado.success) {
+                this.carrito = resultado.carrito;
+                this.actualizarVista();
+            } else {
+                this.mostrarMensaje('Error: ' + resultado.mensaje, 'error');
+            }
+        } catch (error) {
+            console.error('Error al cargar carrito:', error);
+            this.mostrarMensaje('Error de conexión al cargar carrito', 'error');
+        }
     }
 
-    guardarCarritoLocalStorage() {
-        localStorage.setItem('carrito_ferreteria', JSON.stringify(this.carrito));
-    }
+    async agregarProducto(idProducto, nombre, precio, imagen, cantidad = 1) {
+        try {
+            const formData = new FormData();
+            formData.append('id_producto', idProducto);
+            formData.append('cantidad', cantidad);
 
-    agregarProducto(producto) {
-        const productoExistente = this.carrito.find(item => item.id === producto.id);
-        
-        if (productoExistente) {
-            productoExistente.cantidad += 1;
-        } else {
-            this.carrito.push({
-                ...producto,
-                cantidad: 1
+            const response = await fetch('index.php?c=carrito&a=agregar', {
+                method: 'POST',
+                body: formData
             });
-        }
-        
-        this.guardarCarritoLocalStorage();
-        this.actualizarVista();
-        this.mostrarMensaje('Producto agregado al carrito');
-        
-        // Abrir el carrito automáticamente al agregar un producto
-        this.abrirCarrito();
-    }
 
-    eliminarProducto(id) {
-        this.carrito = this.carrito.filter(item => item.id !== id);
-        this.guardarCarritoLocalStorage();
-        this.actualizarVista();
-        this.mostrarMensaje('Producto eliminado del carrito');
-    }
-
-    actualizarCantidad(id, nuevaCantidad) {
-        if (nuevaCantidad < 1) {
-            this.eliminarProducto(id);
-            return;
-        }
-
-        const producto = this.carrito.find(item => item.id === id);
-        if (producto) {
-            producto.cantidad = nuevaCantidad;
-            this.guardarCarritoLocalStorage();
-            this.actualizarVista();
+            const resultado = await response.json();
+            
+            if (resultado.success) {
+                await this.cargarCarritoDesdeBD();
+                this.mostrarMensaje('Producto agregado al carrito');
+            } else {
+                this.mostrarMensaje('Error: ' + resultado.mensaje, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.mostrarMensaje('Error de conexión: ' + error.message, 'error');
         }
     }
 
-    vaciarCarrito() {
+    async actualizarCantidad(idCarrito, nuevaCantidad) {
+        try {
+            const formData = new FormData();
+            formData.append('id_carrito', idCarrito);
+            formData.append('cantidad', nuevaCantidad);
+
+            const response = await fetch('index.php?c=carrito&a=actualizarCantidad', {
+                method: 'POST',
+                body: formData
+            });
+
+            const resultado = await response.json();
+            
+            if (resultado.success) {
+                this.carrito = resultado.carrito;
+                this.actualizarVista();
+                this.mostrarMensaje('Cantidad actualizada');
+            } else {
+                this.mostrarMensaje('Error: ' + resultado.mensaje, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.mostrarMensaje('Error de conexión: ' + error.message, 'error');
+        }
+    }
+
+    async eliminarProducto(idCarrito) {
+        try {
+            const formData = new FormData();
+            formData.append('id_carrito', idCarrito);
+
+            const response = await fetch('index.php?c=carrito&a=eliminar', {
+                method: 'POST',
+                body: formData
+            });
+
+            const resultado = await response.json();
+            
+            if (resultado.success) {
+                this.carrito = resultado.carrito;
+                this.actualizarVista();
+                this.mostrarMensaje('Producto eliminado del carrito');
+            } else {
+                this.mostrarMensaje('Error: ' + resultado.mensaje, 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            this.mostrarMensaje('Error de conexión: ' + error.message, 'error');
+        }
+    }
+
+    async vaciarCarrito() {
         if (this.carrito.length === 0) return;
         
         if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
-            this.carrito = [];
-            this.guardarCarritoLocalStorage();
-            this.actualizarVista();
-            this.mostrarMensaje('Carrito vaciado');
+            try {
+                const response = await fetch('index.php?c=carrito&a=vaciar', {
+                    method: 'POST'
+                });
+
+                const resultado = await response.json();
+                
+                if (resultado.success) {
+                    this.carrito = [];
+                    this.actualizarVista();
+                    this.mostrarMensaje('Carrito vaciado');
+                } else {
+                    this.mostrarMensaje('Error: ' + resultado.mensaje, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.mostrarMensaje('Error de conexión: ' + error.message, 'error');
+            }
         }
     }
 
     calcularSubtotal() {
-        return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+        return this.carrito.reduce((total, item) => total + parseFloat(item.subtotal), 0);
     }
 
     calcularTotal() {
@@ -83,46 +145,9 @@ class CarritoManager {
     }
 
     actualizarVista() {
-        this.actualizarDropdown();
         this.actualizarPaginaCarrito();
+        this.actualizarResumen();
         this.actualizarContadores();
-    }
-
-    actualizarDropdown() {
-        const listaCarrito = document.getElementById('listaCarrito');
-        const carritoTotal = document.getElementById('carritoTotal');
-        
-        if (!listaCarrito) return;
-
-        if (this.carrito.length === 0) {
-            listaCarrito.innerHTML = `
-                <div class="carrito-vacio">
-                    <div class="icono">🛒</div>
-                    <p>Tu carrito está vacío</p>
-                </div>
-            `;
-            if (carritoTotal) carritoTotal.textContent = '0.00';
-        } else {
-            listaCarrito.innerHTML = this.carrito.map(item => `
-                <div class="carrito-item">
-                    <div class="carrito-item-imagen">${item.imagen}</div>
-                    <div class="carrito-item-info">
-                        <div class="carrito-item-nombre">${item.nombre}</div>
-                        <div class="carrito-item-precio">Bs. ${item.precio.toFixed(2)}</div>
-                        <div class="carrito-item-cantidad">
-                            <button onclick="carritoManager.actualizarCantidad(${item.id}, ${item.cantidad - 1})">-</button>
-                            <span>${item.cantidad}</span>
-                            <button onclick="carritoManager.actualizarCantidad(${item.id}, ${item.cantidad + 1})">+</button>
-                        </div>
-                    </div>
-                    <button class="carrito-item-eliminar" onclick="carritoManager.eliminarProducto(${item.id})">
-                        🗑️
-                    </button>
-                </div>
-            `).join('');
-            
-            if (carritoTotal) carritoTotal.textContent = this.calcularTotal().toFixed(2);
-        }
     }
 
     actualizarPaginaCarrito() {
@@ -139,28 +164,53 @@ class CarritoManager {
                 </div>
             `;
         } else {
-            carritoContenido.innerHTML = this.carrito.map(item => `
-                <div class="carrito-item-detalle">
-                    <div class="item-imagen">${item.imagen}</div>
-                    <div class="item-info">
-                        <div class="item-nombre">${item.nombre}</div>
-                        <div class="item-precio">Bs. ${item.precio.toFixed(2)}</div>
-                    </div>
-                    <div class="item-controls">
-                        <div class="cantidad-control">
-                            <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(${item.id}, ${item.cantidad - 1})">-</button>
-                            <span class="cantidad-numero">${item.cantidad}</span>
-                            <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(${item.id}, ${item.cantidad + 1})">+</button>
+            carritoContenido.innerHTML = this.carrito.map(item => {
+                const imagenHTML = item.imagen && item.imagen !== 'null'
+                    ? `<img src="${this.obtenerRutaImagen(item.imagen)}" alt="${item.nombre}" onerror="this.style.display='none'">`
+                    : '📦';
+                
+                return `
+                    <div class="carrito-item-detalle">
+                        <div class="item-imagen">${imagenHTML}</div>
+                        <div class="item-info">
+                            <div class="item-nombre">${item.nombre}</div>
+                            <div class="item-precio">Bs. ${parseFloat(item.precio_unitario).toFixed(2)}</div>
                         </div>
-                        <button class="btn-eliminar-item" onclick="carritoManager.eliminarProducto(${item.id})">
-                            Eliminar
-                        </button>
+                        <div class="item-controls">
+                            <div class="cantidad-control">
+                                <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(${item.id_carrito}, ${parseInt(item.cantidad) - 1})">-</button>
+                                <span class="cantidad-numero">${item.cantidad}</span>
+                                <button class="btn-cantidad" onclick="carritoManager.actualizarCantidad(${item.id_carrito}, ${parseInt(item.cantidad) + 1})">+</button>
+                            </div>
+                            <button class="btn-eliminar-item" onclick="carritoManager.eliminarProducto(${item.id_carrito})">
+                                Eliminar
+                            </button>
+                        </div>
                     </div>
+                `;
+            }).join('') + `
+                <div class="carrito-acciones-principales">
+                    <a href="index.php?c=catalogo" class="btn-seguir-comprando">
+                        ← Seguir Comprando
+                    </a>
+                    <button class="btn-vaciar-carrito-principal" onclick="carritoManager.vaciarCarrito()">
+                        🗑️ Vaciar Carrito
+                    </button>
                 </div>
-            `).join('');
+            `;
         }
+    }
 
-        this.actualizarResumen();
+    obtenerRutaImagen(nombreImagen) {
+        if (nombreImagen.startsWith('http') || nombreImagen.startsWith('/')) {
+            return nombreImagen;
+        }
+        
+        if (nombreImagen.includes('assets/') || nombreImagen.includes('images/')) {
+            return nombreImagen;
+        }
+        
+        return `assets/images/${nombreImagen}`;
     }
 
     actualizarResumen() {
@@ -193,19 +243,21 @@ class CarritoManager {
     actualizarContadores() {
         const contadorCarrito = document.getElementById('contadorCarrito');
         if (contadorCarrito) {
-            const totalItems = this.carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            const totalItems = this.carrito.reduce((sum, item) => sum + parseInt(item.cantidad), 0);
             contadorCarrito.textContent = totalItems;
             contadorCarrito.style.display = totalItems > 0 ? 'flex' : 'none';
         }
     }
 
-    mostrarMensaje(mensaje) {
+    mostrarMensaje(mensaje, tipo = 'success') {
         const toast = document.createElement('div');
+        const backgroundColor = tipo === 'error' ? '#e74c3c' : '#1abc9c';
+        
         toast.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #1abc9c;
+            background: ${backgroundColor};
             color: white;
             padding: 15px 25px;
             border-radius: 8px;
@@ -227,102 +279,34 @@ class CarritoManager {
         }, 3000);
     }
 
-    agregarDropdownListeners() {
-        const iconoCarrito = document.getElementById('iconoCarrito');
-        const dropdownCarrito = document.getElementById('dropdownCarrito');
-        const overlayNotificaciones = document.getElementById('overlayNotificaciones');
 
-        if (!iconoCarrito || !dropdownCarrito) return;
-
-        const abrirCarrito = () => {
-            dropdownCarrito.classList.add('active');
-            if (overlayNotificaciones) {
-                overlayNotificaciones.style.display = 'block';
-            }
-        };
-
-        const cerrarCarrito = () => {
-            dropdownCarrito.classList.remove('active');
-            if (overlayNotificaciones) {
-                overlayNotificaciones.style.display = 'none';
-            }
-        };
-
-        this.abrirCarrito = abrirCarrito;
-        this.cerrarCarrito = cerrarCarrito;
-
-        // Event listener para el icono del carrito
-        iconoCarrito.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (dropdownCarrito.classList.contains('active')) {
-                cerrarCarrito();
-            } else {
-                // Cerrar notificaciones si están abiertas
-                const dropdownNotificaciones = document.getElementById('dropdownNotificaciones');
-                if (dropdownNotificaciones && dropdownNotificaciones.classList.contains('active')) {
-                    dropdownNotificaciones.classList.remove('active');
-                }
-                abrirCarrito();
-            }
-        });
-
-        // Cerrar al hacer click fuera
-        document.addEventListener('click', (e) => {
-            if (!dropdownCarrito.contains(e.target) && !iconoCarrito.contains(e.target)) {
-                cerrarCarrito();
-            }
-        });
-
-        // Cerrar con tecla ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                cerrarCarrito();
-            }
-        });
-
-        // Usar el overlay existente para cerrar
-        if (overlayNotificaciones) {
-            overlayNotificaciones.addEventListener('click', cerrarCarrito);
-        }
-    }
 
     agregarEventListeners() {
-        const btnVaciarCarrito = document.getElementById('btnVaciarCarrito');
-        if (btnVaciarCarrito) {
-            btnVaciarCarrito.addEventListener('click', () => this.vaciarCarrito());
-        }
-
-        const btnVaciarCarritoPrincipal = document.getElementById('btnVaciarCarritoPrincipal');
-        if (btnVaciarCarritoPrincipal) {
-            btnVaciarCarritoPrincipal.addEventListener('click', () => this.vaciarCarrito());
-        }
-
-        const btnProcederPago = document.getElementById('btnProcederPago');
-        const modalPago = document.getElementById('modalPago');
-        const cerrarModalPago = document.getElementById('cerrarModalPago');
-        const btnCancelarPago = document.getElementById('btnCancelarPago');
-        const formPago = document.getElementById('formPago');
-
-        if (btnProcederPago) {
-            btnProcederPago.addEventListener('click', () => {
+        // Event delegation para todos los botones del carrito
+        document.addEventListener('click', (e) => {
+            // Botón proceder al pago
+            if (e.target.id === 'btnProcederPago' || e.target.closest('#btnProcederPago')) {
                 if (this.carrito.length > 0) {
-                    modalPago.classList.add('active');
+                    const modalPago = document.getElementById('modalPago');
+                    if (modalPago) modalPago.classList.add('active');
                 }
-            });
-        }
+            }
+            
+            // Cerrar modal de pago
+            if (e.target.id === 'cerrarModalPago' || e.target.closest('#cerrarModalPago')) {
+                const modalPago = document.getElementById('modalPago');
+                if (modalPago) modalPago.classList.remove('active');
+            }
+            
+            // Cancelar pago
+            if (e.target.id === 'btnCancelarPago' || e.target.closest('#btnCancelarPago')) {
+                const modalPago = document.getElementById('modalPago');
+                if (modalPago) modalPago.classList.remove('active');
+            }
+        });
 
-        if (cerrarModalPago) {
-            cerrarModalPago.addEventListener('click', () => {
-                modalPago.classList.remove('active');
-            });
-        }
-
-        if (btnCancelarPago) {
-            btnCancelarPago.addEventListener('click', () => {
-                modalPago.classList.remove('active');
-            });
-        }
-
+        // Formulario de pago
+        const formPago = document.getElementById('formPago');
         if (formPago) {
             formPago.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -330,6 +314,8 @@ class CarritoManager {
             });
         }
 
+        // Cerrar modal al hacer click fuera
+        const modalPago = document.getElementById('modalPago');
         if (modalPago) {
             modalPago.addEventListener('click', (e) => {
                 if (e.target === modalPago) {
@@ -350,11 +336,9 @@ class CarritoManager {
         }
 
         try {
-            // Preparar datos del carrito para enviar al servidor
             const datosPago = {
                 metodo_pago: metodoPago,
-                total: total,
-                carrito: JSON.stringify(this.carrito)
+                total: total
             };
 
             const response = await fetch('index.php?c=carrito&a=procesarPago', {
@@ -538,12 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Función global para agregar productos desde el catálogo
 function agregarAlCarrito(id, nombre, precio, imagen) {
     if (window.carritoManager) {
-        window.carritoManager.agregarProducto({
-            id: parseInt(id),
-            nombre: nombre,
-            precio: parseFloat(precio),
-            imagen: imagen
-        });
+        window.carritoManager.agregarProducto(id, nombre, precio, imagen);
     } else {
         console.error('CarritoManager no está inicializado');
     }

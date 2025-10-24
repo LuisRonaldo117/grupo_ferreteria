@@ -1,4 +1,3 @@
-// Funcionalidad de búsqueda en tiempo real
 class BusquedaManager {
     constructor() {
         this.init();
@@ -14,7 +13,7 @@ class BusquedaManager {
         const inputBusqueda = document.getElementById('inputBusqueda');
 
         if (formBusqueda && inputBusqueda) {
-            // Buscar al presionar Enter
+            // Buscar al presionar enter
             inputBusqueda.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -22,7 +21,7 @@ class BusquedaManager {
                 }
             });
 
-            // Buscar al hacer click en el icono de lupa (si lo agregamos)
+            // Buscar al hacer click en el icono de lupa
             const iconoLupa = document.querySelector('.icono-lupa');
             if (iconoLupa) {
                 iconoLupa.addEventListener('click', () => {
@@ -37,7 +36,7 @@ class BusquedaManager {
         const termino = inputBusqueda.value.trim();
 
         if (termino.length > 0) {
-            // Redirigir a la página de resultados de búsqueda
+            // Redirigir a la pagina de resultados de busqueda
             window.location.href = `index.php?c=catalogo&a=buscar&q=${encodeURIComponent(termino)}`;
         }
     }
@@ -47,7 +46,7 @@ class BusquedaManager {
         
         if (!inputBusqueda) return;
 
-        // Sugerencias de búsqueda populares
+        // Sugerencias de busqueda
         const sugerencias = [
             'martillo', 'taladro', 'pintura', 'cemento', 'tubería',
             'destornillador', 'llave inglesa', 'brocha', 'foco led',
@@ -63,7 +62,7 @@ class BusquedaManager {
             if (valor.length > 2) {
                 const coincidencias = sugerencias.filter(sugerencia => 
                     sugerencia.toLowerCase().includes(valor)
-                ).slice(0, 5); // Máximo 5 sugerencias
+                ).slice(0, 5);
 
                 if (coincidencias.length > 0) {
                     this.mostrarSugerencias(coincidencias, valor);
@@ -111,7 +110,7 @@ class BusquedaManager {
     }
 }
 
-// Inicializar cuando el DOM esté listo
+// Inicializar cuando el dom este listo
 document.addEventListener('DOMContentLoaded', () => {
     window.busquedaManager = new BusquedaManager();
 });

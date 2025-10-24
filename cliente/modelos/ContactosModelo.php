@@ -1,7 +1,11 @@
 <?php
 
 class ContactosModelo {
+    
     public function obtenerInformacion() {
+        // Obtener sucursales de la bd
+        $sucursales = $this->obtenerSucursales();
+        
         return [
             'titulo' => 'Contactos',
             'portada' => [
@@ -11,30 +15,7 @@ class ContactosModelo {
             ],
             'sucursales' => [
                 'titulo' => 'Nuestras Sucursales',
-                'items' => [
-                    [
-                        'id' => 1,
-                        'nombre' => 'Sucursal El Prado',
-                        'direccion' => 'Av. 16 de Julio #789, El Prado',
-                        'telefono' => '(591) 77683912',
-                        'horario' => 'Lunes a Sábado: 8:30 - 19:30',
-                        'stock' => 'Stock disponible',
-                        'latitud' => -16.4950,
-                        'longitud' => -68.1334,
-                        'icono' => '📍'
-                    ],
-                    [
-                        'id' => 2,
-                        'nombre' => 'Sucursal Sopocachi',
-                        'direccion' => 'Calle Aspiazu #456, Sopocachi',
-                        'telefono' => '(591) 78965423',
-                        'horario' => 'Lunes a Viernes: 9:00 - 19:00',
-                        'stock' => 'Stock limitado',
-                        'latitud' => -16.5080,
-                        'longitud' => -68.1290,
-                        'icono' => '📍'
-                    ]
-                ]
+                'items' => $sucursales
             ],
             'formulario' => [
                 'titulo' => 'Envíanos un Mensaje',
@@ -81,6 +62,81 @@ class ContactosModelo {
                 ]
             ]
         ];
+    }
+    
+    public function obtenerSucursales() {
+        $conexion = conectarBD();
+        
+        $sql = "SELECT id_sucursal, nombre, direccion, telefono, email 
+                FROM sucursal 
+                WHERE id_sucursal IN (1, 2)";
+        
+        $result = $conexion->query($sql);
+        $sucursales = [];
+        
+        if ($result && $result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $sucursales[] = [
+                    'id' => $row['id_sucursal'],
+                    'nombre' => $row['nombre'],
+                    'direccion' => $row['direccion'],
+                    'telefono' => $row['telefono'],
+                    'horario' => 'Lunes a Sábado: 8:30 - 19:30',
+                    'stock' => 'Stock disponible',
+                    'latitud' => $row['id_sucursal'] == 1 ? -16.4950 : -16.5080,
+                    'longitud' => $row['id_sucursal'] == 1 ? -68.1334 : -68.1290,
+                    'icono' => '📍'
+                ];
+            }
+        }
+        
+        $conexion->close();
+        return $sucursales;
+    }
+    
+    public function obtenerUsuario($idCliente) {
+        $conexion = conectarBD();
+        
+        $sql = "SELECT p.nombres, p.apellidos, p.correo, p.telefono
+                FROM cliente c
+                INNER JOIN persona p ON c.id_persona = p.id_persona
+                WHERE c.id_cliente = ?";
+        
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("i", $idCliente);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result && $result->num_rows > 0) {
+            $usuario = $result->fetch_assoc();
+            $stmt->close();
+            $conexion->close();
+            return $usuario;
+        }
+        
+        $stmt->close();
+        $conexion->close();
+        return null;
+    }
+    
+    public function guardarReclamo($datos) {
+        $conexion = conectarBD();
+        
+        $sql = "INSERT INTO reclamos (descripcion, id_cliente, fecha_reclamo) 
+                VALUES (?, ?, NOW())";
+        
+        $descripcion = $datos['mensaje'];
+        
+        $stmt = $conexion->prepare($sql);
+        $idCliente = $datos['id_cliente'] ?: null;
+        $stmt->bind_param("si", $descripcion, $idCliente);
+        
+        $resultado = $stmt->execute();
+        
+        $stmt->close();
+        $conexion->close();
+        
+        return $resultado;
     }
 }
 ?>

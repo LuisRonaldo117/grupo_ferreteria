@@ -44,21 +44,22 @@
     <div class="container">
         <h2>Artículos Relacionados</h2>
         <div class="relacionados-grid">
-            <div class="relacionado-card">
-                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Herramientas">
-                <h3>Guía de Mantenimiento para Herramientas Eléctricas</h3>
-                <a href="index.php?articulo=1">Leer más</a>
-            </div>
-            <div class="relacionado-card">
-                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Pintura">
-                <h3>Técnicas Avanzadas de Pintura</h3>
-                <a href="index.php?articulo=2">Leer más</a>
-            </div>
-            <div class="relacionado-card">
-                <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Fontanería">
-                <h3>Instalación Básica de Tuberías</h3>
-                <a href="index.php?articulo=3">Leer más</a>
-            </div>
+            <?php
+            // Simular artículos relacionados (en un caso real, esto vendría del modelo)
+            $relacionados = [
+                ['id' => 1, 'titulo' => 'Guía de Mantenimiento para Herramientas Eléctricas', 'imagen' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'],
+                ['id' => 2, 'titulo' => 'Técnicas Avanzadas de Pintura', 'imagen' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'],
+                ['id' => 3, 'titulo' => 'Instalación Básica de Tuberías', 'imagen' => 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80']
+            ];
+            
+            foreach($relacionados as $relacionado): 
+            ?>
+                <div class="relacionado-card">
+                    <img src="<?php echo $relacionado['imagen']; ?>" alt="<?php echo $relacionado['titulo']; ?>">
+                    <h3><?php echo $relacionado['titulo']; ?></h3>
+                    <a href="index.php?c=informate&a=articulo&id=<?php echo $relacionado['id']; ?>">Leer más</a>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>

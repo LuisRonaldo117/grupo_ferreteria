@@ -20,14 +20,30 @@
                 <?php foreach($sucursales['items'] as $sucursal): ?>
                     <div class="sucursal-card" data-sucursal-id="<?php echo $sucursal['id']; ?>">
                         <div class="sucursal-header">
-                            <div class="sucursal-icono"><?php echo $sucursal['icono']; ?></div>
+                            <div class="sucursal-icono"><i class="fas fa-store"></i></div>
                             <h3><?php echo $sucursal['nombre']; ?></h3>
                         </div>
                         <div class="sucursal-info">
-                            <p><strong>📍 Dirección:</strong> <?php echo $sucursal['direccion']; ?></p>
-                            <p><strong>📞 Teléfono:</strong> <?php echo $sucursal['telefono']; ?></p>
-                            <p><strong>🕒 Horario:</strong> <?php echo $sucursal['horario']; ?></p>
-                            <p><strong>📦 Stock:</strong> <span class="stock-status"><?php echo $sucursal['stock']; ?></span></p>
+                            <p><i class="fas fa-map-marker-alt text-primary me-2"></i> <strong>Dirección:</strong> <?php echo $sucursal['direccion']; ?></p>
+                            <p><i class="fas fa-phone text-primary me-2"></i> <strong>Teléfono:</strong> <?php echo $sucursal['telefono']; ?></p>
+                            <p><i class="fas fa-clock text-primary me-2"></i> <strong>Horario:</strong> <?php echo $sucursal['horario']; ?></p>
+                            <p><i class="fas fa-boxes text-primary me-2"></i> <strong>Stock:</strong> 
+                                <span class="stock-status <?php 
+                                    if(strpos($sucursal['stock'], 'disponible') !== false) echo 'stock-available';
+                                    elseif(strpos($sucursal['stock'], 'limitado') !== false) echo 'stock-low';
+                                    else echo 'stock-out';
+                                ?>">
+                                    <i class="fas <?php 
+                                        if(strpos($sucursal['stock'], 'disponible') !== false) echo 'fa-check-circle';
+                                        elseif(strpos($sucursal['stock'], 'limitado') !== false) echo 'fa-exclamation-circle';
+                                        else echo 'fa-times-circle';
+                                    ?> me-1"></i> 
+                                    <?php echo $sucursal['stock']; ?>
+                                </span>
+                            </p>
+                            <button class="btn btn-sm btn-primary mt-2" onclick="focusOnMap(<?php echo $sucursal['id']; ?>)">
+                                <i class="fas fa-search-location me-1"></i> Ver en mapa
+                            </button>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -37,7 +53,7 @@
             <div class="mapa-container">
                 <div id="map"></div>
                 <div class="mapa-leyenda">
-                    <p><strong>📍</strong> Haz click en los marcadores para más información</p>
+                    <p><i class="fas fa-map-marker-alt me-1"></i> Haz click en los marcadores para más información</p>
                 </div>
             </div>
         </div>
@@ -48,75 +64,95 @@
 <section class="contacto-section">
     <div class="container">
         <div class="contacto-layout">
-            <!-- Formulario -->
+            <!-- Formulario  -->
             <div class="formulario-container">
-                <h2><?php echo $formulario['titulo']; ?></h2>
+                <h2 class="section-title">Envíanos un Mensaje</h2>
                 <form class="formulario-contacto" id="formContacto">
-                    <div class="form-group">
-                        <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" 
+                                value="<?php echo isset($usuario) ? htmlspecialchars($usuario['nombres'] . ' ' . $usuario['apellidos']) : ''; ?>" 
+                                readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                value="<?php echo isset($usuario) ? htmlspecialchars($usuario['correo']) : ''; ?>" 
+                                readonly>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email">Correo electrónico</label>
-                        <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="asunto">Asunto</label>
-                        <select id="asunto" name="asunto" required>
-                            <option value="">Seleccione un asunto</option>
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto</label>
+                        <select class="form-select" id="asunto" name="asunto" required>
+                            <option value="" selected disabled>Seleccione un asunto</option>
                             <?php foreach($formulario['asuntos'] as $key => $valor): ?>
                                 <option value="<?php echo $key; ?>"><?php echo $valor; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="mensaje">Mensaje</label>
-                        <textarea id="mensaje" name="mensaje" rows="6" placeholder="Describa su consulta o reclamo con el mayor detalle posible..." required></textarea>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" name="mensaje" rows="6" 
+                                placeholder="Describa su consulta o reclamo con el mayor detalle posible..." 
+                                required></textarea>
                     </div>
 
-                    <button type="submit" class="btn-enviar">
-                        <span class="btn-texto">Enviar Mensaje</span>
-                        <span class="btn-cargando" style="display: none;">Enviando...</span>
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-paper-plane me-2"></i> Enviar Mensaje
                     </button>
                 </form>
             </div>
 
             <!-- Informacion de Contacto -->
             <div class="info-container">
-                <h2><?php echo $informacion['titulo']; ?></h2>
+                <h2 class="section-title">Información de Contacto</h2>
                 
-                <?php foreach($informacion['items'] as $item): ?>
-                    <div class="info-card">
-                        <div class="info-icono"><?php echo $item['icono']; ?></div>
-                        <div class="info-contenido">
-                            <h3><?php echo $item['titulo']; ?></h3>
-                            <p><?php echo $item['descripcion']; ?></p>
-                            <?php if(isset($item['telefono'])): ?>
-                                <p><strong>Teléfono:</strong> <?php echo $item['telefono']; ?></p>
-                            <?php endif; ?>
-                            <?php if(isset($item['email'])): ?>
-                                <p><strong>Email:</strong> <?php echo $item['email']; ?></p>
-                            <?php endif; ?>
-                            <?php if(isset($item['horario'])): ?>
-                                <p><strong>Horario:</strong> <?php echo $item['horario']; ?></p>
-                            <?php endif; ?>
-                        </div>
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-headset"></i>
                     </div>
-                <?php endforeach; ?>
+                    <div class="contact-text">
+                        <h5>Atención al Cliente</h5>
+                        <p>Estamos disponibles para atender tus consultas y solicitudes.</p>
+                        <p><strong>Teléfono:</strong> +591 77584652</p>
+                        <p><strong>Email:</strong> contacto@ferreteria.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h5>Soporte Técnico</h5>
+                        <p>Asesoría técnica especializada para tus proyectos.</p>
+                        <p><strong>Teléfono:</strong> +591 78632451</p>
+                        <p><strong>Email:</strong> soporte@ferreteria.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="contact-text">
+                        <h5>Oficina Central</h5>
+                        <p>Av. 16 de Julio #789, El Prado, La Paz</p>
+                        <p><strong>Horario:</strong> Lunes a Sábado: 8:30 - 19:30</p>
+                    </div>
+                </div>
 
                 <!-- Redes Sociales -->
-                <div class="redes-sociales">
-                    <h3><?php echo $redes['titulo']; ?></h3>
-                    <div class="redes-lista">
-                        <?php foreach($redes['items'] as $red): ?>
-                            <a href="<?php echo $red['url']; ?>" class="red-social" target="_blank">
-                                <span class="red-icono"><?php echo $red['icono']; ?></span>
-                                <span class="red-nombre"><?php echo $red['nombre']; ?></span>
-                            </a>
-                        <?php endforeach; ?>
+                <div class="mt-4">
+                    <h5 class="mb-3"><i class="fas fa-share-alt text-primary me-2"></i> Síguenos en Redes</h5>
+                    <div class="social-links">
+                        <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
@@ -124,16 +160,35 @@
     </div>
 </section>
 
-<!-- Incluimos Leaflet CSS y JS -->
+<!-- Leaflet CSS y JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #d32f2f;
+        --accent-color: #007bff;
+        --light-bg: #f8f9fa;
+        --dark-blue: #1a2a3a;
+        --gold-accent: #FFD700;
+    }
+    
     /* Portada */
     .portada-contactos {
         position: relative;
         height: 400px;
         margin-bottom: 60px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('https://images.unsplash.com/photo-1605153864431-a2795a1b2f95?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
     }
 
     .portada-imagen {
@@ -161,14 +216,15 @@
     }
 
     .portada-contenido h1 {
-        font-size: 48px;
-        margin-bottom: 15px;
-        font-weight: bold;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 700;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-family: 'Poppins', sans-serif;
     }
 
     .portada-contenido p {
-        font-size: 20px;
+        font-size: 1.2rem;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         max-width: 600px;
         margin: 0 auto;
@@ -178,15 +234,30 @@
     /* Sucursales */
     .sucursales-section {
         padding: 80px 0;
-        background: #f8f9fa;
+        background: white;
     }
 
     .sucursales-section h2 {
         text-align: center;
-        font-size: 36px;
-        color: #2c3e50;
+        font-size: 2rem;
+        color: var(--dark-blue);
         margin-bottom: 50px;
-        font-weight: bold;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .sucursales-section h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--gold-accent);
+        border-radius: 2px;
     }
 
     .sucursales-layout {
@@ -199,63 +270,115 @@
     .sucursales-lista {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 25px;
     }
 
     .sucursal-card {
         background: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
+        padding: 0;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        transition: all 0.4s ease;
         cursor: pointer;
-        border: 2px solid transparent;
+        border: none;
+        overflow: hidden;
+        margin-bottom: 0;
     }
 
     .sucursal-card:hover, .sucursal-card.active {
-        border-color: #1abc9c;
-        transform: translateY(-5px);
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,.15);
     }
 
     .sucursal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-blue) 100%);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
+    }
+    
+    .sucursal-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: rgba(255,255,255,0.1);
+        transform: rotate(45deg);
     }
 
     .sucursal-icono {
-        font-size: 24px;
+        font-size: 1.5rem;
         margin-right: 15px;
+        color: white;
     }
 
     .sucursal-header h3 {
-        font-size: 20px;
-        color: #2c3e50;
+        font-size: 1.25rem;
+        color: white;
         margin: 0;
         font-weight: 600;
     }
 
+    .sucursal-info {
+        padding: 25px;
+        background: white;
+    }
+
     .sucursal-info p {
         margin: 8px 0;
-        color: #7f8c8d;
+        color: #555;
         line-height: 1.5;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .sucursal-info .text-primary {
+        color: var(--accent-color) !important;
+        margin-right: 8px;
+        width: 16px;
+        text-align: center;
     }
 
     .stock-status {
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: bold;
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-top: 5px;
     }
-
-    .stock-status:contains("disponible") {
-        background: #d4edda;
+    
+    .stock-available {
+        background-color: #d4edda;
         color: #155724;
     }
 
-    .stock-status:contains("limitado") {
-        background: #fff3cd;
+    .stock-low {
+        background-color: #fff3cd;
         color: #856404;
+    }
+    
+    .stock-out {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-primary {
+        background: var(--accent-color);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.875rem;
+    }
+    
+    .btn-primary:hover {
+        background: #0069d9;
+        transform: translateY(-2px);
     }
 
     /* Mapa */
@@ -266,8 +389,9 @@
 
     #map {
         height: 500px;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        border-radius: 12px;
+        box-shadow: 0 10px 20px rgba(0,0,0,.1);
+        border: 1px solid rgba(0,0,0,.1);
     }
 
     .mapa-leyenda {
@@ -275,6 +399,10 @@
         text-align: center;
         color: #7f8c8d;
         font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
     }
 
     /* Estilos del popup del mapa */
@@ -283,174 +411,210 @@
     }
 
     .popup-sucursal h3 {
-        color: #2c3e50;
+        color: var(--dark-blue);
         margin-bottom: 10px;
         font-size: 18px;
+        font-weight: 600;
     }
 
     .popup-sucursal p {
         margin: 5px 0;
-        color: #7f8c8d;
+        color: #555;
         font-size: 14px;
     }
 
     /* Contacto Section */
     .contacto-section {
         padding: 80px 0;
-        background: white;
+        background: var(--light-bg);
     }
 
     .contacto-layout {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 60px;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 40px;
         align-items: start;
     }
 
     /* Formulario */
-    .formulario-container h2 {
-        font-size: 32px;
-        color: #2c3e50;
+    .formulario-container {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 8px 24px rgba(26, 43, 73, 0.1);
+        border-top: 4px solid var(--accent-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .formulario-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,.15);
+    }
+
+    .section-title {
+        color: var(--dark-blue);
+        font-weight: 700;
         margin-bottom: 30px;
-        font-weight: bold;
+        position: relative;
+        padding-bottom: 15px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: var(--gold-accent);
+        border-radius: 2px;
     }
 
     .formulario-contacto {
-        background: #f8f9fa;
-        padding: 30px;
-        border-radius: 15px;
+        background: none;
+        padding: 0;
+        border-radius: 0;
     }
 
-    .form-group {
-        margin-bottom: 25px;
-    }
-
-    .form-group label {
-        display: block;
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-blue);
         margin-bottom: 8px;
-        font-weight: 600;
-        color: #2c3e50;
+        font-family: 'Poppins', sans-serif;
     }
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
+    .form-control, .form-select {
         padding: 12px 15px;
-        border: 2px solid #e9ecef;
         border-radius: 8px;
-        font-size: 16px;
-        transition: border-color 0.3s;
-        background: white;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        outline: none;
-        border-color: #1abc9c;
-    }
-
-    .btn-enviar {
-        background: #1abc9c;
-        color: white;
-        padding: 15px 30px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
         width: 100%;
     }
 
-    .btn-enviar:hover {
-        background: #16a085;
+    .form-control:focus, .form-select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.1);
     }
 
-    .btn-enviar:disabled {
-        background: #bdc3c7;
-        cursor: not-allowed;
+    .btn-submit {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #0069d9 100%);
+        color: white;
+        font-weight: 600;
+        padding: 12px 30px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.15);
     }
 
     /* Información de Contacto */
-    .info-container h2 {
-        font-size: 32px;
-        color: #2c3e50;
-        margin-bottom: 30px;
-        font-weight: bold;
+    .info-container {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 8px 24px rgba(26, 43, 73, 0.1);
+        border-top: 4px solid var(--accent-color);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .info-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,.15);
     }
 
-    .info-card {
-        background: #f8f9fa;
-        padding: 25px;
-        border-radius: 15px;
-        margin-bottom: 25px;
-        display: flex;
-        gap: 15px;
-        align-items: flex-start;
+    /* Iconos de contacto */
+    .contact-icon {
+        font-size: 1.8rem;
+        color: var(--accent-color);
+        margin-right: 15px;
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 123, 255, 0.1);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
     }
-
-    .info-icono {
-        font-size: 32px;
-        flex-shrink: 0;
+    
+    .contact-info:hover .contact-icon {
+        background: var(--accent-color);
+        color: white;
+        transform: scale(1.1);
     }
-
-    .info-contenido h3 {
-        font-size: 18px;
-        color: #2c3e50;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
-
-    .info-contenido p {
-        color: #7f8c8d;
-        margin: 5px 0;
-        line-height: 1.5;
-    }
-
-    /* Redes Sociales */
-    .redes-sociales {
-        margin-top: 40px;
-    }
-
-    .redes-sociales h3 {
-        font-size: 20px;
-        color: #2c3e50;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    .redes-lista {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-
-    .red-social {
+    
+    .contact-info {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 12px 15px;
-        background: #f8f9fa;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+        padding: 10px;
         border-radius: 8px;
-        text-decoration: none;
-        color: #2c3e50;
-        transition: all 0.3s;
+    }
+    
+    .contact-info:hover {
+        background: rgba(0,0,0,0.03);
+    }
+    
+    .contact-text h5 {
+        font-weight: 600;
+        color: var(--dark-blue);
+        margin-bottom: 5px;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .contact-text p {
+        margin-bottom: 0;
+        color: #555;
+        font-size: 0.9rem;
     }
 
-    .red-social:hover {
-        background: #1abc9c;
+    /* Redes sociales */
+    .social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 10px;
         color: white;
-        transform: translateY(-2px);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    .red-icono {
-        font-size: 18px;
+    
+    .social-links a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
     }
-
-    .red-nombre {
-        font-weight: 500;
+    
+    .facebook {
+        background: linear-gradient(135deg, #3b5998 0%, #2d4373 100%);
+    }
+    
+    .twitter {
+        background: linear-gradient(135deg, #1da1f2 0%, #0d8ecf 100%);
+    }
+    
+    .instagram {
+        background: linear-gradient(135deg, #405de6 0%, #5851db 20%, #833ab4 40%, #c13584 60%, #e1306c 80%, #fd1d1d 100%);
+    }
+    
+    .whatsapp {
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
     }
 
     /* Responsive */
@@ -462,7 +626,7 @@
 
         .contacto-layout {
             grid-template-columns: 1fr;
-            gap: 40px;
+            gap: 30px;
         }
 
         #map {
@@ -472,26 +636,21 @@
 
     @media (max-width: 768px) {
         .portada-contenido h1 {
-            font-size: 36px;
+            font-size: 2.2rem;
         }
 
         .portada-contenido p {
-            font-size: 18px;
+            font-size: 1rem;
         }
 
         .sucursales-section h2,
-        .formulario-container h2,
-        .info-container h2 {
-            font-size: 28px;
+        .section-title {
+            font-size: 1.6rem;
         }
-
-        .redes-lista {
-            grid-template-columns: 1fr;
-        }
-
-        .info-card {
-            flex-direction: column;
-            text-align: center;
+        
+        .formulario-container,
+        .info-container {
+            padding: 25px;
         }
     }
 
@@ -499,8 +658,18 @@
         .portada-contactos {
             height: 300px;
         }
-
-        .formulario-contacto {
+        
+        .sucursal-info p {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .sucursal-info .text-primary {
+            margin-bottom: 5px;
+        }
+        
+        .formulario-container,
+        .info-container {
             padding: 20px;
         }
     }
@@ -515,7 +684,7 @@
         // Inicializar mapa
         const map = L.map('map').setView(centroMapa, 13);
 
-        // Agregar capa de tiles (OpenStreetMap)
+        // Agregar capa (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -528,11 +697,11 @@
         sucursales.forEach(sucursal => {
             const popupContent = `
                 <div class="popup-sucursal">
-                    <h3>${sucursal.nombre}</h3>
-                    <p><strong>📍</strong> ${sucursal.direccion}</p>
-                    <p><strong>📞</strong> ${sucursal.telefono}</p>
-                    <p><strong>🕒</strong> ${sucursal.horario}</p>
-                    <p><strong>📦</strong> ${sucursal.stock}</p>
+                    <h3><i class="fas fa-store me-1"></i> ${sucursal.nombre}</h3>
+                    <p><i class="fas fa-map-marker-alt text-primary me-2"></i> ${sucursal.direccion}</p>
+                    <p><i class="fas fa-phone text-primary me-2"></i> ${sucursal.telefono}</p>
+                    <p><i class="fas fa-clock text-primary me-2"></i> ${sucursal.horario}</p>
+                    <p><i class="fas fa-boxes text-primary me-2"></i> ${sucursal.stock}</p>
                 </div>
             `;
 
@@ -583,51 +752,140 @@
             });
         });
 
+        // Función para centrar el mapa en una sucursal específica
+        window.focusOnMap = function(branchId) {
+            const sucursal = sucursales.find(s => s.id == branchId);
+            if (sucursal) {
+                // Remover clase active de todas las tarjetas
+                document.querySelectorAll('.sucursal-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // Agregar clase active a la tarjeta correspondiente
+                document.querySelector(`[data-sucursal-id="${branchId}"]`).classList.add('active');
+                
+                // Centrar mapa en la sucursal
+                map.setView([sucursal.latitud, sucursal.longitud], 15);
+                
+                // Encontrar y abrir el marcador correspondiente
+                marcadores.forEach(marcador => {
+                    const latLng = marcador.getLatLng();
+                    if (latLng.lat === sucursal.latitud && latLng.lng === sucursal.longitud) {
+                        marcador.openPopup();
+                    }
+                });
+            }
+            return false;
+        };
+
         // Manejo del formulario
         const formulario = document.getElementById('formContacto');
         formulario.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const btnEnviar = this.querySelector('.btn-enviar');
-            const btnTexto = this.querySelector('.btn-texto');
-            const btnCargando = this.querySelector('.btn-cargando');
+            const btnEnviar = this.querySelector('.btn-submit');
             
             // Mostrar estado de carga
-            btnTexto.style.display = 'none';
-            btnCargando.style.display = 'inline';
             btnEnviar.disabled = true;
+            btnEnviar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Enviando...';
             
-            // Simular envío (en una aplicación real, aquí harías una petición AJAX)
-            setTimeout(() => {
-                alert('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.');
-                
+            // Enviar datos via AJAX
+            const formData = new FormData(this);
+            
+            fetch('index.php?c=contactos&a=enviarMensaje', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error HTTP: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    mostrarNotificacion(data.mensaje, 'success');
+                    
+                    // Limpiar solo el asunto y el mensaje, mantener nombre y email
+                    document.getElementById('asunto').value = '';
+                    document.getElementById('mensaje').value = '';
+                    
+                } else {
+                    mostrarNotificacion(data.mensaje, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarNotificacion('Error de conexión. Por favor, intente nuevamente.', 'error');
+            })
+            .finally(() => {
                 // Restaurar botón
-                btnTexto.style.display = 'inline';
-                btnCargando.style.display = 'none';
                 btnEnviar.disabled = false;
-                
-                // Limpiar formulario
-                formulario.reset();
-            }, 2000);
-        });
-
-        // Estilos para el estado del stock
-        document.querySelectorAll('.stock-status').forEach(span => {
-            if (span.textContent.includes('disponible')) {
-                span.style.background = '#d4edda';
-                span.style.color = '#155724';
-                span.style.padding = '2px 8px';
-                span.style.borderRadius = '12px';
-                span.style.fontSize = '12px';
-                span.style.fontWeight = 'bold';
-            } else if (span.textContent.includes('limitado')) {
-                span.style.background = '#fff3cd';
-                span.style.color = '#856404';
-                span.style.padding = '2px 8px';
-                span.style.borderRadius = '12px';
-                span.style.fontSize = '12px';
-                span.style.fontWeight = 'bold';
-            }
+                btnEnviar.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Enviar Mensaje';
+            });
         });
     });
+
+    // Función para mostrar notificaciones
+    function mostrarNotificacion(mensaje, tipo = 'success') {
+        const notificacion = document.createElement('div');
+        const backgroundColor = tipo === 'error' ? '#e74c3c' : '#1abc9c';
+        
+        notificacion.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${backgroundColor};
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: slideInRight 0.3s ease;
+            max-width: 400px;
+            font-weight: 500;
+        `;
+        notificacion.textContent = mensaje;
+        
+        document.body.appendChild(notificacion);
+        
+        setTimeout(() => {
+            notificacion.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (notificacion.parentNode) {
+                    document.body.removeChild(notificacion);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    // Agregar estilos para las animaciones si no existen
+    if (!document.querySelector('#notificacion-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notificacion-styles';
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 </script>
