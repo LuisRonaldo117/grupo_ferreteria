@@ -7,17 +7,17 @@ class InicioModelo {
         // Carrusel
         $imagenesCarrusel = [
             [
-                'imagen' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                'imagen' => 'https://www.fierros.com.co/uploads/news-pictures/pphoto-1315.png',
                 'titulo' => 'Herramientas Profesionales',
                 'descripcion' => 'La mejor calidad para tus proyectos'
             ],
             [
-                'imagen' => 'https://images.unsplash.com/photo-1558618666-fcd25856cd63?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                'imagen' => 'https://grupotorices.com/wp-content/uploads/2022/10/mejores-materiales-para-construccion-2022.jpg',
                 'titulo' => 'Materiales de Construcción',
                 'descripcion' => 'Todo lo que necesitas para construir'
             ],
             [
-                'imagen' => 'https://images.unsplash.com/photo-1581094794329-cdc53f4b629f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                'imagen' => 'https://www.axalta.com/content/axalta_blog_mx/es_ES/pintura_decorativa/accesorios-esenciales-para-pintar-una-pared-como-un-profesional/_jcr_content/parMainContent/layoutcontainer_copy/parMainContentLayout/col12/parMainContent/mediateaser_1120113379.axFitIn.mediaTeaser_desktop_x1.png/1697043272284/ACCESORIOS+ESENCIALES+PARA+PINTAR+UNA+PARED+COMO+UN+PROFESIONAL-2.png',
                 'titulo' => 'Pinturas y Accesorios',
                 'descripcion' => 'Colorea y protege tus espacios'
             ]

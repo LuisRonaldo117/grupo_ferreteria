@@ -39,7 +39,7 @@ class InformateModelo {
                         'fecha' => '15 Mayo 2025',
                         'titulo' => 'Las 5 mejores herramientas eléctricas para principiantes',
                         'descripcion' => 'Descubre cuáles son las herramientas esenciales que todo aficionado al bricolaje debería tener en su taller.',
-                        'imagen' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                        'imagen' => 'https://www.mndelgolfo.com/blog/wp-content/uploads/2025/01/herramientas-electricas-que-no-deben-faltar-en-tu-hogar-1024x576.jpg',
                         'slug' => 'mejores-herramientas-electricas-principiantes'
                     ],
                     [
@@ -49,7 +49,7 @@ class InformateModelo {
                         'fecha' => '2 Mayo 2025',
                         'titulo' => 'Cómo elegir la pintura perfecta para cada superficie',
                         'descripcion' => 'Guía completa para seleccionar el tipo de pintura adecuado según el material y las condiciones del ambiente.',
-                        'imagen' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                        'imagen' => 'https://img.freepik.com/foto-gratis/herramientas-seguridad-trabajos-pintura_23-2148908402.jpg',
                         'slug' => 'elegir-pintura-perfecta-superficie'
                     ],
                     [
@@ -59,7 +59,7 @@ class InformateModelo {
                         'fecha' => '20 Abril 2025',
                         'titulo' => 'Soluciones rápidas para problemas comunes de fontanería',
                         'descripcion' => 'Aprende a resolver esos pequeños problemas de tuberías que pueden convertirse en grandes dolores de cabeza.',
-                        'imagen' => 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                        'imagen' => 'https://www.dlubal.com/es/webimage/040212/3572853/piping-design.png?mw=1024&hash=19a9222a0060751d2411104bca8dc7be80d37352',
                         'slug' => 'soluciones-rapidas-problemas-fontaneria'
                     ],
                     [

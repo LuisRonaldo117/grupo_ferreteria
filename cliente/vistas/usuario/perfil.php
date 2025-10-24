@@ -18,13 +18,13 @@
                 
                 <nav class="menu-navegacion">
                     <a href="index.php?c=usuario" class="menu-item <?php echo $seccion_activa === 'perfil' ? 'active' : ''; ?>">
-                        👤 Información Personal
+                        <i class="fas fa-user"></i> Información Personal
                     </a>
                     <a href="index.php?c=usuario&a=pedidos" class="menu-item <?php echo $seccion_activa === 'pedidos' ? 'active' : ''; ?>">
-                        📦 Mis Pedidos
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
                     </a>
                     <a href="index.php?c=usuario&a=cerrarSesion" class="menu-item cerrar-sesion">
-                        🚪 Cerrar Sesión
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                     </a>
                 </nav>
             </div>
@@ -94,7 +94,9 @@
                         
                         <?php if (empty($pedidos)): ?>
                             <div class="pedidos-vacio">
-                                <div class="icono-vacio">📦</div>
+                                <div class="icono-vacio">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
                                 <h3>No tienes pedidos realizados</h3>
                                 <p>Cuando realices tu primer pedido, aparecerá aquí.</p>
                                 <a href="index.php?c=catalogo" class="btn-ir-catalogo">Ir al Catálogo</a>
@@ -153,7 +155,7 @@
 <style>
     .perfil-usuario {
         padding: 40px 0 80px;
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
         min-height: 80vh;
     }
 
@@ -169,22 +171,35 @@
         background: white;
         border-radius: 15px;
         padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 32px rgba(33, 150, 243, 0.1);
         position: sticky;
         top: 20px;
+        border: 1px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .perfil-menu:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
     }
 
     .usuario-info {
         text-align: center;
         margin-bottom: 30px;
         padding-bottom: 25px;
-        border-bottom: 1px solid #ecf0f1;
+        border-bottom: 1px solid #e3f2fd;
     }
 
     .usuario-avatar {
         width: 80px;
         height: 80px;
-        background: linear-gradient(135deg, #1abc9c, #16a085);
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -193,24 +208,26 @@
         font-weight: bold;
         color: white;
         margin: 0 auto 15px;
+        box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
+        border: 3px solid #e3f2fd;
     }
 
     .usuario-datos h3 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 5px;
         font-size: 18px;
         font-weight: 600;
     }
 
     .usuario-datos p {
-        color: #7f8c8d;
+        color: #546e7a;
         font-size: 14px;
     }
 
     .menu-navegacion {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
 
     .menu-item {
@@ -219,32 +236,44 @@
         gap: 12px;
         padding: 15px 20px;
         text-decoration: none;
-        color: #7f8c8d;
+        color: #546e7a;
         border-radius: 10px;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
         font-weight: 500;
+        border: 1px solid transparent;
     }
 
     .menu-item:hover {
-        background: #f8f9fa;
-        color: #2c3e50;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        color: #1976D2;
+        border-color: #bbdefb;
+        transform: translateX(5px);
     }
 
     .menu-item.active {
-        background: #1abc9c;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        border-color: #1976D2;
+    }
+
+    .menu-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 16px;
     }
 
     .cerrar-sesion {
         margin-top: 20px;
-        color: #e74c3c !important;
-        border-top: 1px solid #ecf0f1;
+        color: #f44336 !important;
+        border-top: 1px solid #e3f2fd;
         padding-top: 20px;
     }
 
     .cerrar-sesion:hover {
-        background: #e74c3c !important;
+        background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%) !important;
         color: white !important;
+        border-color: #d32f2f;
     }
 
     /* Contenido Principal */
@@ -252,15 +281,42 @@
         background: white;
         border-radius: 15px;
         padding: 40px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 32px rgba(33, 150, 243, 0.1);
+        border: 1px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .perfil-contenido:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
     }
 
     .seccion-perfil h2,
     .seccion-pedidos h2 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 30px;
         font-size: 28px;
-        font-weight: bold;
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .seccion-perfil h2:after,
+    .seccion-pedidos h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
+        border-radius: 2px;
     }
 
     /* Formulario de Perfil */
@@ -271,7 +327,7 @@
     .form-seccion {
         margin-bottom: 40px;
         padding-bottom: 30px;
-        border-bottom: 1px solid #ecf0f1;
+        border-bottom: 1px solid #e3f2fd;
     }
 
     .form-seccion:last-child {
@@ -280,10 +336,24 @@
     }
 
     .form-seccion h3 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 20px;
         font-size: 20px;
         font-weight: 600;
+        position: relative;
+        padding-left: 15px;
+    }
+
+    .form-seccion h3:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 20px;
+        background: linear-gradient(135deg, #2196F3, #1976D2);
+        border-radius: 2px;
     }
 
     .form-fila {
@@ -301,24 +371,27 @@
         display: block;
         margin-bottom: 8px;
         font-weight: 600;
-        color: #2c3e50;
+        color: #1a237e;
     }
 
     .form-grupo input,
     .form-grupo textarea {
         width: 100%;
         padding: 12px 15px;
-        border: 2px solid #e9ecef;
+        border: 2px solid #e3f2fd;
         border-radius: 8px;
         font-size: 16px;
-        transition: border-color 0.3s;
+        transition: all 0.3s ease;
         background: white;
+        color: #1a237e;
     }
 
     .form-grupo input:focus,
     .form-grupo textarea:focus {
         outline: none;
-        border-color: #1abc9c;
+        border-color: #2196F3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        transform: translateY(-1px);
     }
 
     .form-acciones {
@@ -327,7 +400,7 @@
     }
 
     .btn-guardar {
-        background: #1abc9c;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
         border: none;
         padding: 15px 30px;
@@ -335,30 +408,41 @@
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        position: relative;
+        overflow: hidden;
     }
 
     .btn-guardar:hover {
-        background: #16a085;
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+    }
+
+    .btn-guardar:active {
+        transform: translateY(0);
     }
 
     /* Sección de Pedidos */
     .pedidos-vacio {
         text-align: center;
         padding: 60px 20px;
-        color: #7f8c8d;
+        color: #546e7a;
     }
 
     .icono-vacio {
         font-size: 80px;
         margin-bottom: 20px;
-        opacity: 0.5;
+        color: #2196F3;
+        opacity: 0.7;
     }
 
     .pedidos-vacio h3 {
         font-size: 24px;
         margin-bottom: 15px;
-        color: #2c3e50;
+        color: #1a237e;
+        font-weight: 600;
     }
 
     .pedidos-vacio p {
@@ -367,18 +451,23 @@
     }
 
     .btn-ir-catalogo {
-        background: #1abc9c;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
         padding: 12px 30px;
         text-decoration: none;
         border-radius: 8px;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         display: inline-block;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
     }
 
     .btn-ir-catalogo:hover {
-        background: #16a085;
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        color: white;
+        text-decoration: none;
     }
 
     .lista-pedidos {
@@ -388,15 +477,29 @@
     }
 
     .pedido-card {
-        border: 2px solid #ecf0f1;
+        border: 2px solid #e3f2fd;
         border-radius: 12px;
         padding: 25px;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
+        background: white;
+        position: relative;
+        overflow: hidden;
     }
 
     .pedido-card:hover {
-        border-color: #1abc9c;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #2196F3;
+        box-shadow: 0 8px 25px rgba(33, 150, 243, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .pedido-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(135deg, #2196F3, #1976D2);
     }
 
     .pedido-header {
@@ -407,30 +510,51 @@
     }
 
     .pedido-info h3 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 5px;
         font-size: 18px;
         font-weight: 600;
     }
 
     .pedido-fecha {
-        color: #7f8c8d;
+        color: #546e7a;
         font-size: 14px;
     }
 
     .pedido-estado {
-        padding: 6px 12px;
+        padding: 8px 16px;
         border-radius: 20px;
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .estado-pendiente { background: #fff3cd; color: #856404; }
-    .estado-procesado { background: #d1ecf1; color: #0c5460; }
-    .estado-enviado { background: #d4edda; color: #155724; }
-    .estado-entregado { background: #d4edda; color: #155724; }
-    .estado-cancelado { background: #f8d7da; color: #721c24; }
+    .estado-pendiente { 
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7); 
+        color: #856404; 
+        border: 1px solid #ffeaa7;
+    }
+    .estado-procesado { 
+        background: linear-gradient(135deg, #d1ecf1, #b3e5fc); 
+        color: #0c5460; 
+        border: 1px solid #b3e5fc;
+    }
+    .estado-enviado { 
+        background: linear-gradient(135deg, #d4edda, #c8e6c9); 
+        color: #155724; 
+        border: 1px solid #c8e6c9;
+    }
+    .estado-entregado { 
+        background: linear-gradient(135deg, #d4edda, #c8e6c9); 
+        color: #155724; 
+        border: 1px solid #c8e6c9;
+    }
+    .estado-cancelado { 
+        background: linear-gradient(135deg, #f8d7da, #ffcdd2); 
+        color: #721c24; 
+        border: 1px solid #ffcdd2;
+    }
 
     .pedido-detalle {
         display: flex;
@@ -441,12 +565,17 @@
 
     .pedido-monto {
         font-size: 18px;
-        color: #2c3e50;
+        color: #1a237e;
+        font-weight: 600;
     }
 
     .pedido-metodo {
-        color: #7f8c8d;
+        color: #546e7a;
         font-size: 14px;
+        background: #e3f2fd;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-weight: 500;
     }
 
     .pedido-acciones {
@@ -454,18 +583,23 @@
     }
 
     .btn-ver-detalle {
-        background: #3498db;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
-        padding: 8px 20px;
+        padding: 10px 20px;
         text-decoration: none;
         border-radius: 6px;
         font-size: 14px;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
     }
 
     .btn-ver-detalle:hover {
-        background: #2980b9;
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        color: white;
+        text-decoration: none;
     }
 
     /* Responsive */
@@ -509,6 +643,11 @@
 
         .perfil-contenido {
             padding: 20px;
+        }
+        
+        .seccion-perfil h2,
+        .seccion-pedidos h2 {
+            font-size: 24px;
         }
     }
 </style>
@@ -592,20 +731,22 @@
     // Función para mostrar notificaciones bonitas
     function mostrarNotificacion(mensaje, tipo = 'success') {
         const notificacion = document.createElement('div');
-        const backgroundColor = tipo === 'error' ? '#e74c3c' : '#1abc9c';
+        const backgroundColor = tipo === 'error' ? '#f44336' : '#2196F3';
         
         notificacion.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${backgroundColor};
+            background: linear-gradient(135deg, ${backgroundColor}, ${tipo === 'error' ? '#d32f2f' : '#1976D2'});
             color: white;
             padding: 15px 25px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
             z-index: 10000;
             animation: slideInRight 0.3s ease;
             max-width: 400px;
+            font-weight: 500;
+            border-left: 4px solid ${tipo === 'error' ? '#d32f2f' : '#1976D2'};
         `;
         notificacion.textContent = mensaje;
         

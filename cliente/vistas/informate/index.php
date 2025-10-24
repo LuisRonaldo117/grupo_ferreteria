@@ -2,10 +2,12 @@
 // Vista Infórmate - Estructura original con estilos del diseño guía
 ?>
 
+<!-- Incluir el header -->
+
 <!-- Portada -->
 <section class="portada-informate">
     <div class="portada-imagen">
-        <img src="<?php echo $portada['imagen']; ?>" alt="Infórmate">
+        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Infórmate">
         <div class="portada-contenido">
             <h1><?php echo $portada['titulo']; ?></h1>
             <p><?php echo $portada['subtitulo']; ?></p>
@@ -36,85 +38,213 @@
             <!-- Pestaña Articulos -->
             <div id="tab-articulos" class="tab-panel active">
                 <div class="panel-header">
-                    <h2><?php echo $articulos['titulo']; ?></h2>
+                    <h2>Artículos Especializados</h2>
                     <p>Descubre artículos informativos sobre herramientas, técnicas y materiales</p>
                 </div>
                 <div class="articulos-grid">
-                    <?php foreach($articulos['items'] as $articulo): ?>
-                        <article class="articulo-card">
-                            <div class="articulo-imagen">
-                                <img src="<?php echo $articulo['imagen']; ?>" alt="<?php echo $articulo['titulo']; ?>">
-                                <div class="articulo-etiqueta"><?php echo $articulo['etiqueta']; ?></div>
+                    <article class="articulo-card">
+                        <div class="articulo-imagen">
+                            <img src="https://www.mndelgolfo.com/blog/wp-content/uploads/2025/01/herramientas-electricas-que-no-deben-faltar-en-tu-hogar-1024x576.jpg" alt="Herramientas eléctricas">
+                            <div class="articulo-etiqueta">Nuevo</div>
+                        </div>
+                        <div class="articulo-contenido">
+                            <div class="articulo-meta">
+                                <span class="badge-category">Herramientas</span>
+                                <span class="articulo-fecha">15 Mar 2024</span>
                             </div>
-                            <div class="articulo-contenido">
-                                <div class="articulo-meta">
-                                    <span class="badge-category"><?php echo $articulo['categoria']; ?></span>
-                                    <span class="articulo-fecha"><?php echo $articulo['fecha']; ?></span>
-                                </div>
-                                <h3><?php echo $articulo['titulo']; ?></h3>
-                                <p><?php echo $articulo['descripcion']; ?></p>
-                                <a href="index.php?articulo=<?php echo $articulo['id']; ?>" class="btn-leer-mas">
-                                    <i class="fas fa-book-reader me-1"></i>Leer Más
-                                </a>
+                            <h3>Guía Completa de Herramientas Eléctricas Profesionales</h3>
+                            <p>Aprende a elegir y utilizar las mejores herramientas eléctricas para tus proyectos de construcción y renovación.</p>
+                            <a href="index.php?articulo=1" class="btn-leer-mas">
+                                <i class="fas fa-book-reader me-1"></i>Leer Más
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="articulo-card">
+                        <div class="articulo-imagen">
+                            <img src="https://www.construyendoseguro.com/wp-content/uploads/2025/02/materiales-para-construccion.jpg" alt="Materiales construcción">
+                            <div class="articulo-etiqueta">Popular</div>
+                        </div>
+                        <div class="articulo-contenido">
+                            <div class="articulo-meta">
+                                <span class="badge-category">Materiales</span>
+                                <span class="articulo-fecha">10 Mar 2024</span>
                             </div>
-                        </article>
-                    <?php endforeach; ?>
+                            <h3>Materiales de Construcción: Calidad vs Precio</h3>
+                            <p>Descubre cómo balancear calidad y presupuesto al seleccionar materiales para tu próximo proyecto.</p>
+                            <a href="index.php?articulo=2" class="btn-leer-mas">
+                                <i class="fas fa-book-reader me-1"></i>Leer Más
+                            </a>
+                        </div>
+                    </article>
+                    
+                    <article class="articulo-card">
+                        <div class="articulo-imagen">
+                            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Pinturas y acabados">
+                            <div class="articulo-etiqueta">Destacado</div>
+                        </div>
+                        <div class="articulo-contenido">
+                            <div class="articulo-meta">
+                                <span class="badge-category">Acabados</span>
+                                <span class="articulo-fecha">5 Mar 2024</span>
+                            </div>
+                            <h3>Tendencias en Pinturas y Acabados para 2024</h3>
+                            <p>Explora las últimas tendencias en colores, texturas y técnicas de aplicación para darle vida a tus espacios.</p>
+                            <a href="index.php?articulo=3" class="btn-leer-mas">
+                                <i class="fas fa-book-reader me-1"></i>Leer Más
+                            </a>
+                        </div>
+                    </article>
                 </div>
             </div>
 
             <!-- Pestaña Tutoriales -->
             <div id="tab-tutoriales" class="tab-panel">
                 <div class="panel-header">
-                    <h2><?php echo $tutoriales['titulo']; ?></h2>
+                    <h2>Tutoriales en Video</h2>
                     <p>Aprende con nuestros tutoriales en video paso a paso</p>
                 </div>
                 <div class="tutoriales-grid">
-                    <?php foreach($tutoriales['items'] as $tutorial): ?>
-                        <div class="tutorial-card">
-                            <div class="tutorial-video">
-                                <img src="<?php echo $tutorial['imagen']; ?>" alt="<?php echo $tutorial['titulo']; ?>">
-                                <div class="play-button" onclick="abrirVideo('<?php echo $tutorial['video_url']; ?>')">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                                <div class="duracion"><?php echo $tutorial['duracion']; ?></div>
+                    <div class="tutorial-card">
+                        <div class="tutorial-video">
+                            <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="Instalación cerámica">
+                            <div class="play-button" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
                             </div>
-                            <div class="tutorial-contenido">
-                                <h3><?php echo $tutorial['titulo']; ?></h3>
-                                <p><?php echo $tutorial['descripcion']; ?></p>
-                                <button class="btn-ver-video" onclick="abrirVideo('<?php echo $tutorial['video_url']; ?>')">
-                                    <i class="fas fa-play me-1"></i>Ver Tutorial
-                                </button>
-                            </div>
+                            <div class="duracion">15:30</div>
                         </div>
-                    <?php endforeach; ?>
+                        <div class="tutorial-contenido">
+                            <h3>Instalación Perfecta de Cerámica</h3>
+                            <p>Aprende las técnicas profesionales para instalar cerámica sin errores y con acabados perfectos.</p>
+                            <button class="btn-ver-video" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play me-1"></i>Ver Tutorial
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-video">
+                            <img src="https://images.unsplash.com/photo-1605106707843-e02b4f9c57bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Electricidad básica">
+                            <div class="play-button" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="duracion">22:15</div>
+                        </div>
+                        <div class="tutorial-contenido">
+                            <h3>Instalaciones Eléctricas Seguras</h3>
+                            <p>Guía completa para realizar instalaciones eléctricas residenciales con total seguridad.</p>
+                            <button class="btn-ver-video" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play me-1"></i>Ver Tutorial
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-card">
+                        <div class="tutorial-video">
+                            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Carpintería básica">
+                            <div class="play-button" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="duracion">18:45</div>
+                        </div>
+                        <div class="tutorial-contenido">
+                            <h3>Carpintería para Principiantes</h3>
+                            <p>Domina las técnicas básicas de carpintería y crea tus primeros proyectos con confianza.</p>
+                            <button class="btn-ver-video" onclick="abrirVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ')">
+                                <i class="fas fa-play me-1"></i>Ver Tutorial
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Pestaña Consejos -->
             <div id="tab-consejos" class="tab-panel">
                 <div class="panel-header">
-                    <h2><?php echo $consejos['titulo']; ?></h2>
+                    <h2>Consejos Prácticos</h2>
                     <p>Tips prácticos de nuestros expertos para mejores resultados</p>
                 </div>
                 <div class="consejos-grid">
-                    <?php foreach($consejos['items'] as $categoria): ?>
-                        <div class="consejo-categoria">
-                            <div class="categoria-header">
-                                <div class="categoria-icono">
-                                    <?php echo $categoria['icono']; ?>
-                                </div>
-                                <h3><?php echo $categoria['titulo']; ?></h3>
+                    <div class="consejo-categoria">
+                        <div class="categoria-header">
+                            <div class="categoria-icono">
+                                <i class="fas fa-tools"></i>
                             </div>
-                            <ul class="lista-consejos">
-                                <?php foreach($categoria['consejos'] as $consejo): ?>
-                                    <li>
-                                        <i class="fas fa-check text-success me-2"></i>
-                                        <?php echo $consejo; ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                            <h3>Herramientas</h3>
                         </div>
-                    <?php endforeach; ?>
+                        <ul class="lista-consejos">
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Siempre mantén tus herramientas limpias y afiladas
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Usa herramientas adecuadas para cada tipo de material
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Almacena las herramientas en lugar seco y organizado
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Verifica el estado de las herramientas eléctricas antes de usar
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="consejo-categoria">
+                        <div class="categoria-header">
+                            <div class="categoria-icono">
+                                <i class="fas fa-paint-roller"></i>
+                            </div>
+                            <h3>Pintura y Acabados</h3>
+                        </div>
+                        <ul class="lista-consejos">
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Prepara bien la superficie antes de pintar
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Usa cinta de enmascarar para bordes perfectos
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Aplica pintura en capas delgadas y uniformes
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Mantén una ventilación adecuada durante el trabajo
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="consejo-categoria">
+                        <div class="categoria-header">
+                            <div class="categoria-icono">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <h3>Construcción</h3>
+                        </div>
+                        <ul class="lista-consejos">
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Siempre mide dos veces y corta una vez
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Usa equipo de protección personal en todo momento
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Planifica tu proyecto antes de comenzar
+                            </li>
+                            <li>
+                                <i class="fas fa-check text-success me-2"></i>
+                                Consulta con expertos para proyectos complejos
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,14 +269,31 @@
 </div>
 
 <style>
+    /* Reset para mantener consistencia con el header */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background-color: #ffffff;
+        color: #333;
+        line-height: 1.6;
+        padding-top: 0 !important;
+    }
+
     :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #d32f2f;
-        --accent-color: #007bff;
-        --light-bg: #f8f9fa;
-        --text-muted: #6c757d;
-        --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
-        --shadow-md: 0 4px 16px rgba(0,0,0,0.15);
+        --primary-blue: #1a237e;
+        --accent-blue: #2196F3;
+        --dark-blue: #1976D2;
+        --light-blue: #e3f2fd;
+        --success-green: #4CAF50;
+        --warning-orange: #ff9800;
+        --shadow-sm: 0 4px 12px rgba(33, 150, 243, 0.1);
+        --shadow-md: 0 8px 25px rgba(33, 150, 243, 0.15);
+        --shadow-lg: 0 12px 35px rgba(33, 150, 243, 0.2);
     }
     
     /* Portada */
@@ -154,9 +301,10 @@
         position: relative;
         height: 400px;
         margin-bottom: 40px;
-        border-radius: 12px;
+        border-radius: 16px;
         overflow: hidden;
-        box-shadow: var(--shadow-sm);
+        box-shadow: var(--shadow-lg);
+        margin-top: 20px;
     }
 
     .portada-imagen {
@@ -170,6 +318,11 @@
         height: 100%;
         object-fit: cover;
         filter: brightness(0.7);
+        transition: transform 0.5s ease;
+    }
+
+    .portada-imagen:hover img {
+        transform: scale(1.05);
     }
 
     .portada-contenido {
@@ -184,38 +337,51 @@
     }
 
     .portada-contenido h1 {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        font-weight: bold;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
     }
 
     .portada-contenido p {
-        font-size: 1.25rem;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        font-size: 1.3rem;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
         max-width: 600px;
         margin: 0 auto;
         line-height: 1.6;
+        font-weight: 500;
     }
 
     /* Navegación por pestañas */
     .tabs-section {
         padding: 40px 0 80px;
-        background: white;
+        background: #ffffff;
     }
 
     .tabs-navegacion {
         display: flex;
         justify-content: center;
         margin-bottom: 50px;
-        background: #f8f9fa;
-        padding: 10px;
+        background: #ffffff;
+        padding: 12px;
         border-radius: 50px;
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid #e9ecef;
+        box-shadow: var(--shadow-md);
+        border: 2px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tabs-navegacion:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-blue), var(--dark-blue));
     }
 
     .tab-btn {
@@ -229,25 +395,34 @@
         cursor: pointer;
         transition: all 0.3s ease;
         font-size: 16px;
-        font-weight: 500;
-        color: var(--text-muted);
+        font-weight: 600;
+        color: #546e7a;
         flex: 1;
         justify-content: center;
+        position: relative;
+        overflow: hidden;
     }
 
     .tab-btn:hover {
-        color: var(--primary-color);
-        background: rgba(0, 123, 255, 0.1);
+        color: var(--primary-blue);
+        background: rgba(33, 150, 243, 0.1);
+        transform: translateY(-2px);
     }
 
     .tab-btn.active {
-        background: linear-gradient(90deg, var(--accent-color), #0056b3);
+        background: linear-gradient(135deg, var(--accent-blue), var(--dark-blue));
         color: white;
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+        transform: translateY(-2px);
     }
 
     .tab-btn i {
         font-size: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    .tab-btn.active i {
+        transform: scale(1.1);
     }
 
     /* Contenido de pestañas */
@@ -257,16 +432,22 @@
 
     .tab-panel {
         display: none;
-        animation: fadeIn 0.5s ease;
+        animation: fadeInUp 0.5s ease;
     }
 
     .tab-panel.active {
         display: block;
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp {
+        from { 
+            opacity: 0; 
+            transform: translateY(30px); 
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
     }
 
     .panel-header {
@@ -275,12 +456,12 @@
     }
 
     .panel-header h2 {
-        font-size: 2.5rem;
-        color: var(--primary-color);
-        margin-bottom: 15px;
+        font-size: 2.8rem;
+        color: var(--primary-blue);
+        margin-bottom: 20px;
         font-weight: 700;
         position: relative;
-        padding-bottom: 15px;
+        padding-bottom: 20px;
     }
 
     .panel-header h2:after {
@@ -289,44 +470,47 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 80px;
-        height: 3px;
-        background: var(--accent-color);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-blue), var(--dark-blue));
         border-radius: 2px;
     }
 
     .panel-header p {
-        font-size: 1.1rem;
-        color: var(--text-muted);
+        font-size: 1.2rem;
+        color: #546e7a;
         max-width: 500px;
         margin: 0 auto;
         line-height: 1.6;
+        font-weight: 500;
     }
 
     /* Artículos */
     .articulos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
         gap: 30px;
     }
 
     .articulo-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
-        transition: all 0.3s ease;
-        border: 1px solid #e9ecef;
+        transition: all 0.4s ease;
+        border: 1px solid #e3f2fd;
+        position: relative;
     }
 
     .articulo-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-md);
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--accent-blue);
     }
 
     .articulo-imagen {
         position: relative;
-        height: 220px;
+        height: 240px;
         overflow: hidden;
     }
 
@@ -334,110 +518,121 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s ease;
+        transition: transform 0.4s ease;
     }
 
     .articulo-card:hover .articulo-imagen img {
-        transform: scale(1.05);
+        transform: scale(1.1);
     }
 
     .articulo-etiqueta {
         position: absolute;
         top: 15px;
         right: 15px;
-        background: var(--secondary-color);
+        background: linear-gradient(135deg, var(--warning-orange), #f57c00);
         color: white;
-        padding: 6px 15px;
+        padding: 8px 16px;
         border-radius: 20px;
         font-size: 12px;
-        font-weight: bold;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
     }
 
     .articulo-contenido {
-        padding: 25px;
+        padding: 30px;
     }
 
     .articulo-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     .badge-category {
-        background: linear-gradient(90deg, var(--accent-color), #0056b3);
+        background: linear-gradient(135deg, var(--accent-blue), var(--dark-blue));
         color: white;
-        padding: 6px 12px;
+        padding: 8px 16px;
         border-radius: 20px;
         font-size: 0.8rem;
-        font-weight: 500;
+        font-weight: 600;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
     }
 
     .articulo-fecha {
-        color: var(--text-muted);
+        color: #78909c;
         font-size: 0.85rem;
+        font-weight: 500;
     }
 
     .articulo-contenido h3 {
-        font-size: 1.4rem;
-        color: var(--primary-color);
+        font-size: 1.5rem;
+        color: var(--primary-blue);
         margin-bottom: 15px;
         line-height: 1.4;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .articulo-contenido p {
-        color: var(--text-muted);
+        color: #546e7a;
         line-height: 1.6;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
+        margin-bottom: 25px;
+        font-size: 1rem;
     }
 
     .btn-leer-mas {
-        background: linear-gradient(90deg, var(--accent-color), #0056b3);
+        background: linear-gradient(135deg, var(--accent-blue), var(--dark-blue));
         color: white;
-        padding: 10px 20px;
+        padding: 12px 25px;
         border: none;
         border-radius: 8px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         transition: all 0.3s ease;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 14px;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        cursor: pointer;
     }
 
     .btn-leer-mas:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         color: white;
+        text-decoration: none;
     }
 
     /* Tutoriales */
     .tutoriales-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
         gap: 30px;
     }
 
     .tutorial-card {
         background: white;
-        border-radius: 12px;
+        border-radius: 16px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
-        transition: all 0.3s ease;
-        border: 1px solid #e9ecef;
+        transition: all 0.4s ease;
+        border: 1px solid #e3f2fd;
+        position: relative;
     }
 
     .tutorial-card:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-md);
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--accent-blue);
     }
 
     .tutorial-video {
         position: relative;
-        height: 220px;
+        height: 240px;
         overflow: hidden;
     }
 
@@ -445,11 +640,11 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.3s ease;
+        transition: transform 0.4s ease;
     }
 
     .tutorial-card:hover .tutorial-video img {
-        transform: scale(1.05);
+        transform: scale(1.1);
     }
 
     .play-button {
@@ -457,27 +652,29 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(211, 47, 47, 0.9);
-        width: 70px;
-        height: 70px;
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.9), rgba(25, 118, 210, 0.9));
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(5px);
     }
 
     .play-button:hover {
-        background: rgba(211, 47, 47, 1);
+        background: linear-gradient(135deg, rgba(33, 150, 243, 1), rgba(25, 118, 210, 1));
         transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.4);
     }
 
     .play-button i {
         color: white;
-        font-size: 24px;
-        margin-left: 3px;
+        font-size: 28px;
+        margin-left: 4px;
     }
 
     .duracion {
@@ -486,93 +683,117 @@
         right: 15px;
         background: rgba(0,0,0,0.8);
         color: white;
-        padding: 6px 12px;
-        border-radius: 15px;
+        padding: 8px 14px;
+        border-radius: 20px;
         font-size: 12px;
         font-weight: 600;
+        backdrop-filter: blur(5px);
     }
 
     .tutorial-contenido {
-        padding: 25px;
+        padding: 30px;
     }
 
     .tutorial-contenido h3 {
-        font-size: 1.4rem;
-        color: var(--primary-color);
+        font-size: 1.5rem;
+        color: var(--primary-blue);
         margin-bottom: 15px;
         line-height: 1.4;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .tutorial-contenido p {
-        color: var(--text-muted);
+        color: #546e7a;
         line-height: 1.6;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
+        margin-bottom: 25px;
+        font-size: 1rem;
     }
 
     .btn-ver-video {
-        background: linear-gradient(90deg, var(--secondary-color), #b71c1c);
+        background: linear-gradient(135deg, var(--success-green), #2E7D32);
         color: white;
-        padding: 12px 25px;
+        padding: 14px 25px;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         transition: all 0.3s ease;
         width: 100%;
-        font-weight: 500;
-        font-size: 14px;
+        font-weight: 600;
+        font-size: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
     }
 
     .btn-ver-video:hover {
+        background: linear-gradient(135deg, #43A047, #1B5E20);
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
     }
 
     /* Consejos */
     .consejos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 30px;
     }
 
     .consejo-categoria {
         background: white;
-        padding: 30px;
-        border-radius: 12px;
+        padding: 35px;
+        border-radius: 16px;
         box-shadow: var(--shadow-sm);
-        border: 1px solid #e9ecef;
-        transition: all 0.3s ease;
+        border: 1px solid #e3f2fd;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
     }
 
     .consejo-categoria:hover {
-        transform: translateY(-5px);
-        box-shadow: var(--shadow-md);
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--accent-blue);
+    }
+
+    .consejo-categoria:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent-blue), var(--dark-blue));
     }
 
     .categoria-header {
         display: flex;
         align-items: center;
-        margin-bottom: 25px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #f8f9fa;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e3f2fd;
     }
 
     .categoria-icono {
-        font-size: 40px;
-        margin-right: 15px;
-        color: var(--accent-color);
+        font-size: 42px;
+        margin-right: 20px;
+        color: var(--accent-blue);
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
     }
 
     .categoria-header h3 {
-        font-size: 1.4rem;
-        color: var(--primary-color);
+        font-size: 1.5rem;
+        color: var(--primary-blue);
         margin: 0;
-        font-weight: 600;
+        font-weight: 700;
     }
 
     .lista-consejos {
@@ -582,13 +803,20 @@
     }
 
     .lista-consejos li {
-        padding: 12px 0;
-        border-bottom: 1px solid #f8f9fa;
-        color: var(--text-muted);
+        padding: 15px 0;
+        border-bottom: 1px solid #f5f5f5;
+        color: #546e7a;
         line-height: 1.5;
-        font-size: 0.95rem;
+        font-size: 1rem;
         display: flex;
         align-items: flex-start;
+        transition: all 0.3s ease;
+    }
+
+    .lista-consejos li:hover {
+        background: #f8fdff;
+        padding-left: 10px;
+        border-radius: 8px;
     }
 
     .lista-consejos li:last-child {
@@ -597,12 +825,14 @@
 
     .lista-consejos li i {
         margin-top: 3px;
+        color: var(--success-green);
+        font-size: 14px;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
         .portada-contenido h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
         }
 
         .portada-contenido p {
@@ -612,17 +842,17 @@
         .tabs-navegacion {
             flex-direction: column;
             border-radius: 20px;
-            gap: 5px;
+            gap: 8px;
             max-width: 100%;
         }
 
         .tab-btn {
             border-radius: 15px;
-            padding: 12px 20px;
+            padding: 15px 20px;
         }
 
         .panel-header h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
         }
 
         .articulos-grid,
@@ -636,6 +866,16 @@
             height: 300px;
             margin-bottom: 30px;
         }
+        
+        .categoria-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .categoria-icono {
+            margin-right: 0;
+        }
     }
 
     @media (max-width: 480px) {
@@ -644,7 +884,7 @@
         }
 
         .portada-contenido h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         .portada-contenido p {
@@ -653,27 +893,21 @@
 
         .articulo-meta {
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             align-items: flex-start;
         }
 
-        .categoria-header {
-            flex-direction: column;
-            text-align: center;
-            gap: 10px;
-        }
-
-        .categoria-icono {
-            margin-right: 0;
-        }
-
         .panel-header h2 {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
         }
 
         .articulo-contenido,
         .tutorial-contenido {
             padding: 20px;
+        }
+        
+        .consejo-categoria {
+            padding: 25px;
         }
     }
 </style>

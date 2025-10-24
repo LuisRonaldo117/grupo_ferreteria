@@ -194,7 +194,7 @@ class CarritoManager {
                         ← Seguir Comprando
                     </a>
                     <button class="btn-vaciar-carrito-principal" onclick="carritoManager.vaciarCarrito()">
-                        🗑️ Vaciar Carrito
+                             Vaciar Carrito
                     </button>
                 </div>
             `;

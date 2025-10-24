@@ -47,9 +47,9 @@
             <?php
             // Simular artículos relacionados (en un caso real, esto vendría del modelo)
             $relacionados = [
-                ['id' => 1, 'titulo' => 'Guía de Mantenimiento para Herramientas Eléctricas', 'imagen' => 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'],
-                ['id' => 2, 'titulo' => 'Técnicas Avanzadas de Pintura', 'imagen' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'],
-                ['id' => 3, 'titulo' => 'Instalación Básica de Tuberías', 'imagen' => 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80']
+                ['id' => 1, 'titulo' => 'Mantenimiento de Herramientas Eléctricas', 'imagen' => 'https://www.mndelgolfo.com/blog/wp-content/uploads/2025/01/herramientas-electricas-que-no-deben-faltar-en-tu-hogar-1024x576.jpg'],
+                ['id' => 2, 'titulo' => 'Técnicas Avanzadas de Pintura', 'imagen' => 'https://img.freepik.com/foto-gratis/herramientas-seguridad-trabajos-pintura_23-2148908402.jpg'],
+                ['id' => 3, 'titulo' => 'Instalación Básica de Tuberías', 'imagen' => 'https://www.dlubal.com/es/webimage/040212/3572853/piping-design.png?mw=1024&hash=19a9222a0060751d2411104bca8dc7be80d37352']
             ];
             
             foreach($relacionados as $relacionado): 

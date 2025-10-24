@@ -45,7 +45,7 @@
                             </a>
                             <button class="btn-vaciar-carrito-principal" 
                                     onclick="carritoManager.vaciarCarrito()">
-                                🗑️ Vaciar Carrito
+                                    Vaciar Carrito
                             </button>
                         </div>
                     <?php else: ?>
@@ -158,16 +158,31 @@
 <style>
     .carrito-page {
         padding: 40px 0 80px;
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
         min-height: 70vh;
     }
 
     .carrito-page h1 {
         text-align: center;
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 40px;
         font-size: 36px;
-        font-weight: bold;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .carrito-page h1:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
+        border-radius: 2px;
     }
 
     .carrito-layout {
@@ -182,53 +197,81 @@
         background: white;
         border-radius: 15px;
         padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 32px rgba(33, 150, 243, 0.1);
+        border: 1px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carrito-productos:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
     }
 
     .carrito-vacio-mensaje {
         text-align: center;
         padding: 60px 20px;
-        color: #7f8c8d;
+        color: #546e7a;
     }
 
     .carrito-vacio-mensaje .icono {
         font-size: 80px;
         margin-bottom: 20px;
-        opacity: 0.5;
+        opacity: 0.7;
+        color: #2196F3;
     }
 
     .carrito-vacio-mensaje h3 {
         font-size: 24px;
         margin-bottom: 15px;
-        color: #2c3e50;
+        color: #1a237e;
+        font-weight: 600;
     }
 
     .carrito-vacio-mensaje p {
         margin-bottom: 25px;
         font-size: 16px;
+        color: #546e7a;
     }
 
     .btn-ir-catalogo {
-        background: #1abc9c;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
         padding: 12px 30px;
         text-decoration: none;
         border-radius: 8px;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         display: inline-block;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
     }
 
     .btn-ir-catalogo:hover {
-        background: #16a085;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        color: white;
+        text-decoration: none;
     }
 
     .carrito-item-detalle {
         display: flex;
         align-items: center;
         padding: 20px;
-        border-bottom: 1px solid #ecf0f1;
+        border-bottom: 1px solid #e3f2fd;
         gap: 20px;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .carrito-item-detalle:hover {
+        background: #f8fdff;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.1);
     }
 
     .carrito-item-detalle:last-child {
@@ -239,13 +282,14 @@
         width: 80px;
         height: 80px;
         border-radius: 10px;
-        background: #f8f9fa;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 32px;
         flex-shrink: 0;
         overflow: hidden;
+        border: 2px solid #e3f2fd;
     }
 
     .item-imagen img {
@@ -255,27 +299,6 @@
         border-radius: 10px;
     }
 
-    /* Para el dropdown del carrito */
-    .carrito-item-imagen {
-        width: 50px;
-        height: 50px;
-        border-radius: 8px;
-        background: #f8f9fa;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        flex-shrink: 0;
-        overflow: hidden;
-    }
-
-    .carrito-item-imagen img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
     .item-info {
         flex: 1;
     }
@@ -283,13 +306,13 @@
     .item-nombre {
         font-size: 18px;
         font-weight: 600;
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 5px;
     }
 
     .item-precio {
         font-size: 16px;
-        color: #1abc9c;
+        color: #1976D2;
         font-weight: bold;
     }
 
@@ -303,15 +326,17 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        background: #f8f9fa;
+        background: #e3f2fd;
         padding: 5px 15px;
         border-radius: 25px;
+        border: 1px solid #bbdefb;
     }
 
     .btn-cantidad {
-        background: none;
+        background: #2196F3;
+        color: white;
         border: none;
-        font-size: 18px;
+        font-size: 16px;
         cursor: pointer;
         width: 30px;
         height: 30px;
@@ -319,33 +344,38 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        font-weight: bold;
     }
 
     .btn-cantidad:hover {
-        background: #1abc9c;
-        color: white;
+        background: #1976D2;
+        transform: scale(1.1);
     }
 
     .cantidad-numero {
         font-weight: 600;
         min-width: 30px;
         text-align: center;
+        color: #1a237e;
     }
 
     .btn-eliminar-item {
-        background: #e74c3c;
+        background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
         color: white;
         border: none;
         padding: 8px 15px;
-        border-radius: 5px;
+        border-radius: 6px;
         cursor: pointer;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(244, 67, 54, 0.2);
     }
 
     .btn-eliminar-item:hover {
-        background: #c0392b;
+        background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
     }
 
     .carrito-acciones-principales {
@@ -353,36 +383,44 @@
         justify-content: space-between;
         margin-top: 30px;
         padding-top: 20px;
-        border-top: 2px solid #ecf0f1;
+        border-top: 2px solid #e3f2fd;
     }
 
     .btn-seguir-comprando {
-        background: #3498db;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
         padding: 12px 25px;
         text-decoration: none;
         border-radius: 8px;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
     }
 
     .btn-seguir-comprando:hover {
-        background: #2980b9;
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        color: white;
+        text-decoration: none;
     }
 
     .btn-vaciar-carrito-principal {
-        background: #e74c3c;
+        background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
         color: white;
         border: none;
         padding: 12px 25px;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
     }
 
     .btn-vaciar-carrito-principal:hover {
-        background: #c0392b;
+        background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
     }
 
     /* Resumen del Pedido */
@@ -395,15 +433,41 @@
         background: white;
         border-radius: 15px;
         padding: 30px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 32px rgba(33, 150, 243, 0.1);
+        border: 1px solid #e3f2fd;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .resumen-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
     }
 
     .resumen-card h3 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 25px;
         font-size: 20px;
         font-weight: 600;
         text-align: center;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .resumen-card h3:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 2px;
+        background: linear-gradient(90deg, #2196F3, #1976D2);
     }
 
     .resumen-detalle {
@@ -414,7 +478,8 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
-        color: #7f8c8d;
+        color: #546e7a;
+        font-weight: 500;
     }
 
     .resumen-total {
@@ -422,24 +487,26 @@
         justify-content: space-between;
         margin-top: 20px;
         padding-top: 20px;
-        border-top: 2px solid #ecf0f1;
+        border-top: 2px solid #e3f2fd;
         font-size: 18px;
         font-weight: bold;
-        color: #2c3e50;
+        color: #1a237e;
     }
 
     .seguridad-info {
         text-align: center;
         margin-bottom: 25px;
         padding: 15px;
-        background: #f8f9fa;
+        background: #e8f5e9;
         border-radius: 8px;
-        color: #7f8c8d;
+        color: #2e7d32;
         font-size: 14px;
+        font-weight: 500;
+        border: 1px solid #c8e6c9;
     }
 
     .btn-proceder-pago {
-        background: #1abc9c;
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
         color: white;
         border: none;
         padding: 15px;
@@ -447,17 +514,24 @@
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         width: 100%;
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .btn-proceder-pago:hover {
-        background: #16a085;
+        background: linear-gradient(135deg, #43A047 0%, #1B5E20 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
     }
 
     .btn-proceder-pago:disabled {
-        background: #bdc3c7;
+        background: #bdbdbd;
         cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
     }
 
     /* Modal de Pago */
@@ -468,10 +542,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.8);
+        background: rgba(26, 35, 126, 0.9);
         z-index: 2000;
         align-items: center;
         justify-content: center;
+        backdrop-filter: blur(5px);
     }
 
     .modal-pago.active {
@@ -486,16 +561,18 @@
         max-height: 90vh;
         overflow-y: auto;
         animation: modalSlideIn 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        border: 1px solid #e3f2fd;
     }
 
     @keyframes modalSlideIn {
         from {
             opacity: 0;
-            transform: translateY(-50px);
+            transform: translateY(-50px) scale(0.9);
         }
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
     }
 
@@ -504,11 +581,13 @@
         justify-content: space-between;
         align-items: center;
         padding: 25px 30px;
-        border-bottom: 1px solid #ecf0f1;
+        border-bottom: 1px solid #e3f2fd;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
     }
 
     .modal-header h2 {
-        color: #2c3e50;
         margin: 0;
         font-size: 24px;
         font-weight: 600;
@@ -517,30 +596,61 @@
     .cerrar-modal {
         font-size: 30px;
         cursor: pointer;
-        color: #7f8c8d;
+        color: white;
         transition: color 0.3s;
+        opacity: 0.8;
     }
 
     .cerrar-modal:hover {
-        color: #e74c3c;
+        opacity: 1;
+        transform: scale(1.1);
     }
 
     .modal-body {
         padding: 30px;
     }
 
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #1a237e;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e3f2fd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s;
+        background: white;
+    }
+
+    .form-group select:focus {
+        outline: none;
+        border-color: #2196F3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+
     .resumen-modal {
-        background: #f8f9fa;
+        background: #f8fdff;
         padding: 20px;
         border-radius: 10px;
         margin: 25px 0;
+        border: 1px solid #e3f2fd;
     }
 
     .resumen-modal h3 {
-        color: #2c3e50;
+        color: #1a237e;
         margin-bottom: 15px;
         font-size: 18px;
         font-weight: 600;
+        text-align: center;
     }
 
     .modal-acciones {
@@ -551,34 +661,36 @@
 
     .btn-cancelar {
         flex: 1;
-        background: #95a5a6;
+        background: linear-gradient(135deg, #78909c 0%, #546e7a 100%);
         color: white;
         border: none;
         padding: 12px;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
     }
 
     .btn-cancelar:hover {
-        background: #7f8c8d;
+        background: linear-gradient(135deg, #546e7a 0%, #455a64 100%);
+        transform: translateY(-1px);
     }
 
     .btn-confirmar-pago {
         flex: 2;
-        background: #1abc9c;
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
         color: white;
         border: none;
         padding: 12px;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
     }
 
     .btn-confirmar-pago:hover {
-        background: #16a085;
+        background: linear-gradient(135deg, #43A047 0%, #1B5E20 100%);
+        transform: translateY(-1px);
     }
 
     /* Responsive */
@@ -623,12 +735,13 @@
     }
 
     .notificacion-pago {
-        background: linear-gradient(135deg, #d4edda, #c3e6cb);
-        border: 2px solid #28a745;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border: 2px solid #4CAF50;
         border-radius: 10px;
         padding: 20px;
         margin: 20px 0;
         animation: slideInDown 0.5s ease;
+        box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
     }
 
     .notificacion-contenido {
@@ -639,33 +752,40 @@
 
     .notificacion-icono {
         font-size: 40px;
+        color: #4CAF50;
     }
 
     .notificacion-texto h3 {
-        color: #155724;
+        color: #2e7d32;
         margin: 0 0 5px 0;
         font-size: 20px;
+        font-weight: 600;
     }
 
     .notificacion-texto p {
-        color: #155724;
+        color: #2e7d32;
         margin: 0;
         opacity: 0.9;
     }
 
     .btn-descargar-factura {
-        background: #007bff;
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: white;
         padding: 10px 20px;
         text-decoration: none;
-        border-radius: 5px;
+        border-radius: 6px;
         font-weight: 500;
-        transition: background 0.3s;
+        transition: all 0.3s ease;
         margin-left: auto;
+        box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
     }
 
     .btn-descargar-factura:hover {
-        background: #0056b3;
+        background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        color: white;
+        text-decoration: none;
     }
 
     @keyframes slideInDown {
