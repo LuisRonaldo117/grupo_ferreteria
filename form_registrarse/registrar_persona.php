@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $genero = mysqli_real_escape_string($conexion, $_POST['genero']);
     $id_departamento = intval($_POST['id_departamento']);
 
-    // Verificar si la cédula ya existe
     $check_sql = "SELECT COUNT(*) AS count FROM persona WHERE ci = '$ci'";
     $check_result = mysqli_query($conexion, $check_sql);
     $row = mysqli_fetch_assoc($check_result);
@@ -22,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($row['count'] > 0) {
         $error_msg = "La cédula <strong>$ci</strong> ya está registrada. Por favor verifica.";
     } else {
-        // Insertar datos si no existe
         $sql = "INSERT INTO persona (nombres, apellidos, ci, fecha_nacimiento, direccion, telefono, correo, genero, id_departamento)
                 VALUES ('$nombres', '$apellidos', '$ci', '$fecha_nacimiento', '$direccion', '$telefono', '$correo', '$genero', '$id_departamento')";
 
@@ -41,84 +39,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registro de Persona</title>
-    <link rel="stylesheet" href="../estilos/persona_cliente.css" />
+    <link rel="stylesheet" href="../estilos/persona_cliente.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
     <div class="wrapper">
         <div class="form-card">
+            <h1>Iniciar Registro</h1>
+
             <form action="registrar_persona.php" method="post">
 
-                <h1>Iniciar Registro</h1>
-
                 <?php if ($error_msg): ?>
-                    <div class="error-msg">
-                        <?= $error_msg ?>
-                    </div>
+                    <div class="error-msg"><?= $error_msg ?></div>
                 <?php endif; ?>
 
-                <div class="input-box">
-                    <input type="text" placeholder="Nombres" name="nombre" required>
-                    <i class='bx bxs-user'></i>
-                </div>
+                <div class="input-box"><input type="text" placeholder="Nombres" name="nombre" required><i class='bx bxs-user'></i></div>
 
-                <div class="input-box">
-                    <input type="text" placeholder="Apellidos" name="apellido" required>
-                    <i class='bx bx-user'></i>
-                </div>
+                <div class="input-box"><input type="text" placeholder="Apellidos" name="apellido" required><i class='bx bx-user'></i></div>
 
-                <div class="input-box">
-                    <input type="text" placeholder="Cédula" name="ci" required>
-                    <i class='bx bxs-id-card'></i>
-                </div>
+                <div class="input-box"><input type="text" placeholder="Cédula" name="ci" required><i class='bx bxs-id-card'></i></div>
 
-                <div class="input-box">
-                    <label for="fecha_nacimiento" style="color:white;">Fecha de Nacimiento:</label>
+                <div class="input-box full-width">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                     <input type="date" name="fecha_nacimiento" required>
                 </div>
 
-                <div class="input-box">
-                    <input type="text" placeholder="Dirección" name="direccion">
-                    <i class='bx bxs-map'></i>
-                </div>
+                <div class="input-box"><input type="text" placeholder="Dirección" name="direccion"><i class='bx bxs-map'></i></div>
 
-                <div class="input-box">
-                    <input type="text" placeholder="Teléfono" name="telefono">
-                    <i class='bx bxs-phone-call'></i>
-                </div>
+                <div class="input-box"><input type="text" placeholder="Teléfono" name="telefono"><i class='bx bxs-phone-call'></i></div>
 
-                <div class="input-box">
-                    <input type="email" placeholder="Correo" name="correo">
-                    <i class='bx bxs-envelope'></i>
-                </div>
+                <div class="input-box full-width"><input type="email" placeholder="Correo" name="correo"><i class='bx bxs-envelope'></i></div>
 
-                <div class="input-box">
-                    <label for="genero" style="color:white;">Género:</label>
-                    <select name="genero" id="genero" required>
-                        <option value="" disabled selected>Selecciona Género</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Femenino">Femenino</option>
-                    </select>
-                </div>
+                <!-- Género y Departamento lado a lado -->
+                <div class="side-by-side full-width">
+                    <div class="input-box">
+                        <label for="genero">Género:</label>
+                        <select name="genero" id="genero" required>
+                            <option value="" disabled selected>Selecciona Género</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                        </select>
+                    </div>
 
-                <div class="input-box">
-                    <label for="id_departamento" style="color:white;">Departamento:</label>
-                    <select name="id_departamento" id="id_departamento" required>
-                        <option value="" disabled selected>Selecciona departamento</option>
-                        <?php
-                        $sql = "SELECT id_departamento, nom_departamento FROM departamento ORDER BY id_departamento";
-                        $result = mysqli_query($conexion, $sql);
-                        if ($result) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<option value="' . $row['id_departamento'] . '">' . htmlspecialchars($row['nom_departamento']) . '</option>';
+                    <div class="input-box">
+                        <label for="id_departamento">Departamento:</label>
+                        <select name="id_departamento" id="id_departamento" required>
+                            <option value="" disabled selected>Selecciona departamento</option>
+                            <?php
+                            $sql = "SELECT id_departamento, nom_departamento FROM departamento ORDER BY id_departamento";
+                            $result = mysqli_query($conexion, $sql);
+                            if ($result) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo '<option value="' . $row['id_departamento'] . '">' . htmlspecialchars($row['nom_departamento']) . '</option>';
+                                }
                             }
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="buttons">

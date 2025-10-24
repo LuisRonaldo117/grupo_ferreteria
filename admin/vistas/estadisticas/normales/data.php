@@ -56,6 +56,13 @@ try {
                     ORDER BY valor DESC
                     LIMIT 10";
             break;
+case 'productos_stok':
+    $sql = "SELECT p.nombre AS categoria, p.stock AS valor, c.nombre_categoria AS subcategoria, p.min_stock
+            FROM producto p
+            LEFT JOIN categoria c ON p.id_categoria = c.id_categoria
+            ORDER BY p.stock ASC
+            LIMIT 20";
+    break;
 
         // 6️⃣ Ventas por empleado
         case 'ventas_empleado':

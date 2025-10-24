@@ -210,6 +210,7 @@
     <optgroup label="📦 Productos">
         <option value="productos">Productos más Vendidos</option>
         <option value="productos_categoria">Productos por Categoría</option>
+        <option value="productos_stok">Productos con poco Stokc</option>
     </optgroup>
 
     <!-- 🧾 RECLAMOS -->

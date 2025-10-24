@@ -1,159 +1,200 @@
-/* Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
+/* ============================
+   Estilos Globales
+============================ */
 body {
+    background: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* alineamos al inicio */
-    padding-top: 20px; /* distancia fija desde arriba */
-    padding-bottom: 20px;    /* distancia desde abajo */
-    background: #121212;
-}
-
-/* Card central */
-.wrapper {
+    background-image: url('../img/inicio.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    padding: 0 15px; /* un poco de margen lateral en celulares */
 }
 
-.form-card {
-    background: #1e1e2f;
-    padding: 20px 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+/* Contenedor Principal */
+.wrapper {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 15px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     width: 100%;
-    max-width: 470px;
+    max-width: 900px;
+    box-sizing: border-box;
 }
 
-.form-card h1 {
+/* Título */
+h1 {
     text-align: center;
-    color: #fff;
-    margin-bottom: 25px;
-    font-size: 1.8rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-/* Inputs */
-.input-box {
-    position: relative;
     margin-bottom: 20px;
+    color: #333;
+    font-size: 28px;
 }
 
+/* Formulario en grid 3 columnas */
+.form-card form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px 15px;
+}
+
+/* Inputs que ocupan columnas completas */
+.input-box.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Inputs y selects generales */
+.input-box input,
+.input-box select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    background: #fff;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    appearance: none;
+}
+
+/* Focus */
+.input-box input:focus,
+.input-box select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0,123,255,0.3);
+}
+
+/* Iconos */
 .input-box i {
     position: absolute;
-    left: 12px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #8ab6ff;
-    font-size: 1.2rem;
+    color: #aaa;
+    font-size: 20px;
+    pointer-events: none;
 }
 
-/* Input y Select Estilo */
-.input-box input,
-.input-box select,
-.input-box input[type="date"] {
-    width: 100%;
-    padding: 12px 15px 12px 40px;
-    border-radius: 8px;
-    border: none;
-    background: #2a2a3d;
-    color: #fff;
-    font-size: 1rem;
-    transition: 0.3s;
-    appearance: none; /* Quitar flecha por defecto */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
-
-.input-box select {
-    padding-right: 35px; /* Espacio para flecha personalizada */
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 20 20'%3E%3Cpolygon fill='%238ab6ff' points='0,0 20,0 10,10'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-}
-
-.input-box input:focus,
-.input-box select:focus,
-.input-box input[type="date"]:focus {
-    outline: 2px solid #4fc3f7;
-}
-
-/* Buttons */
-.buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn {
-    flex: 1;
-    padding: 12px 0;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-submit {
-    background: #1506f1;
-    color: #fff;
-}
-
-.btn-submit:hover {
-    background: #2c1fe6;
-}
-
-.btn-login {
-    background: #e02727;
-    color: #fff;
-}
-
-.btn-login:hover {
-    background: #fc0000;
+/* Labels */
+.input-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
 }
 
 /* Error */
 .error-msg {
-    background: #ff4d4d;
+    grid-column: 1 / -1;
+    background-color: #f44336;
     color: white;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: center;
+    font-weight: 500;
 }
 
-/* Media Queries para móviles */
-@media (max-width: 480px) {
-    .form-card {
-        padding: 15px 20px;
-    }
+/* Botones */
+.buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 45px;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-    .form-card h1 {
-        font-size: 1.5rem;
-    }
+.btn {
+    width: 28%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
-    .input-box input,
-    .input-box select,
-    .input-box input[type="date"] {
-        font-size: 0.95rem;
-        padding: 10px 12px 10px 40px;
-    }
+.btn-submit {
+    background-color: #28a745;
+}
+.btn-submit:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
 
-    .btn {
-        font-size: 0.95rem;
-        padding: 10px 0;
+.btn-login {
+    background-color: #007bff;
+}
+.btn-login:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* ============================
+   Side-by-side Inputs y Selects
+============================ */
+.side-by-side {
+    display: flex;
+    gap: 20px; /* separación entre columnas */
+    flex-wrap: wrap; /* para móviles */
+    width: 100%;
+}
+
+.side-by-side .input-box {
+    flex: 1;           /* ocupa igual espacio */
+    min-width: 180px;  /* evita que se achique demasiado */
+}
+
+/* Inputs y selects dentro de side-by-side */
+.side-by-side .input-box input,
+.side-by-side .input-box select {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    outline: none;
+    box-sizing: border-box;
+    background: #fff;
+    color: #333;
+}
+
+/* Select con flecha personalizada */
+.side-by-side .input-box select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px; /* espacio para la flecha */
+}
+
+/* Focus */
+.side-by-side .input-box input:focus,
+.side-by-side .input-box select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0,123,255,0.3);
+}
+
+/* ============================
+   Responsivo
+============================ */
+@media (max-width: 1024px) {
+    .form-card form {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
+
+@media (max-width: 768px) {
+    .wrapper { width: 90%; padding: 20px; }
+    .form-card form { display: block; }
+    .input-box, .input-box.full-width { width: 100%; margin-bottom: 20px; }
+    .buttons { flex-direction: column; }
+    .btn { width: 100%; }
+    .side-by-side { flex-direction: column; }
 }

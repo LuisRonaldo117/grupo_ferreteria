@@ -191,7 +191,7 @@ table, tr, td, th {
             <strong>FERRETERÍA CENTRAL</strong><br>
             <?= htmlspecialchars($datosPedido['nombre_sucursal']) ?><br>
             <strong>Cliente:</strong> <?= htmlspecialchars($datosPedido['nombre_cliente']) ?><br>
-            <strong>CI/NIT:</strong> <?= htmlspecialchars($datosPedido['ci_cliente']) ?>
+            <strong>CI:</strong> <?= htmlspecialchars($datosPedido['ci_cliente']) ?>
         </div>
         <div class="info-fecha-ci">
             <span class="fecha">Fecha: <?= htmlspecialchars($datosPedido['fecha_pedido']) ?></span><br>

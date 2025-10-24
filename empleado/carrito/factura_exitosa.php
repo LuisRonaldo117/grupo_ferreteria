@@ -14,8 +14,8 @@ $total = $datosFactura['total'];
 
 // Datos de la empresa (opcional, para encabezado)
 $nombreEmpresa = "Grupo Ferretería S.R.L.";
-$direccionEmpresa = "Av. América #245, Cochabamba - Bolivia";
-$telefonoEmpresa = "+591 4 4456789";
+$direccionEmpresa = "Av. 16 de Julio #789, El Prado";
+$telefonoEmpresa = "+591 63171544";
 $nitEmpresa = "7894567012";
 ?>
 
@@ -27,15 +27,13 @@ $nitEmpresa = "7894567012";
   <link rel="stylesheet" href="../css/facturaexitosa.css">
 </head>
 <body>
-
   <div class="factura-container">
 
     <!-- Encabezado -->
     <div class="factura-header">
       <div>
-        <strong><?= $nombreEmpresa ?></strong><br>
-        <?= $direccionEmpresa ?><br>
-        Tel: <?= $telefonoEmpresa ?> | NIT: <?= $nitEmpresa ?>
+        <strong>Dirrección:</strong> <?= $direccionEmpresa ?><br>
+        <strong>NIT:</strong>  <?= $nitEmpresa ?>
       </div>
       <div>
         <strong>N° Factura:</strong> <?= str_pad($idFactura, 5, '0', STR_PAD_LEFT) ?><br>

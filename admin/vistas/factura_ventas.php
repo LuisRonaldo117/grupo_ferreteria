@@ -144,7 +144,7 @@ if (isset($_POST['id_factura'])) {
             <strong>FERRETERÍA CENTRAL</strong><br>
             Av. 16 de Julio #789, El Prado, La Paz, Bolivia<br>
             <strong>Cliente:</strong> <?= htmlspecialchars($datosFactura['nombre_cliente'] ?? '---') ?><br>
-            <strong>CI/NIT:</strong> <?= htmlspecialchars($datosFactura['ci_cliente'] ?? '---') ?>
+            <strong>CI:</strong> <?= htmlspecialchars($datosFactura['ci_cliente'] ?? '---') ?>
         </div>
         <div class="info-fecha-ci">
             <span class="fecha">Fecha: <?= htmlspecialchars($datosFactura['fecha']) ?></span><br>

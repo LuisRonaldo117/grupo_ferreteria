@@ -25,49 +25,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 VALUES ('$usuario', '$contrasena', $id_persona)";
 
         if (mysqli_query($conexion, $sql)) {
-            echo '
-            <!DOCTYPE html>
-            <html lang="es">
-            <head>
-                <meta charset="UTF-8" />
-                <title>Registro Exitoso</title>
-                <style>
-                    body {
-                        background: #f0f0f0;
-                        font-family: Arial, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                    }
-                    .message-box {
-                        margin: 20px auto 0 auto;
-                        width: fit-content;
-                        background: #4CAF50;
-                        color: white;
-                        padding: 15px 30px;
-                        border-radius: 8px;
-                        box-shadow: 0 0 10px rgba(0,0,0,0.2);
-                        font-size: 18px;
-                        text-align: center;
-                        position: relative;
-                        top: 20px;
-                    }
-                </style>
-                <script>
-                    setTimeout(() => {
-                        window.location.href = "../index.php";
-                    }, 3000);
-                </script>
-            </head>
-            <body>
-                <div class="message-box">
-                    ¡Guardado exitosamente!<br/>
-                    Serás redirigido al inicio...
-                </div>
-            </body>
-            </html>
-            ';
-            exit();
-        } else {
+    echo '
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro Exitoso</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                height: 100vh;
+                background-image: url("../img/inicio.jpg");
+                background-size: cover;
+                background-position: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* Fondo oscuro semi-transparente */
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .message-box {
+                background: rgba(255,255,255,0.95);
+                padding: 30px 50px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                text-align: center;
+                font-size: 20px;
+                color: #28a745;
+                font-weight: 600;
+                animation: fadeIn 0.5s ease;
+            }
+
+            .message-box span {
+                display: block;
+                margin-top: 10px;
+                font-size: 16px;
+                color: #333;
+                font-weight: 400;
+            }
+
+            @keyframes fadeIn {
+                from {opacity: 0; transform: scale(0.9);}
+                to {opacity: 1; transform: scale(1);}
+            }
+        </style>
+        <script>
+            setTimeout(() => {
+                window.location.href = "../index.php";
+            }, 3000);
+        </script>
+    </head>
+    <body>
+        <div class="overlay">
+            <div class="message-box">
+                ¡Guardado exitosamente!
+                <span>Serás redirigido al inicio...</span>
+            </div>
+        </div>
+    </body>
+    </html>
+    ';
+    exit();
+}
+ else {
             $error_msg = "Error al guardar: " . mysqli_error($conexion);
         }
     }
@@ -81,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Cliente</title>
-    <link rel="stylesheet" href="../estilos/persona_cliente.css">
+    <link rel="stylesheet" href="../estilos/crear_cliente.css">
 </head>
 
 <body>

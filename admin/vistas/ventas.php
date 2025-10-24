@@ -148,15 +148,17 @@
 <script>
 $(document).ready(function() {
     var tabla = $('#tablaFactura').DataTable({
-        responsive: false,
-        scrollX: true,
-        lengthChange: true,
-        pageLength: 15,
-        autoWidth: false,
-        language: {
-            url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
-        }
-    });
+    responsive: false,
+    scrollX: true,
+    lengthChange: true,
+    pageLength: 15,
+    autoWidth: false,
+    order: [[0, 'desc']], // 👈 esto obliga a mostrar DESC por la primera columna (#)
+    language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+    }
+});
+
 
     // Filtro personalizado por tipo de venta y mes
     $.fn.dataTable.ext.search.push(
