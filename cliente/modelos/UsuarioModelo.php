@@ -59,7 +59,6 @@ class UsuarioModelo {
     public function obtenerDetallePedido($idPedido, $idCliente) {
         $conexion = conectarBD();
         
-        // Verificar que el pedido pertenece al cliente
         $sql = "SELECT p.*, CONCAT('FERR-', LPAD(p.id_pedido, 5, '0')) as numero_pedido
                 FROM pedido p
                 WHERE p.id_pedido = ? AND p.id_cliente = ?";
@@ -72,7 +71,6 @@ class UsuarioModelo {
         if ($result && $result->num_rows > 0) {
             $pedido = $result->fetch_assoc();
             
-            // Obtener detalles del pedido
             $sql_detalle = "SELECT dp.cantidad, dp.precio_unitario, dp.total,
                                    pr.nombre as producto_nombre, pr.descripcion
                             FROM detalle_pedido dp
@@ -107,23 +105,16 @@ class UsuarioModelo {
         $conexion = conectarBD();
         
         if (!$conexion) {
-            error_log("Error: No se pudo conectar a la base de datos");
             return false;
         }
         
-        // Inicializar variables
-        $stmt_persona = null;
-        $stmt_verificar = null;
-        $stmt_actualizar = null;
-        
         try {
-            // Obtenemos el id_persona del cliente
             $sql_persona = "SELECT id_persona FROM cliente WHERE id_cliente = ?";
             $stmt_persona = $conexion->prepare($sql_persona);
             $stmt_persona->bind_param("i", $idCliente);
             
             if (!$stmt_persona->execute()) {
-                throw new Exception("Error al obtener id_persona: " . $stmt_persona->error);
+                throw new Exception("Error al obtener datos del cliente");
             }
             
             $result_persona = $stmt_persona->get_result();
@@ -132,79 +123,72 @@ class UsuarioModelo {
                 $cliente = $result_persona->fetch_assoc();
                 $idPersona = $cliente['id_persona'];
                 
+                $sql_departamento = "SELECT id_departamento FROM persona WHERE id_persona = ?";
+                $stmt_departamento = $conexion->prepare($sql_departamento);
+                $stmt_departamento->bind_param("i", $idPersona);
+                $stmt_departamento->execute();
+                $result_departamento = $stmt_departamento->get_result();
                 
-                // Verificar si el correo ya existe en otro usuario
-                $sql_verificar_correo = "SELECT id_persona FROM persona WHERE correo = ? AND id_persona != ?";
-                $stmt_verificar = $conexion->prepare($sql_verificar_correo);
-                $stmt_verificar->bind_param("si", $datos['correo'], $idPersona);
-                
-                if (!$stmt_verificar->execute()) {
-                    throw new Exception("Error al verificar correo: " . $stmt_verificar->error);
+                if ($result_departamento && $result_departamento->num_rows > 0) {
+                    $persona_actual = $result_departamento->fetch_assoc();
+                    $id_departamento_actual = $persona_actual['id_departamento'];
+                    $stmt_departamento->close();
+                    
+                    $sql_verificar = "SELECT id_persona FROM persona WHERE correo = ? AND id_persona != ?";
+                    $stmt_verificar = $conexion->prepare($sql_verificar);
+                    $stmt_verificar->bind_param("si", $datos['correo'], $idPersona);
+                    
+                    if (!$stmt_verificar->execute()) {
+                        throw new Exception("Error al verificar correo");
+                    }
+                    
+                    $result_verificar = $stmt_verificar->get_result();
+                    
+                    if ($result_verificar && $result_verificar->num_rows > 0) {
+                        throw new Exception("El correo electrónico ya está en uso por otro usuario");
+                    }
+                    
+                    $stmt_verificar->close();
+                    
+                    $sql_actualizar = "UPDATE persona SET 
+                                    nombres = ?, apellidos = ?, correo = ?, 
+                                    telefono = ?, direccion = ?, id_departamento = ?
+                                    WHERE id_persona = ?";
+                    
+                    $stmt_actualizar = $conexion->prepare($sql_actualizar);
+                    $stmt_actualizar->bind_param("sssssii", 
+                        $datos['nombres'], 
+                        $datos['apellidos'], 
+                        $datos['correo'],
+                        $datos['telefono'], 
+                        $datos['direccion'],
+                        $id_departamento_actual,
+                        $idPersona
+                    );
+                    
+                    $resultado = $stmt_actualizar->execute();
+                    $filasAfectadas = $stmt_actualizar->affected_rows;
+                    
+                    $stmt_actualizar->close();
+                    $stmt_persona->close();
+                    $conexion->close();
+                    
+                    return $resultado && $filasAfectadas > 0;
+                    
+                } else {
+                    throw new Exception("No se pudo obtener los datos del usuario");
                 }
-                
-                $result_verificar = $stmt_verificar->get_result();
-                
-                if ($result_verificar && $result_verificar->num_rows > 0) {
-                    throw new Exception("El correo electrónico ya está en uso por otro usuario");
-                }
-                
-                // Cerrar la verificacion
-                $stmt_verificar->close();
-                $stmt_verificar = null;
-                
-                // Actualizar datos del usuario
-                $sql_actualizar = "UPDATE persona SET 
-                                nombres = ?, apellidos = ?, correo = ?, 
-                                telefono = ?, direccion = ?
-                                WHERE id_persona = ?";
-                
-                $stmt_actualizar = $conexion->prepare($sql_actualizar);
-                $stmt_actualizar->bind_param("sssssi", 
-                    $datos['nombres'], 
-                    $datos['apellidos'], 
-                    $datos['correo'],
-                    $datos['telefono'], 
-                    $datos['direccion'], 
-                    $idPersona
-                );
-                
-                $resultado = $stmt_actualizar->execute();
-                
-                if (!$resultado) {
-                    throw new Exception("Error al actualizar perfil: " . $stmt_actualizar->error);
-                }
-                
-                // Verificar cuantas filas fueron afectadas
-                $filasAfectadas = $stmt_actualizar->affected_rows;
-                error_log("Filas afectadas en la actualización: " . $filasAfectadas);
-                
-                // Cerrar la actualización
-                $stmt_actualizar->close();
-                $stmt_actualizar = null;
-                
-                // Cerrar statement de persona
-                $stmt_persona->close();
-                $stmt_persona = null;
-                
-                // Cerrar conexion
-                $conexion->close();
-                
-                return $resultado && $filasAfectadas > 0;
             } else {
                 throw new Exception("Cliente no encontrado");
             }
             
         } catch (Exception $e) {
-            error_log("Error en actualizarPerfil modelo: " . $e->getMessage());
+            if (isset($stmt_persona) && $stmt_persona) $stmt_persona->close();
+            if (isset($stmt_departamento) && $stmt_departamento) $stmt_departamento->close();
+            if (isset($stmt_verificar) && $stmt_verificar) $stmt_verificar->close();
+            if (isset($stmt_actualizar) && $stmt_actualizar) $stmt_actualizar->close();
             
-            // Cerrar statements si es que estan abiertos
-            if ($stmt_persona) $stmt_persona->close();
-            if ($stmt_verificar) $stmt_verificar->close();
-            if ($stmt_actualizar) $stmt_actualizar->close();
-            
-            // Cerrar conexion
-            $conexion->close();
-            
+            if ($conexion) $conexion->close();
             return false;
         }
     }

@@ -595,7 +595,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Función para agregar al carrito con AJAX
+    // Función para agregar al carrito con AJAX - VERSIÓN CORREGIDA
     function agregarAlCarrito(id, nombre, precio, imagen) {   
         console.log('Agregando al carrito:', {id, nombre, precio, imagen});
         
@@ -604,7 +604,6 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'X-Requested-With': 'XMLHttpRequest'
             },
             body: 'id_producto=' + id + '&cantidad=1'
         })
@@ -615,9 +614,11 @@
             return response.json();
         })
         .then(data => {
+            console.log('Respuesta del servidor:', data);
             if (data.success) {
                 showToast('✓ ' + data.mensaje, 'success');
-                actualizarContadorCarrito();
+                // Actualizar el contador del carrito con el valor devuelto
+                actualizarContadorCarritoUI(data.totalItems || 0);
             } else {
                 showToast('✗ ' + data.mensaje, 'error');
             }
@@ -625,22 +626,34 @@
         .catch(error => {
             console.error('Error:', error);
             showToast('✗ Error al agregar al carrito', 'error');
+            // Intentar actualizar el contador de todas formas
+            actualizarContadorCarrito();
         });
     }
 
+    // Función para actualizar la UI del contador inmediatamente
+    function actualizarContadorCarritoUI(totalItems) {
+        const cartBadge = document.getElementById('contadorCarrito');
+        if (cartBadge) {
+            cartBadge.textContent = totalItems;
+            cartBadge.style.display = totalItems > 0 ? 'inline' : 'none';
+            
+            // Efecto visual de actualización
+            cartBadge.classList.add('pulse');
+            setTimeout(() => {
+                cartBadge.classList.remove('pulse');
+            }, 500);
+        }
+        console.log('Contador actualizado:', totalItems);
+    }
+
+    // Función para obtener el carrito actual
     function actualizarContadorCarrito() {
-        fetch('index.php?c=carrito&a=obtenerCarrito', {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
+        fetch('index.php?c=carrito&a=obtenerCarrito')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const cartBadge = document.getElementById('contadorCarrito');
-                if (cartBadge) {
-                    cartBadge.textContent = data.totalItems || 0;
-                }
+                actualizarContadorCarritoUI(data.totalItems || 0);
             }
         })
         .catch(error => console.error('Error al obtener carrito:', error));

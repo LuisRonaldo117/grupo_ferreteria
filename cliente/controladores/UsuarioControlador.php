@@ -17,7 +17,6 @@ class UsuarioControlador {
             exit();
         }
         
-        // Usar el id real del cliente desde la sesión
         $this->idCliente = $_SESSION['id_cliente'];
     }
     
@@ -66,30 +65,17 @@ class UsuarioControlador {
     }
     
     public function actualizarPerfil() {
-        if (ob_get_length()) ob_clean();
-        
-        header('Content-Type: application/json');
-        
-        // Log para debugs
-        error_log("=== ACTUALIZAR PERFIL INICIADO ===");
-        error_log("Datos POST recibidos: " . print_r($_POST, true));
-        error_log("ID Cliente: " . $this->idCliente);
-        
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            error_log("Error: Método no permitido");
-            echo json_encode(['success' => false, 'mensaje' => 'Método no permitido']);
-            exit();
+        while (ob_get_level()) {
+            ob_end_clean();
         }
         
+        header('Content-Type: application/json; charset=utf-8');
+        
+        $response = [];
+        
         try {
-            // Validar que los campos requeridos esten presentes
-            $camposRequeridos = ['nombres', 'apellidos', 'correo'];
-            foreach ($camposRequeridos as $campo) {
-                if (!isset($_POST[$campo]) || empty(trim($_POST[$campo]))) {
-                    error_log("Error: Campo requerido faltante: " . $campo);
-                    echo json_encode(['success' => false, 'mensaje' => 'El campo ' . $campo . ' es requerido']);
-                    exit();
-                }
+            if (empty($_POST['nombres']) || empty($_POST['apellidos']) || empty($_POST['correo'])) {
+                throw new Exception('Faltan campos requeridos');
             }
             
             $datos = [
@@ -100,44 +86,35 @@ class UsuarioControlador {
                 'direccion' => isset($_POST['direccion']) ? trim($_POST['direccion']) : ''
             ];
             
-            error_log("Datos procesados: " . print_r($datos, true));
-            
-            // Validar formato de email
             if (!filter_var($datos['correo'], FILTER_VALIDATE_EMAIL)) {
-                error_log("Error: Email inválido: " . $datos['correo']);
-                echo json_encode(['success' => false, 'mensaje' => 'El formato del correo electrónico no es válido']);
-                exit();
+                throw new Exception('El formato del correo electrónico no es válido');
             }
             
             $resultado = $this->modelo->actualizarPerfil($this->idCliente, $datos);
             
             if ($resultado) {
-                // Actualizar tambien los datos en la sesión
                 $_SESSION['nombre_cliente'] = $datos['nombres'];
                 $_SESSION['apellido_cliente'] = $datos['apellidos'];
                 
-                error_log("Perfil actualizado exitosamente");
-                echo json_encode([
+                $response = [
                     'success' => true, 
                     'mensaje' => 'Perfil actualizado correctamente'
-                ]);
+                ];
             } else {
-                error_log("Error: No se pudo actualizar el perfil en el modelo");
-                echo json_encode([
+                $response = [
                     'success' => false, 
-                    'mensaje' => 'Error al actualizar el perfil. Verifique los datos e intente nuevamente.'
-                ]);
+                    'mensaje' => 'No se pudo actualizar el perfil. Verifique los datos e intente nuevamente.'
+                ];
             }
+            
         } catch (Exception $e) {
-            error_log("Error en actualizarPerfil: " . $e->getMessage());
-            echo json_encode([
+            $response = [
                 'success' => false, 
-                'mensaje' => 'Error: ' . $e->getMessage()
-            ]);
+                'mensaje' => $e->getMessage()
+            ];
         }
         
-        error_log("=== ACTUALIZAR PERFIL FINALIZADO ===");
-        error_log("JSON enviado: " . json_last_error_msg());
+        echo json_encode($response, JSON_UNESCAPED_UNICODE);
         exit();
     }
     

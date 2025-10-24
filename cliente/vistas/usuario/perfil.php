@@ -664,62 +664,36 @@
                 const btnTexto = this.querySelector('.btn-texto');
                 const btnCargando = this.querySelector('.btn-cargando');
                 
-                // Mostrar estado de carga
                 btnTexto.style.display = 'none';
                 btnCargando.style.display = 'inline';
                 btnGuardar.disabled = true;
                 
-                // Enviar datos via AJAX
                 const formData = new FormData(this);
                 
-                console.log('Enviando datos del formulario...');
-                
-                fetch('index.php?c=usuario&a=actualizarPerfil', {
+                fetch('/grupo_ferreteria/cliente/index.php?c=usuario&a=actualizarPerfil', {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => {
-                    console.log('Respuesta recibida, status:', response.status);
-                    
-                    if (!response.ok) {
-                        throw new Error('Error HTTP: ' + response.status);
-                    }
-                    
-                    return response.text().then(text => {
-                        console.log('Respuesta texto completo:', text);
-                        
-                        // Intentar parsear como JSON
-                        try {
-                            const data = JSON.parse(text);
-                            console.log('Datos parseados:', data);
-                            return data;
-                        } catch (e) {
-                            console.error('Error parseando JSON:', e);
-                            console.error('Texto recibido:', text);
-                            
-                            // Si no es JSON válido, mostrar el texto completo para debug
-                            mostrarNotificacion('Error en la respuesta del servidor. Ver consola para detalles.', 'error');
-                            throw new Error('Respuesta no válida del servidor: ' + text.substring(0, 100));
+                .then(response => response.text())
+                .then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.success) {
+                            mostrarNotificacion('Perfil actualizado correctamente', 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            mostrarNotificacion('Error: ' + data.mensaje, 'error');
                         }
-                    });
-                })
-                .then(data => {
-                    if (data.success) {
-                        mostrarNotificacion('Perfil actualizado correctamente', 'success');
-                        // Opcional: recargar la página después de un tiempo
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
-                    } else {
-                        mostrarNotificacion('Error: ' + data.mensaje, 'error');
+                    } catch (e) {
+                        mostrarNotificacion('Error en la respuesta del servidor', 'error');
                     }
                 })
                 .catch(error => {
-                    console.error('Error completo:', error);
-                    mostrarNotificacion('Error de conexión: ' + error.message, 'error');
+                    mostrarNotificacion('Error de conexión', 'error');
                 })
                 .finally(() => {
-                    // Restaurar boton
                     btnTexto.style.display = 'inline';
                     btnCargando.style.display = 'none';
                     btnGuardar.disabled = false;
@@ -728,67 +702,26 @@
         }
     });
 
-    // Función para mostrar notificaciones bonitas
     function mostrarNotificacion(mensaje, tipo = 'success') {
         const notificacion = document.createElement('div');
-        const backgroundColor = tipo === 'error' ? '#f44336' : '#2196F3';
-        
         notificacion.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, ${backgroundColor}, ${tipo === 'error' ? '#d32f2f' : '#1976D2'});
+            background: ${tipo === 'error' ? '#f44336' : '#4CAF50'};
             color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.3);
+            padding: 15px 20px;
+            border-radius: 5px;
             z-index: 10000;
-            animation: slideInRight 0.3s ease;
-            max-width: 400px;
             font-weight: 500;
-            border-left: 4px solid ${tipo === 'error' ? '#d32f2f' : '#1976D2'};
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         `;
         notificacion.textContent = mensaje;
         
         document.body.appendChild(notificacion);
         
         setTimeout(() => {
-            notificacion.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => {
-                if (notificacion.parentNode) {
-                    document.body.removeChild(notificacion);
-                }
-            }, 300);
+            document.body.removeChild(notificacion);
         }, 4000);
-    }
-
-    // Agregar estilos para las animaciones si no existen
-    if (!document.querySelector('#notificacion-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notificacion-styles';
-        style.textContent = `
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     }
 </script>
