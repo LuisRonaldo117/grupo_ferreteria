@@ -250,11 +250,11 @@ class FacturaModelo {
             // Convertir metodo de pago para la tabla pedido
             $tipoPagoPedido = $this->convertirMetodoPagoParaPedido($metodoPago);
             
-            // Insertar pedido principal
+            // CAMBIO IMPORTANTE: Estado siempre debe ser 'pendiente'
             $sqlPedido = "INSERT INTO pedido 
                     (id_cliente, id_sucursal, fecha_pedido, estado, total, tipo_pago)
                     VALUES 
-                    (?, 1, NOW(), 'entregado', ?, ?)";
+                    (?, 1, NOW(), 'pendiente', ?, ?)";
             
             $stmtPedido = $conexion->prepare($sqlPedido);
             $stmtPedido->bind_param("ids", $id_cliente, $factura['total'], $tipoPagoPedido);
@@ -264,8 +264,8 @@ class FacturaModelo {
             
             // Obtener detalles de la factura
             $sqlDetalles = "SELECT id_producto, cantidad, precio_unitario 
-                           FROM detalle_factura 
-                           WHERE id_factura = ?";
+                        FROM detalle_factura 
+                        WHERE id_factura = ?";
             $stmtDetalles = $conexion->prepare($sqlDetalles);
             $stmtDetalles->bind_param("i", $id_factura);
             $stmtDetalles->execute();

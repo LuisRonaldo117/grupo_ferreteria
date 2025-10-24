@@ -1,17 +1,17 @@
 <?php
 class PedidoModelo {
     
-    public function crearPedido($idCliente, $total, $metodoPago, $estado, $productos) {
+    public function crearPedido($idCliente, $total, $metodoPago, $productos, $estado = 'pendiente') {
         $conexion = conectarBD();
         
         // Convertir metodo de pago a formato de la bd
         $tipoPago = $this->convertirMetodoPago($metodoPago);
         
-        // Insertar pedido
+        // FORZAR estado 'pendiente' - ignorar el parámetro $estado
         $sql = "INSERT INTO pedido (id_cliente, total, tipo_pago, estado, fecha_pedido) 
-                VALUES (?, ?, ?, ?, NOW())";
+                VALUES (?, ?, ?, 'pendiente', NOW())";
         $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("idss", $idCliente, $total, $tipoPago, $estado);
+        $stmt->bind_param("ids", $idCliente, $total, $tipoPago);
         
         if ($stmt->execute()) {
             $idPedido = $conexion->insert_id;
